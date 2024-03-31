@@ -2,12 +2,15 @@ package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.controller.dto.UserResponse;
+import com.aruiz.user.notification.domain.User;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +30,15 @@ public class UserServiceImpl implements UserService {
     public UserResponse save(UserRequest userRequest) throws Exception {
 
         UserEntity userEntity = modelMapper.map(userRequest, UserEntity.class);
+
+        userRepository.save(userEntity);
+
+        log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
+
+        return modelMapper.map(userEntity, UserResponse.class);
+    }
+
+    public UserResponse save(UserEntity userEntity) throws Exception {
 
         userRepository.save(userEntity);
 
@@ -102,4 +114,17 @@ public class UserServiceImpl implements UserService {
 
         return null;
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String emailUser) {
+        // Buscamos el usuario en la base de datos por su correo electrónico
+        try {
+            return userRepository.findByEmail(emailUser)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + emailUser));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

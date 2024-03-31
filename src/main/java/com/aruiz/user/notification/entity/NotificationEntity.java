@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -14,13 +13,13 @@ import java.time.LocalDateTime;
 public class NotificationEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String content;
     private LocalDateTime creationDate;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "notification", cascade = CascadeType.ALL)
     private NotificationTypeEntity notificationType;
 
     @ManyToOne

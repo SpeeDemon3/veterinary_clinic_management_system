@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Data
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -12,7 +11,7 @@ import lombok.*;
 public class RoleEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

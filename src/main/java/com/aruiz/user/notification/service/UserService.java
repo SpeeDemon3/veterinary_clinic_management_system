@@ -2,10 +2,13 @@ package com.aruiz.user.notification.service;
 
 import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.controller.dto.UserResponse;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     UserResponse save(UserRequest userRequest) throws Exception;
 
@@ -17,4 +20,5 @@ public interface UserService {
 
     UserResponse updateById(Long id, UserRequest userRequest) throws Exception;
 
+    UserDetails loadUserByUsername(String emailUser) throws UsernameNotFoundException;
 }
