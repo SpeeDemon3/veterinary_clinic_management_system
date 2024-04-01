@@ -3,6 +3,7 @@ package com.aruiz.user.notification.controller;
 import com.aruiz.user.notification.controller.dto.LoginRequest;
 import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.service.impl.AuthenticationService;
+import com.aruiz.user.notification.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final AuthenticationService authenticationService;
+
+    private final UserServiceImpl userService;
 
     @GetMapping("/test")
     public ResponseEntity<?> test() {
@@ -46,5 +49,47 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(userService.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<?> findAll() {
+        try {
+            return ResponseEntity.ok(userService.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/updateById/{id}")
+    public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+        try {
+            return ResponseEntity.ok(userService.updateById(id, userRequest));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(userService.deleteById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
+
+
+
 
 }

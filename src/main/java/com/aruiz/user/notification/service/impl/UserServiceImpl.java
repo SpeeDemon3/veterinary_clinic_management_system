@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
         if (entityList.isEmpty()) {
             log.error("There are no entities to recover!!!");
-            return null;
+            throw new Exception();
         }
 
         List<UserResponse> userResponseList = new ArrayList<>();
@@ -69,13 +70,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse findById(Long id) throws Exception {
 
-        UserEntity userEntity = userRepository.findById(id).orElse(null);
+        Optional<UserEntity> userEntityOptional = userRepository.findById(id);
 
-        if (userEntity == null) {
-            log.error("User not found");
-            return null;
+        if (userEntityOptional.isEmpty()) {
+            log.error("User not found!!!");
+            throw new Exception();
         }
 
+        UserEntity userEntity = userEntityOptional.get();
         log.info("User found with ID -> {}", userEntity.getId());
 
         return modelMapper.map(userEntity, UserResponse.class);
@@ -87,10 +89,12 @@ public class UserServiceImpl implements UserService {
         if(userRepository.existsById(id)) {
             userRepository.deleteById(id);
             log.info("User successfully deleted");
-            return "User with ID -> " + id + "successfully deleted";
+            return "User with ID -> " + id + " successfully deleted!!!";
+        } else {
+            log.error("User not found!!!");
+            throw new Exception();
         }
 
-        return null;
     }
 
     @Override
@@ -110,9 +114,11 @@ public class UserServiceImpl implements UserService {
 
             return modelMapper.map(userEntitySave, UserResponse.class);
 
+        } else {
+            log.error("User not found!!!");
+            throw new Exception();
         }
 
-        return null;
     }
 
     @Override
