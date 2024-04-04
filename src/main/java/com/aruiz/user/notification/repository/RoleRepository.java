@@ -12,4 +12,6 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 
     Optional<List<RoleEntity>> findAllByName(String name) throws Exception;
 
+    Optional<RoleEntity> findByName(String name) throws Exception;
+
 }

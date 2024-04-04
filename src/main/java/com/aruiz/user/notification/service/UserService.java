@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.service;
 
 import com.aruiz.user.notification.controller.dto.UserRequest;
+import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.controller.dto.UserResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +19,7 @@ public interface UserService extends UserDetailsService {
 
     String deleteById(Long id) throws Exception;
 
-    UserResponse updateById(Long id, UserRequest userRequest) throws Exception;
+    UserResponse updateById(Long id, UserRequestUpdate userRequest) throws Exception;
 
     UserDetails loadUserByUsername(String emailUser) throws UsernameNotFoundException;
 }

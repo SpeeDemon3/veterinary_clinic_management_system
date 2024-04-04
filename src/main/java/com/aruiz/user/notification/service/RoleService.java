@@ -2,6 +2,7 @@ package com.aruiz.user.notification.service;
 
 import com.aruiz.user.notification.controller.dto.RoleRequest;
 import com.aruiz.user.notification.controller.dto.RoleResponse;
+import com.aruiz.user.notification.domain.Role;
 
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface RoleService {
     Boolean deleteById(Long id) throws Exception;
 
     List<RoleResponse> findAllByName(String name) throws Exception;
+
+    Role findByName(String nane) throws Exception;
 
 }

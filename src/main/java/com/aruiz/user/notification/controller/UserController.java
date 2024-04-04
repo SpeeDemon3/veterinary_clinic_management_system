@@ -1,7 +1,9 @@
 package com.aruiz.user.notification.controller;
 
 import com.aruiz.user.notification.controller.dto.LoginRequest;
+import com.aruiz.user.notification.controller.dto.SignUpRequest;
 import com.aruiz.user.notification.controller.dto.UserRequest;
+import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.service.impl.AuthenticationService;
 import com.aruiz.user.notification.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> signup(@RequestBody SignUpRequest userRequest) {
         try {
             return ResponseEntity.ok(authenticationService.signup(userRequest));
         } catch (Exception e) {
@@ -69,7 +71,7 @@ public class UserController {
     }
 
     @PutMapping("/updateById/{id}")
-    public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody UserRequestUpdate userRequest) {
         try {
             return ResponseEntity.ok(userService.updateById(id, userRequest));
         } catch (Exception e) {

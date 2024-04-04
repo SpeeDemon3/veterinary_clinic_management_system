@@ -2,8 +2,8 @@ package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.RoleRequest;
 import com.aruiz.user.notification.controller.dto.RoleResponse;
+import com.aruiz.user.notification.domain.Role;
 import com.aruiz.user.notification.entity.RoleEntity;
-import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.RoleRepository;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.RoleService;
@@ -34,37 +34,13 @@ public class RoleServicesImpl implements RoleService {
 
         if (roleRequest.getName() != null) {
 
-            Optional<UserEntity> optionalUserEntity = userRepository.findById(roleRequest.getUser());
+            RoleEntity roleEntity = modelMapper.map(roleRequest, RoleEntity.class);
 
-            if (optionalUserEntity.isPresent()) {
+            RoleEntity roleEntitySave = roleRepository.save(roleEntity);
 
-                UserEntity userEntity = optionalUserEntity.get();
+            log.info("Role saved successfully!!!");
 
-                RoleEntity roleEntity = modelMapper.map(roleRequest, RoleEntity.class);
-
-                roleEntity.setUser(userEntity);
-
-                if (userEntity.getRole() != null) {
-                    roleEntity.setId(userEntity.getId());
-                }
-
-                log.info("User found");
-
-                RoleEntity roleEntitySave = roleRepository.save(roleEntity);
-
-                userEntity.setRole(roleEntitySave);
-
-                userRepository.save(userEntity);
-
-                log.info("Role saved successfully!!!");
-
-                return modelMapper.map(roleEntitySave, RoleResponse.class);
-
-
-            } else {
-                log.error("User not found!!!!");
-                throw new RuntimeException("User not found!!!");
-            }
+            return modelMapper.map(roleEntitySave, RoleResponse.class);
 
         } else {
             log.error("Something went wrong!!!!");
@@ -107,6 +83,7 @@ public class RoleServicesImpl implements RoleService {
             log.error("Roles not found!!!");
             throw new Exception();
         }
+
 
     }
 
@@ -164,5 +141,22 @@ public class RoleServicesImpl implements RoleService {
             throw new Exception();
         }
 
+    }
+
+    @Override
+    public Role findByName(String nane) throws Exception {
+
+        Optional<RoleEntity> roleEntityOptional = roleRepository.findByName("name");
+
+        if (roleEntityOptional.isPresent()) {
+
+            RoleEntity roleEntity = roleEntityOptional.get();
+
+            return modelMapper.map(roleEntity, Role.class);
+        }
+
+        log.error("Rol name not found!!!!");
+
+        return null;
     }
 }

@@ -3,6 +3,8 @@ package com.aruiz.user.notification.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,9 +20,8 @@ public class RoleEntity {
 
     private String description;
 
-    @OneToOne()
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @OneToMany(mappedBy = "role")
+    private List<UserEntity> users;
 
 
 }

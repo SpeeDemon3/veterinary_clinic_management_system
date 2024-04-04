@@ -26,7 +26,8 @@ public class UserEntity implements UserDetails {
     private String email;
     private String password;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
     private RoleEntity role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

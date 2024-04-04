@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.UserRequest;
+import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.controller.dto.UserResponse;
 import com.aruiz.user.notification.domain.User;
 import com.aruiz.user.notification.entity.UserEntity;
@@ -29,6 +30,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse save(UserRequest userRequest) throws Exception {
+
+        UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
+
+        userRequestUpdate.setRole(1L);
 
         UserEntity userEntity = modelMapper.map(userRequest, UserEntity.class);
 
@@ -98,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateById(Long id, UserRequest userRequest) throws Exception {
+    public UserResponse updateById(Long id, UserRequestUpdate userRequest) throws Exception {
 
         UserEntity userEntity = userRepository.findById(id).orElse(null);
 

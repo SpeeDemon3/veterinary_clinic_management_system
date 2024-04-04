@@ -1,21 +1,18 @@
 package com.aruiz.user.notification.controller.dto;
 
-import com.aruiz.user.notification.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RoleResponse {
-
-    private Long id;
+public class SignUpRequest {
     private String name;
-    private String description;
-    private List<User> users;
+    private String email;
+    private String password;
+    private Long role;
+    private Long profile;
 }
