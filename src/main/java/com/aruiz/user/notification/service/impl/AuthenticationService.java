@@ -23,6 +23,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
     private final RoleServicesImpl roleServices;
+    private final ProfileServiceImpl profileService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -33,7 +34,6 @@ public class AuthenticationService {
     public JwtResponse signup(SignUpRequest request) throws Exception {
 
         Optional<Role> roleEntityOptional = Optional.ofNullable(roleServices.findByName("ROLE_USER"));
-
         Role roleFind;
 
         RoleEntity roleEntity = new RoleEntity();
@@ -43,6 +43,13 @@ public class AuthenticationService {
 
             roleEntity = modelMapper.map(roleFind, RoleEntity.class);
 
+        }
+
+
+        ProfileEntity profileEntity;
+
+        if (profileResponseOptional.isPresent()) {
+            profileEntity = profileResponseOptional
         }
 
         // Construir un nuevo objeto UserEntity con los datos proporcionados en la solicitud de registro
