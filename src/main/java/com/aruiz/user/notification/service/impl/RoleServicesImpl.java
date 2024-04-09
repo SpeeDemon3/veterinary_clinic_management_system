@@ -51,10 +51,13 @@ public class RoleServicesImpl implements RoleService {
 
     @Override
     public RoleResponse findById(Long id) throws Exception {
-        boolean exists = roleRepository.existsById(id);
+        Optional<RoleEntity> roleEntityOptional = roleRepository.findById(id);
 
-        if (exists) {
-            return modelMapper.map(roleRepository.findById(id), RoleResponse.class);
+        if (roleEntityOptional.isPresent()) {
+
+            RoleResponse roleResponse = modelMapper.map(roleEntityOptional.get(), RoleResponse.class);
+
+            return roleResponse;
         } else {
             log.error("Role not found!!!!");
             throw new Exception();

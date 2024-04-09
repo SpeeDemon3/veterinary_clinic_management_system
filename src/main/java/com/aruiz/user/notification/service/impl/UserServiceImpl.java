@@ -66,7 +66,9 @@ public class UserServiceImpl implements UserService {
         List<UserResponse> userResponseList = new ArrayList<>();
 
         for(UserEntity user : entityList) {
+            log.info("Recovering users...");
             userResponseList.add(modelMapper.map(user, UserResponse.class));
+            log.info("Info {}", user.toString());
         }
 
         return userResponseList;

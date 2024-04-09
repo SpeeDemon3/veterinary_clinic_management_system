@@ -29,7 +29,7 @@ public class RoleController {
     @GetMapping("/findById/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(roleServices.findById(id));
+            return ResponseEntity.ok().body(roleServices.findById(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id not found!!!");
         }

@@ -49,16 +49,6 @@ public class AuthenticationService {
             profileEntity = modelMapper.map(request.getProfile(), ProfileEntity.class);
 
         }
-/*
-        Optional<ProfileRequest> optionalProfileRequest = Optional.ofNullable(profileService.findById(request.getProfile()));
-        ProfileEntity profileEntity;
-
-        if (optionalProfileResponse.isPresent()) {
-            profileEntity = modelMapper.map(optionalProfileResponse.get(), ProfileEntity.class);
-        } else {
-            profileEntity = null;
-        }
- */
 
         // Construir un nuevo objeto UserEntity con los datos proporcionados en la solicitud de registro
         var user = UserEntity
@@ -66,19 +56,22 @@ public class AuthenticationService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(roleEntity) // EL ROL AL CREAR UN USUARIO SERA ROLE_USER POR DEFECTO
-                .profile(profileEntity) //#### TIENE QUE ASIGNAR UN PERFIL, HAY QUE RECUPERARLO Y ASIGNARLO COMO EN ROL
+                .role(roleEntity)
+                .profile(profileEntity)
                 .build();
 
-        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+        profileEntity.setUser(user);
+
 
         // Guardar el usuario en la base de datos
         userService.save(user);
-
+/*
         profileEntity.setUser(user);
 
         profileService.save(modelMapper.map(profileEntity, ProfileRequest.class));
 
+
+ */
         // Generar un token JWT para el usuario registrado
         var jwt = jwtService.generateToken(user);
 
