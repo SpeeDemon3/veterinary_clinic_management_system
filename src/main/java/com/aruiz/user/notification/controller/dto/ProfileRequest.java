@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class ProfileRequest {
     private String img;
     private String birthdate;
-    private Long user;
+    //private Long user;
 }

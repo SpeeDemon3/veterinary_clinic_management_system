@@ -58,6 +58,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     }
 
+
     @Override
     public List<ProfileResponse> findAll() throws Exception {
 

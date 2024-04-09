@@ -146,7 +146,7 @@ public class RoleServicesImpl implements RoleService {
     @Override
     public Role findByName(String nane) throws Exception {
 
-        Optional<RoleEntity> roleEntityOptional = roleRepository.findByName("name");
+        Optional<RoleEntity> roleEntityOptional = roleRepository.findByName(nane);
 
         if (roleEntityOptional.isPresent()) {
 

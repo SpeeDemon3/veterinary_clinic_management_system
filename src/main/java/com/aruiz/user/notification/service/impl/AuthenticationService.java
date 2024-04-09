@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.*;
+import com.aruiz.user.notification.domain.Profile;
 import com.aruiz.user.notification.domain.Role;
 import com.aruiz.user.notification.domain.User;
 import com.aruiz.user.notification.entity.ProfileEntity;
@@ -38,19 +39,26 @@ public class AuthenticationService {
 
         RoleEntity roleEntity = new RoleEntity();
 
+        ProfileEntity profileEntity = new ProfileEntity();
+
         if (roleEntityOptional.isPresent()) {
             roleFind = roleEntityOptional.get();
 
             roleEntity = modelMapper.map(roleFind, RoleEntity.class);
 
+            profileEntity = modelMapper.map(request.getProfile(), ProfileEntity.class);
+
         }
-
-
+/*
+        Optional<ProfileRequest> optionalProfileRequest = Optional.ofNullable(profileService.findById(request.getProfile()));
         ProfileEntity profileEntity;
 
-        if (profileResponseOptional.isPresent()) {
-            profileEntity = profileResponseOptional
+        if (optionalProfileResponse.isPresent()) {
+            profileEntity = modelMapper.map(optionalProfileResponse.get(), ProfileEntity.class);
+        } else {
+            profileEntity = null;
         }
+ */
 
         // Construir un nuevo objeto UserEntity con los datos proporcionados en la solicitud de registro
         var user = UserEntity
@@ -58,14 +66,18 @@ public class AuthenticationService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.setRole(roleEntity.getId()) // EL ROL AL CREAR UN USUARIO SERA ROLE_USER POR DEFECTO
-                .profile(modelMapper.map(request.getProfile(), ProfileEntity.class)) //#### TIENE QUE ASIGNAR UN PERFIL, HAY QUE RECUPERARLO Y ASIGNARLO COMO EN ROL
+                .role(roleEntity) // EL ROL AL CREAR UN USUARIO SERA ROLE_USER POR DEFECTO
+                .profile(profileEntity) //#### TIENE QUE ASIGNAR UN PERFIL, HAY QUE RECUPERARLO Y ASIGNARLO COMO EN ROL
                 .build();
 
         UserResponse userResponse = modelMapper.map(user, UserResponse.class);
 
         // Guardar el usuario en la base de datos
         userService.save(user);
+
+        profileEntity.setUser(user);
+
+        profileService.save(modelMapper.map(profileEntity, ProfileRequest.class));
 
         // Generar un token JWT para el usuario registrado
         var jwt = jwtService.generateToken(user);

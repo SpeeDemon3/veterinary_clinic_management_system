@@ -13,6 +13,6 @@ public class SignUpRequest {
     private String name;
     private String email;
     private String password;
-    private Long role;
-    private Long profile;
+    //private Long role;
+    private ProfileRequest profile;
 }
