@@ -82,12 +82,14 @@ public class UserServiceImpl implements UserService {
         if (userEntityOptional.isEmpty()) {
             log.error("User not found!!!");
             throw new Exception();
+        } else {
+            UserEntity userEntity = userEntityOptional.get();
+            log.info("User found with ID -> {}", userEntity.getId());
+
+            return modelMapper.map(userEntity, UserResponse.class);
         }
 
-        UserEntity userEntity = userEntityOptional.get();
-        log.info("User found with ID -> {}", userEntity.getId());
 
-        return modelMapper.map(userEntity, UserResponse.class);
     }
 
     @Override
