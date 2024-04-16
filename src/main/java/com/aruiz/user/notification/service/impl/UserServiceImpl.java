@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(userEntity);
 
-        log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
+        log.info("Saving entity ID, name {} {}", userEntity.getId(), userEntity.getName());
 
         return modelMapper.map(userEntity, UserResponse.class);
     }
