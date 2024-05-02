@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ProfileService {
 
-    ProfileResponse save(ProfileRequest profileRequest) throws Exception;
+    ProfileResponse save(ProfileRequest profileRequest, Long userId) throws Exception;
 
     ProfileResponse findById(Long id) throws Exception;
 

@@ -67,7 +67,7 @@ public class AuthenticationService {
 
         profileEntity.setUser(user);
 
-        profileService.save(modelMapper.map(profileEntity, ProfileRequest.class));
+        //profileService.save(modelMapper.map(profileEntity, ProfileRequest.class));
 
         // Guardar el usuario en la base de datos
         userService.save(modelMapper.map(user, SignUpRequest.class));

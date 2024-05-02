@@ -2,10 +2,14 @@ package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.ProfileRequest;
 import com.aruiz.user.notification.controller.dto.ProfileResponse;
+import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
+import com.aruiz.user.notification.controller.dto.UserResponse;
 import com.aruiz.user.notification.domain.Profile;
 import com.aruiz.user.notification.entity.ProfileEntity;
+import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.ProfileRepository;
 import com.aruiz.user.notification.service.ProfileService;
+import com.aruiz.user.notification.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +29,28 @@ public class ProfileServiceImpl implements ProfileService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public ProfileResponse save(ProfileRequest profileRequest) throws Exception {
+    @Autowired
+    private UserService userService;
 
-        if (profileRequest != null) {
+
+    @Override
+    public ProfileResponse save(ProfileRequest profileRequest, Long userId) throws Exception {
+
+        Optional<UserResponse> optionalUser = Optional.ofNullable(userService.findById(userId));
+
+        if (profileRequest != null && optionalUser.isPresent()) {
+
+            UserEntity userEntity = modelMapper.map(optionalUser.get(), UserEntity.class);
 
             ProfileEntity profileEntity = modelMapper.map(profileRequest, ProfileEntity.class);
 
+            profileEntity.setUser(userEntity);
+
+            userEntity.setProfile(profileEntity);
+
             profileRepository.save(profileEntity);
+
+            userService.updateById(userId, modelMapper.map(userEntity, UserRequestUpdate.class));
 
             return modelMapper.map(profileEntity, ProfileResponse.class);
         } else {
