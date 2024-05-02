@@ -1,5 +1,6 @@
 package com.aruiz.user.notification.service.impl;
 
+import com.aruiz.user.notification.controller.dto.SignUpRequest;
 import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.controller.dto.UserResponse;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private ModelMapper modelMapper;
 
     @Override
-    public UserResponse save(UserRequest userRequest) throws Exception {
+    public UserResponse save(SignUpRequest userRequest) throws Exception {
 
         UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
 
@@ -43,16 +44,26 @@ public class UserServiceImpl implements UserService {
 
         return modelMapper.map(userEntity, UserResponse.class);
     }
+/*
+    public UserResponse save(UserEntity userRequest) throws Exception {
 
-    public UserResponse save(UserEntity userEntity) throws Exception {
+        UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
+
+        userRequestUpdate.setRole(1L);
+
+        if(userRequest.getProfile() == null) {
+            userRequest.setProfile(null);
+        }
+
+        UserEntity userEntity = modelMapper.map(userRequest, UserEntity.class);
 
         userRepository.save(userEntity);
 
-        log.info("Saving entity ID, name {} {}", userEntity.getId(), userEntity.getName());
+        log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
 
         return modelMapper.map(userEntity, UserResponse.class);
     }
-
+*/
     @Override
     public List<UserResponse> findAll() throws Exception {
 
@@ -129,6 +140,7 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String emailUser) {

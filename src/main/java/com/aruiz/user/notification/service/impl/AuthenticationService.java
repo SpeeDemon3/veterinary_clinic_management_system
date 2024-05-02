@@ -9,6 +9,7 @@ import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -46,9 +48,12 @@ public class AuthenticationService {
 
             roleEntity = modelMapper.map(roleFind, RoleEntity.class);
 
-            profileEntity = modelMapper.map(request.getProfile(), ProfileEntity.class);
+            //log.info(String.valueOf(request.getProfile()));
+
+            //profileEntity = modelMapper.map(request.getProfile(), ProfileEntity.class);
 
         }
+
 
         // Construir un nuevo objeto UserEntity con los datos proporcionados en la solicitud de registro
         var user = UserEntity
@@ -57,14 +62,15 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(roleEntity)
-                .profile(profileEntity)
+                //.profile(profileEntity)
                 .build();
 
         profileEntity.setUser(user);
 
+        profileService.save(modelMapper.map(profileEntity, ProfileRequest.class));
 
         // Guardar el usuario en la base de datos
-        userService.save(user);
+        userService.save(modelMapper.map(user, SignUpRequest.class));
 /*
         profileEntity.setUser(user);
 

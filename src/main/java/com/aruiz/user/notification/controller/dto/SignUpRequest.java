@@ -14,5 +14,5 @@ public class SignUpRequest {
     private String email;
     private String password;
     //private Long role;
-    private ProfileRequest profile;
+    //private ProfileRequest profile;
 }

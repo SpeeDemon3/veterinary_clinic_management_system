@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class NotificationRequest {
-
     private String content;
     private LocalDateTime creationDate;
-    private Long destinationUserId;
 }

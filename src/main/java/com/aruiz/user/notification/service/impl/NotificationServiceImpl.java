@@ -2,6 +2,7 @@ package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.NotificationRequest;
 import com.aruiz.user.notification.controller.dto.NotificationResponse;
+import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.controller.dto.UserResponse;
 import com.aruiz.user.notification.entity.NotificationEntity;
 import com.aruiz.user.notification.entity.UserEntity;
@@ -40,9 +41,15 @@ public class NotificationServiceImpl implements NotificationService {
 
                 UserEntity userEntity = modelMapper.map(userResponse, UserEntity.class);
 
-                notificationRequest.setDestinationUserId(destinationUserId);
-
                 NotificationEntity notificationEntity = modelMapper.map(notificationRequest, NotificationEntity.class);
+
+                notificationEntity.setDestinationUser(userEntity);
+
+                log.info(notificationEntity.toString());
+
+                notificationRepository.save(notificationEntity);
+
+                userEntity.getNotifications().add(notificationEntity);
 
                 return modelMapper.map(notificationEntity, NotificationResponse.class);
 

@@ -1,5 +1,6 @@
 package com.aruiz.user.notification.service;
 
+import com.aruiz.user.notification.controller.dto.SignUpRequest;
 import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.controller.dto.UserResponse;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
-    UserResponse save(UserRequest userRequest) throws Exception;
+    UserResponse save(SignUpRequest userRequest) throws Exception;
 
     List<UserResponse> findAll() throws Exception;
 
