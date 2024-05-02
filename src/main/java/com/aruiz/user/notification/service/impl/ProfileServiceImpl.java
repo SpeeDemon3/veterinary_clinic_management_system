@@ -29,8 +29,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
 
     @Override

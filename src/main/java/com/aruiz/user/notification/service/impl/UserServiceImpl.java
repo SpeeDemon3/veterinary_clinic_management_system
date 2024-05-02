@@ -7,6 +7,7 @@ import com.aruiz.user.notification.controller.dto.UserResponse;
 import com.aruiz.user.notification.domain.User;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.UserRepository;
+import com.aruiz.user.notification.service.ProfileService;
 import com.aruiz.user.notification.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ProfileService profileService;
 
     @Override
     public UserResponse save(SignUpRequest userRequest) throws Exception {

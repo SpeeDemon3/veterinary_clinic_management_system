@@ -17,5 +17,4 @@ public interface ProfileService {
 
     ProfileResponse updateById(Long id, ProfileRequest profileRequest) throws Exception;
 
-
 }
