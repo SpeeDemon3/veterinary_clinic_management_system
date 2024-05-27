@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface PetService {
 
-    PetResponse save(PetRequest petRequest, Long ownerId) throws Exception;
+    PetResponse save(Long ownerId, PetRequest petRequest) throws Exception;
 
     List<PetResponse> findAll() throws Exception;
 
@@ -20,6 +20,6 @@ public interface PetService {
 
     PetResponse updateById(Long id, PetRequestUpdate petRequestUpdate) throws Exception;
 
-    Optional<PetEntity> findByCode(String identificationCode) throws Exception;
+    Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception;
 
 }

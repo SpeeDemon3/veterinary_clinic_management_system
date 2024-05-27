@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         // Establece el rol por defecto (1L)
         userRequestUpdate.setRole(1L);
         // Mapea la solicitud a una entidad de usuario
-        UserEntity userEntity = modelMapper.map(userRequest, UserEntity.class);
+        UserEntity userEntity = modelMapper.map(userRequestUpdate, UserEntity.class);
         // Guarda la entidad de usuario en la base de datos
         userRepository.save(userEntity);
         // Registra información sobre la entidad guardada

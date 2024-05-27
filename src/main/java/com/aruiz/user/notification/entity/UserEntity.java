@@ -38,7 +38,7 @@ public class UserEntity implements UserDetails {
     private List<NotificationEntity> notifications;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ArrayList<PetEntity> pets;
+    private List<PetEntity> pets;
 
 
     @Override

@@ -31,7 +31,7 @@ public class PetServiceImpl implements PetService {
 
 
     @Override
-    public PetResponse save(PetRequest petRequest, Long ownerId) throws Exception {
+    public PetResponse save(Long ownerId, PetRequest petRequest) throws Exception {
 
         Optional<UserEntity> optionalUserEntity = userRepository.findById(ownerId);
 
@@ -48,7 +48,7 @@ public class PetServiceImpl implements PetService {
             return modelMapper.map(petEntity, PetResponse.class);
 
         } else {
-            log.error("User with id" + ownerId + " not found!!!!");
+            log.error("User with id{} not found!!!!", ownerId);
         }
 
         log.error("There was an error saving the pet!!!!");
@@ -76,7 +76,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Optional<PetEntity> findByCode(String identificationCode) throws Exception {
+    public Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception {
         return Optional.empty();
     }
 }

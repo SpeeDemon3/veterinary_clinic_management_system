@@ -68,12 +68,10 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(roleEntity)
                 //.profile(profileEntity)
-                .pets(pets)
+                .pets(null)
                 .build();
 
         profileEntity.setUser(user);
-
-        //profileService.save(modelMapper.map(profileEntity, ProfileRequest.class));
 
         // Guardar el usuario en la base de datos
         userService.save(modelMapper.map(user, SignUpRequest.class));
@@ -81,13 +79,6 @@ public class AuthenticationService {
         log.info(String.valueOf(user));
 
 
-/*
-        profileEntity.setUser(user);
-
-        profileService.save(modelMapper.map(profileEntity, ProfileRequest.class));
-
-
- */
         // Generar un token JWT para el usuario registrado
         var jwt = jwtService.generateToken(user);
 

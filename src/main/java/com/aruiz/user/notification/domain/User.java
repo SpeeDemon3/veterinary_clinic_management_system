@@ -17,6 +17,7 @@ public class User {
     private Role role;
     private Profile profile;
     private List<Notification> notifications;
+    private List<Pet> pets;
 
 
 }

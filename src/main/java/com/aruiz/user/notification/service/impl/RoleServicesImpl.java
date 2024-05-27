@@ -4,6 +4,7 @@ import com.aruiz.user.notification.controller.dto.RoleRequest;
 import com.aruiz.user.notification.controller.dto.RoleResponse;
 import com.aruiz.user.notification.domain.Role;
 import com.aruiz.user.notification.entity.RoleEntity;
+import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.RoleRepository;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.RoleService;
@@ -162,4 +163,5 @@ public class RoleServicesImpl implements RoleService {
 
         return null;
     }
+
 }

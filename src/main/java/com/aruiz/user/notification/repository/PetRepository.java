@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface PetRepository extends JpaRepository<PetEntity, Long> {
 
-    Optional<PetEntity> findByCode(String identificationCode) throws Exception;
+    Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception;
 
 }
