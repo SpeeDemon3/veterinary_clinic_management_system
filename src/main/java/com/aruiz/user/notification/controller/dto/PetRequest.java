@@ -1,4 +1,4 @@
-package com.aruiz.user.notification.domain;
+package com.aruiz.user.notification.controller.dto;
 
 import com.aruiz.user.notification.entity.UserEntity;
 import lombok.AllArgsConstructor;
@@ -7,18 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Pet {
-
-    private Long id;
+public class PetRequest {
     private UserEntity owner;
-    private String identificationCode;
     private String name;
     private String description;
-    private String vaccinationData;
-    private String img;
     private String birthdate;
-    private String medication;
 }

@@ -1,26 +1,17 @@
-package com.aruiz.user.notification.entity;
+package com.aruiz.user.notification.controller.dto;
 
-import jakarta.persistence.*;
+import com.aruiz.user.notification.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Entity
-public class PetEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
+public class PetResponse {
     private UserEntity owner;
-
     private String identificationCode;
     private String name;
     private String description;
