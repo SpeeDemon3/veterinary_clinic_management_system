@@ -48,26 +48,7 @@ public class UserServiceImpl implements UserService {
 
         return modelMapper.map(userEntity, UserResponse.class);
     }
-/*
-    public UserResponse save(UserEntity userRequest) throws Exception {
 
-        UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
-
-        userRequestUpdate.setRole(1L);
-
-        if(userRequest.getProfile() == null) {
-            userRequest.setProfile(null);
-        }
-
-        UserEntity userEntity = modelMapper.map(userRequest, UserEntity.class);
-
-        userRepository.save(userEntity);
-
-        log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
-
-        return modelMapper.map(userEntity, UserResponse.class);
-    }
-*/
     @Override
     public List<UserResponse> findAll() throws Exception {
 

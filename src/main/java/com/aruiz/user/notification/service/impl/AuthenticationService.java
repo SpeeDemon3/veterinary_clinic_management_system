@@ -4,6 +4,7 @@ import com.aruiz.user.notification.controller.dto.*;
 import com.aruiz.user.notification.domain.Profile;
 import com.aruiz.user.notification.domain.Role;
 import com.aruiz.user.notification.domain.User;
+import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.ProfileEntity;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Slf4j
@@ -43,10 +45,13 @@ public class AuthenticationService {
 
         ProfileEntity profileEntity = new ProfileEntity();
 
+        ArrayList<PetEntity> pets = new ArrayList<>();
+
         if (roleEntityOptional.isPresent()) {
             roleFind = roleEntityOptional.get();
 
             roleEntity = modelMapper.map(roleFind, RoleEntity.class);
+
 
             //log.info(String.valueOf(request.getProfile()));
 
@@ -63,6 +68,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(roleEntity)
                 //.profile(profileEntity)
+                .pets(pets)
                 .build();
 
         profileEntity.setUser(user);
@@ -71,6 +77,10 @@ public class AuthenticationService {
 
         // Guardar el usuario en la base de datos
         userService.save(modelMapper.map(user, SignUpRequest.class));
+
+        log.info(String.valueOf(user));
+
+
 /*
         profileEntity.setUser(user);
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class UserEntity implements UserDetails {
 
     @OneToMany(mappedBy = "destinationUser")
     private List<NotificationEntity> notifications;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ArrayList<PetEntity> pets;
 
 
     @Override
