@@ -54,7 +54,7 @@ Este proyecto es un sistema para la gestión de una clínica veterinaria de usua
   - Cuerpo de la solicitud: `SignUpRequest`
 
 - Inicio de Sesión: `POST /login`
-  - uerpo de la solicitud: `LoginRequest`
+  - Cuerpo de la solicitud: `LoginRequest`
 
 - Crear Mascota: POST `/add/{ownerId}`
   - Cuerpo de la solicitud: `PetRequest` 
@@ -62,23 +62,21 @@ Este proyecto es un sistema para la gestión de una clínica veterinaria de usua
 ## Ejemplo de Solicitud para Registrar Usuario
 POST /signup
 {
-"name": "John Doe",
-"email": "johndoe@example.com",
-"password": "password123"
+"name": "John Cube",
+"email": "johncube@example.com",
+"password": "p@ssword123"
 }
 
 POST /users/1/pets
 {
 "identificationCode": "123ABC",
-"name": "Fido",
+"name": "Tango",
 "description": "Friendly dog",
 "vaccinationData": "Up to date",
 "img": "image_url",
 "birthdate": "2020-01-01",
 "medication": "None"
 }
-
-
 
 ## Contribución
 1. Haz un fork del proyecto.
