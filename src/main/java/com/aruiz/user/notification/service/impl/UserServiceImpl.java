@@ -1,13 +1,12 @@
 package com.aruiz.user.notification.service.impl;
 
-import com.aruiz.user.notification.controller.dto.SignUpRequest;
-import com.aruiz.user.notification.controller.dto.UserRequest;
-import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
-import com.aruiz.user.notification.controller.dto.UserResponse;
+import com.aruiz.user.notification.controller.dto.*;
 import com.aruiz.user.notification.domain.User;
+import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.ProfileService;
+import com.aruiz.user.notification.service.RoleService;
 import com.aruiz.user.notification.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -36,6 +35,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ProfileService profileService;
 
+    @Autowired
+    private RoleService roleService;
+
     /**
      * Guarda un nuevo usuario en la base de datos.
      *
@@ -48,18 +50,55 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserResponse save(SignUpRequest userRequest) throws Exception {
-        // Mapea la solicitud a un objeto de actualización de usuario
-        UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
-        // Establece el rol por defecto (1L)
-        userRequestUpdate.setRole(1L);
-        // Mapea la solicitud a una entidad de usuario
-        UserEntity userEntity = modelMapper.map(userRequestUpdate, UserEntity.class);
-        // Guarda la entidad de usuario en la base de datos
-        userRepository.save(userEntity);
-        // Registra información sobre la entidad guardada
-        log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
-        // Mapea la entidad de usuario a una respuesta de usuario y la devuelve
-        return modelMapper.map(userEntity, UserResponse.class);
+
+        Optional<RoleResponse> roleEntityOptional = Optional.ofNullable(roleService.findById(Long.valueOf(1)));
+
+        if (roleEntityOptional.isPresent()) {
+
+            RoleEntity roleEntity = modelMapper.map(roleEntityOptional.get(), RoleEntity.class);
+
+            // Mapea la solicitud a un objeto de actualización de usuario
+            UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
+            // Establece el rol por defecto (1L)
+            userRequestUpdate.setRole(roleEntity.getId());
+            // Mapea la solicitud a una entidad de usuario
+            UserEntity userEntity = modelMapper.map(userRequestUpdate, UserEntity.class);
+            // Guarda la entidad de usuario en la base de datos
+            userRepository.save(userEntity);
+            // Registra información sobre la entidad guardada
+            log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
+            // Mapea la entidad de usuario a una respuesta de usuario y la devuelve
+            return modelMapper.map(userEntity, UserResponse.class);
+        } else {
+            log.info("Role not found!!!");
+            return null;
+        }
+
+    }
+
+    UserEntity saveEntity(UserEntity userEntity) throws Exception {
+
+        Optional<RoleResponse> roleEntityOptional = Optional.ofNullable(roleService.findById(Long.valueOf(1)));
+
+        if (roleEntityOptional.isPresent()) {
+
+            RoleEntity roleEntity = modelMapper.map(roleEntityOptional.get(), RoleEntity.class);
+
+            // Mapea la solicitud a un objeto de actualización de usuario
+            UserEntity userEntitySave = userEntity;
+            // Establece el rol por defecto (1L)
+            userEntitySave.setRole(roleEntity);
+            // Guarda la entidad de usuario en la base de datos
+            userRepository.save(userEntity);
+            // Registra información sobre la entidad guardada
+            log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
+            // Mapea la entidad de usuario a una respuesta de usuario y la devuelve
+            return userEntitySave;
+        } else {
+            log.info("Role not found!!!");
+            return null;
+        }
+
     }
 
     /**

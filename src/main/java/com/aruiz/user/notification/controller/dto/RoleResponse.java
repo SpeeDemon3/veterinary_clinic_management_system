@@ -17,5 +17,4 @@ public class RoleResponse {
     private Long id;
     private String name;
     private String description;
-    private List<User> users;
 }

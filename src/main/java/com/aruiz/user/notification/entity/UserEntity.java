@@ -1,5 +1,8 @@
 package com.aruiz.user.notification.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserEntity implements UserDetails {
 
     @Id
@@ -28,7 +32,7 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @ManyToOne()
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

@@ -38,8 +38,8 @@ public class AuthenticationService {
 
     public JwtResponse signup(SignUpRequest request) throws Exception {
 
-        Optional<Role> roleEntityOptional = Optional.ofNullable(roleServices.findByName("ROLE_USER"));
-        Role roleFind;
+        Optional<RoleResponse> roleEntityOptional = Optional.ofNullable(roleServices.findById(1L));
+        RoleEntity roleFind;
 
         RoleEntity roleEntity = new RoleEntity();
 
@@ -48,7 +48,7 @@ public class AuthenticationService {
         ArrayList<PetEntity> pets = new ArrayList<>();
 
         if (roleEntityOptional.isPresent()) {
-            roleFind = roleEntityOptional.get();
+            roleFind = modelMapper.map(roleEntityOptional.get(), RoleEntity.class);
 
             roleEntity = modelMapper.map(roleFind, RoleEntity.class);
 
@@ -57,33 +57,37 @@ public class AuthenticationService {
 
             //profileEntity = modelMapper.map(request.getProfile(), ProfileEntity.class);
 
+
+            // Construir un nuevo objeto UserEntity con los datos proporcionados en la solicitud de registro
+            var user = UserEntity
+                    .builder()
+                    .name(request.getName())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(roleEntity)
+                    //.profile(profileEntity)
+                    .pets(null)
+                    .build();
+
+            profileEntity.setUser(user);
+
+            // Guardar el usuario en la base de datos
+            userService.saveEntity(user);
+
+            log.info(String.valueOf(user));
+
+
+            // Generar un token JWT para el usuario registrado
+            var jwt = jwtService.generateToken(user);
+
+            // Construir y devolver una respuesta de inicio de sesión con el token JWT generado
+            return JwtResponse.builder().token(jwt).build();
+
         }
 
+        log.error("User creation failed!!!!");
+        return null;
 
-        // Construir un nuevo objeto UserEntity con los datos proporcionados en la solicitud de registro
-        var user = UserEntity
-                .builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(roleEntity)
-                //.profile(profileEntity)
-                .pets(null)
-                .build();
-
-        profileEntity.setUser(user);
-
-        // Guardar el usuario en la base de datos
-        userService.save(modelMapper.map(user, SignUpRequest.class));
-
-        log.info(String.valueOf(user));
-
-
-        // Generar un token JWT para el usuario registrado
-        var jwt = jwtService.generateToken(user);
-
-        // Construir y devolver una respuesta de inicio de sesión con el token JWT generado
-        return JwtResponse.builder().token(jwt).build();
     }
 
     public JwtResponse login(LoginRequest loginRequest) throws Exception {

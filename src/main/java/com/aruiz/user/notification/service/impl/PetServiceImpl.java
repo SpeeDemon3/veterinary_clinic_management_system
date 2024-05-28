@@ -43,12 +43,12 @@ public class PetServiceImpl implements PetService {
 
             petRepository.save(petEntity);
 
-            log.info("Saving pet entity with ID and NAME -> {}{}", petEntity.getId(), petEntity.getName());
+            log.info("Saving pet entity with ID and NAME -> {} {}", petEntity.getId(), petEntity.getName());
 
             return modelMapper.map(petEntity, PetResponse.class);
 
         } else {
-            log.error("User with id{} not found!!!!", ownerId);
+            log.error("User with id {} not found!!!!", ownerId);
         }
 
         log.error("There was an error saving the pet!!!!");
