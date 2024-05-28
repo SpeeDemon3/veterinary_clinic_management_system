@@ -33,15 +33,19 @@ public class UserEntity implements UserDetails {
 
     @ManyToOne()
     @JoinColumn(name = "role_id", nullable = false)
+    @ToString.Exclude
     private RoleEntity role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private ProfileEntity profile;
 
     @OneToMany(mappedBy = "destinationUser")
+    @ToString.Exclude
     private List<NotificationEntity> notifications;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<PetEntity> pets;
 
 
