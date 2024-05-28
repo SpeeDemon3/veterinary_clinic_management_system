@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PetRequestUpdate {
-    private UserEntity owner;
+public class PetRequestUpdateWithoutOwner {
     private String identificationCode;
     private String name;
     private String description;

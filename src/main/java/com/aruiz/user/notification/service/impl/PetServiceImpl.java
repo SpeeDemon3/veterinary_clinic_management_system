@@ -2,6 +2,7 @@ package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.PetRequest;
 import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
+import com.aruiz.user.notification.controller.dto.PetRequestUpdateWithoutOwner;
 import com.aruiz.user.notification.controller.dto.PetResponse;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.UserEntity;
@@ -130,6 +131,8 @@ public class PetServiceImpl implements PetService {
         log.error("Pet with ID {} is not present!!!", id);
         throw new Exception();
     }
+
+
 
     @Override
     public Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception {

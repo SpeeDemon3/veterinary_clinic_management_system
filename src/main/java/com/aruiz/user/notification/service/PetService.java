@@ -2,6 +2,7 @@ package com.aruiz.user.notification.service;
 
 import com.aruiz.user.notification.controller.dto.PetRequest;
 import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
+import com.aruiz.user.notification.controller.dto.PetRequestUpdateWithoutOwner;
 import com.aruiz.user.notification.controller.dto.PetResponse;
 import com.aruiz.user.notification.entity.PetEntity;
 

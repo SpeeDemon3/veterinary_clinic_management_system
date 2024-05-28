@@ -2,6 +2,7 @@ package com.aruiz.user.notification.controller;
 
 import com.aruiz.user.notification.controller.dto.PetRequest;
 import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
+import com.aruiz.user.notification.controller.dto.PetRequestUpdateWithoutOwner;
 import com.aruiz.user.notification.service.impl.PetServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,5 +62,6 @@ public class PetController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
 }
