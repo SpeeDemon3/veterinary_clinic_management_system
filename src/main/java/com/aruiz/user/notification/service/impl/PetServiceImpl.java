@@ -111,7 +111,24 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public PetResponse updateById(Long id, PetRequestUpdate petRequestUpdate) throws Exception {
-        return null;
+
+        Optional<PetEntity> optionalPetEntity = petRepository.findById(id);
+
+        if (optionalPetEntity.isPresent()) {
+
+            PetEntity petEntitySave = modelMapper.map(petRequestUpdate, PetEntity.class);
+
+            petEntitySave.setId(id);
+
+            petRepository.save(petEntitySave);
+
+            log.info("Pet successfully updated!!!");
+
+            return modelMapper.map(petEntitySave, PetResponse.class);
+        }
+
+        log.error("Pet with ID {} is not present!!!", id);
+        throw new Exception();
     }
 
     @Override

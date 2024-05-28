@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.controller;
 
 import com.aruiz.user.notification.controller.dto.PetRequest;
+import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
 import com.aruiz.user.notification.service.impl.PetServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,15 @@ public class PetController {
         }
     }
 
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(petService.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/findAll")
     public ResponseEntity<?> findAllPets() {
         try {
@@ -38,6 +48,15 @@ public class PetController {
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(petService.deleteById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/updateById/{id}")
+    public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody PetRequestUpdate petRequestUpdate) {
+        try {
+            return ResponseEntity.ok(petService.updateById(id, petRequestUpdate));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
