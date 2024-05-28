@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,17 +58,55 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public List<PetResponse> findAll() throws Exception {
-        return List.of();
+
+        List<PetEntity> petEntities = petRepository.findAll();
+
+        if (petEntities.isEmpty()) {
+            log.error("There are no entities to recover!!!");
+            throw new Exception();
+        }
+
+        List<PetResponse> petResponseList = new ArrayList<>();
+
+        for(PetEntity pet : petEntities) {
+            log.info("Recovering Pets...");
+            petResponseList.add(modelMapper.map(pet, PetResponse.class));
+        }
+
+        return petResponseList;
     }
 
     @Override
     public PetResponse findById(Long id) throws Exception {
-        return null;
+
+        Optional<PetEntity> petEntityOptional = petRepository.findById(id);
+
+        if (petEntityOptional.isPresent()) {
+
+            log.info("Pet with ID " + id + " is present.");
+
+            return modelMapper.map(petEntityOptional.get(), PetResponse.class);
+
+        }
+
+        log.error("Pet with ID -> {} not found!!!", id);
+        throw new Exception();
     }
 
     @Override
     public String deleteById(Long id) throws Exception {
-        return "";
+
+        Optional<PetEntity> optionalPetEntity = petRepository.findById(id);
+
+        if (optionalPetEntity.isPresent()) {
+            petRepository.deleteById(id);
+
+            log.info("Pet successfully deleted");
+            return "Pet with ID -> " + id + " successfully deleted!!";
+        }
+
+        log.error("Pet with ID {} not found", id);
+        throw new Exception();
     }
 
     @Override

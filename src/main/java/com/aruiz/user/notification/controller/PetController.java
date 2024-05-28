@@ -24,4 +24,23 @@ public class PetController {
         }
     }
 
+    @GetMapping("/findAll")
+    public ResponseEntity<?> findAllPets() {
+        try {
+            return ResponseEntity.ok(petService.findAll());
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(petService.deleteById(id));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

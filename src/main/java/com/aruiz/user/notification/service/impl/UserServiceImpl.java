@@ -76,6 +76,16 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Saves a given UserEntity with a default role.
+     *
+     * <p>This method fetches the default role with ID 1, sets it to the provided UserEntity,
+     * and saves the entity in the database. If the role is not found, it logs a message and returns null.</p>
+     *
+     * @param userEntity the UserEntity to be saved
+     * @return the saved UserEntity with the default role set, or null if the role is not found
+     * @throws Exception if there is an issue during the role fetching or user saving process
+     */
     UserEntity saveEntity(UserEntity userEntity) throws Exception {
 
         Optional<RoleResponse> roleEntityOptional = Optional.ofNullable(roleService.findById(Long.valueOf(1)));
@@ -86,13 +96,13 @@ public class UserServiceImpl implements UserService {
 
             // Mapea la solicitud a un objeto de actualización de usuario
             UserEntity userEntitySave = userEntity;
-            // Establece el rol por defecto (1L)
+            // Establece el rol por defecto
             userEntitySave.setRole(roleEntity);
             // Guarda la entidad de usuario en la base de datos
             userRepository.save(userEntity);
             // Registra información sobre la entidad guardada
             log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
-            // Mapea la entidad de usuario a una respuesta de usuario y la devuelve
+
             return userEntitySave;
         } else {
             log.info("Role not found!!!");
