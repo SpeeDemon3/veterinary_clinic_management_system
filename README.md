@@ -50,24 +50,26 @@ Este proyecto es un sistema para la gestión de una clínica veterinaria de usua
 
 ## Endpoints Principales
 
-- Registro de Usuario: `Post /signup`
+- Registro de Usuario: `Post /api/user/signup`
   - Cuerpo de la solicitud: `SignUpRequest`
 
-- Inicio de Sesión: `POST /login`
+- Inicio de Sesión: `POST /api/user/login`
   - Cuerpo de la solicitud: `LoginRequest`
 
-- Crear Mascota: POST `/add/{ownerId}`
+- Crear Mascota: `POST /api/pet/add/{ownerId}`
   - Cuerpo de la solicitud: `PetRequest` 
   
 ## Ejemplo de Solicitud para Registrar Usuario
-POST /signup
+POST /api/user/signup
 {
 "name": "John Cube",
 "email": "johncube@example.com",
 "password": "p@ssword123"
 }
 
-POST /users/1/pets
+## Ejemplo de Solicitud para Registrar una Mascota
+
+POST /api/pet/add
 {
 "identificationCode": "123ABC",
 "name": "Tango",
