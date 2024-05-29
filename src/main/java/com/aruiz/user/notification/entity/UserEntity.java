@@ -32,7 +32,7 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @ManyToOne()
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     @ToString.Exclude
     private RoleEntity role;
 

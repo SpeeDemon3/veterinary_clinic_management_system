@@ -2,7 +2,6 @@ package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.PetRequest;
 import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
-import com.aruiz.user.notification.controller.dto.PetRequestUpdateWithoutOwner;
 import com.aruiz.user.notification.controller.dto.PetResponse;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.UserEntity;
@@ -117,6 +116,38 @@ public class PetServiceImpl implements PetService {
 
         if (optionalPetEntity.isPresent()) {
 
+            if (petRequestUpdate.getOwner() == null) {
+                petRequestUpdate.setOwner(optionalPetEntity.get().getOwner());
+            }
+
+            if (petRequestUpdate.getIdentificationCode() == null) {
+                petRequestUpdate.setIdentificationCode(optionalPetEntity.get().getIdentificationCode());
+            }
+
+            if (petRequestUpdate.getName() == null) {
+                petRequestUpdate.setName(optionalPetEntity.get().getName());
+            }
+
+            if (petRequestUpdate.getDescription() == null) {
+                petRequestUpdate.setDescription(optionalPetEntity.get().getDescription());
+            }
+
+            if (petRequestUpdate.getVaccinationData() == null) {
+                petRequestUpdate.setVaccinationData(optionalPetEntity.get().getVaccinationData());
+            }
+
+            if (petRequestUpdate.getImg() == null) {
+                petRequestUpdate.setImg(optionalPetEntity.get().getImg());
+            }
+
+            if (petRequestUpdate.getBirthdate() == null) {
+                petRequestUpdate.setBirthdate(petRequestUpdate.getBirthdate());
+            }
+
+            if (petRequestUpdate.getMedication() == null) {
+                petRequestUpdate.setMedication(petRequestUpdate.getMedication());
+            }
+
             PetEntity petEntitySave = modelMapper.map(petRequestUpdate, PetEntity.class);
 
             petEntitySave.setId(id);
@@ -131,8 +162,6 @@ public class PetServiceImpl implements PetService {
         log.error("Pet with ID {} is not present!!!", id);
         throw new Exception();
     }
-
-
 
     @Override
     public Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception {

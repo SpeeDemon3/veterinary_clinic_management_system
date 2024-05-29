@@ -8,8 +8,10 @@ import com.aruiz.user.notification.domain.Profile;
 import com.aruiz.user.notification.entity.ProfileEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.ProfileRepository;
+import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.ProfileService;
 import com.aruiz.user.notification.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,33 +31,35 @@ public class ProfileServiceImpl implements ProfileService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private UserServiceImpl userService;
-
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    public ProfileResponse save(ProfileRequest profileRequest, Long userId) throws Exception {
-
-        Optional<UserResponse> optionalUser = Optional.ofNullable(userService.findById(userId));
-
-        if (profileRequest != null && optionalUser.isPresent()) {
-
-            UserEntity userEntity = modelMapper.map(optionalUser.get(), UserEntity.class);
-
-            ProfileEntity profileEntity = modelMapper.map(profileRequest, ProfileEntity.class);
-
-            profileEntity.setUser(userEntity);
-
-            userEntity.setProfile(profileEntity);
-
-            profileRepository.save(profileEntity);
-
-            userService.updateById(userId, modelMapper.map(userEntity, UserRequestUpdate.class));
-
-            return modelMapper.map(profileEntity, ProfileResponse.class);
-        } else {
-            throw new Exception();
+    public ProfileResponse save(Long userId, ProfileRequest profileRequest) throws Exception {
+        // Verifica si el usuario existe en la base de datos
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            // Lanza una excepción si el usuario no existe
+            log.error("User not found with ID: " + userId);
+            throw new EntityNotFoundException("User not found with ID: " + userId);
         }
 
+        // Obtén el usuario de la base de datos
+        UserEntity userEntity = optionalUser.get();
+
+        // Mapea la solicitud de perfil a una entidad de perfil
+        ProfileEntity profileEntity = modelMapper.map(profileRequest, ProfileEntity.class);
+
+        // Establece la relación entre el usuario y el perfil
+        userEntity.setProfile(profileEntity);
+        profileEntity.setUser(userEntity);
+
+        // Guarda tanto el usuario como el perfil en la base de datos
+        userRepository.save(userEntity);
+        profileRepository.save(profileEntity);
+
+        // Mapea el perfil guardado a una respuesta de perfil y devuélvela
+        return modelMapper.map(profileEntity, ProfileResponse.class);
     }
 
     @Override
@@ -114,7 +118,17 @@ public class ProfileServiceImpl implements ProfileService {
 
         if (optionalProfileEntity.isPresent()) {
 
-            ProfileEntity profileEntity = optionalProfileEntity.get();
+
+            if (profileRequest.getImg() == null) {
+                profileRequest.setImg(optionalProfileEntity.get().getImg());
+            }
+
+            if (profileRequest.getBirthdate() == null) {
+                profileRequest.setBirthdate(optionalProfileEntity.get().getBirthdate());
+            }
+
+            ProfileEntity profileEntity = modelMapper.map(profileRequest, ProfileEntity.class);
+
             profileEntity.setId(id);
 
             profileRepository.save(profileEntity);

@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.controller.dto;
 
 import com.aruiz.user.notification.domain.User;
+import com.aruiz.user.notification.entity.ProfileEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,6 @@ public class ProfileResponse {
     private String img;
     private String birthdate;
     private User user;
+
+
 }

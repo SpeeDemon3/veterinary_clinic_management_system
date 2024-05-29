@@ -1,13 +1,13 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.*;
-import com.aruiz.user.notification.domain.User;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
+import com.aruiz.user.notification.repository.ProfileRepository;
+import com.aruiz.user.notification.repository.RoleRepository;
 import com.aruiz.user.notification.repository.UserRepository;
-import com.aruiz.user.notification.service.ProfileService;
-import com.aruiz.user.notification.service.RoleService;
 import com.aruiz.user.notification.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,11 @@ public class UserServiceImpl implements UserService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private ProfileService profileService;
+    private ProfileRepository profileRepository;
 
     @Autowired
-    private RoleService roleService;
+    private RoleRepository roleRepository;
+
 
     /**
      * Guarda un nuevo usuario en la base de datos.
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse save(SignUpRequest userRequest) throws Exception {
 
-        Optional<RoleResponse> roleEntityOptional = Optional.ofNullable(roleService.findById(Long.valueOf(1)));
+        Optional<Optional<RoleEntity>> roleEntityOptional = Optional.ofNullable(roleRepository.findById(Long.valueOf(1)));
 
         if (roleEntityOptional.isPresent()) {
 
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
             return modelMapper.map(userEntity, UserResponse.class);
         } else {
             log.info("Role not found!!!");
-            return null;
+            throw new Exception("Default role with ID 1 not found!");
         }
 
     }
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
      */
     UserEntity saveEntity(UserEntity userEntity) throws Exception {
 
-        Optional<RoleResponse> roleEntityOptional = Optional.ofNullable(roleService.findById(Long.valueOf(1)));
+        Optional<Optional<RoleEntity>> roleEntityOptional = Optional.ofNullable(roleRepository.findById(Long.valueOf(1)));
 
         if (roleEntityOptional.isPresent()) {
 
@@ -124,7 +125,7 @@ public class UserServiceImpl implements UserService {
         // Verifica si la lista está vacía y lanza una excepción si es así
         if (entityList.isEmpty()) {
             log.error("There are no entities to recover!!!");
-            throw new Exception();
+            throw new EntityNotFoundException("No users found in the database");
         }
         // Inicializa una lista para almacenar las respuestas de usuario
         List<UserResponse> userResponseList = new ArrayList<>();
@@ -153,7 +154,7 @@ public class UserServiceImpl implements UserService {
         if (userEntityOptional.isEmpty()) {
             // Registra un mensaje de error si no se encuentra ningún usuario con el identificador dado y lanza una excepción
             log.error("User not found!!!");
-            throw new Exception();
+            throw new EntityNotFoundException("User not found with ID -> " + id);
         } else {
             // Obtiene la entidad de usuario si se encuentra en la base de datos
             UserEntity userEntity = userEntityOptional.get();
@@ -220,6 +221,53 @@ public class UserServiceImpl implements UserService {
             // Registra un mensaje de error si no se encuentra ningún usuario con el identificador dado y lanza una excepción
             log.error("User not found!!!");
             throw new Exception();
+        }
+    }
+
+    public UserResponse updateByIdT(Long id, UserRequestUpdate userRequest) throws Exception {
+        // Busca la entidad de usuario en la base de datos por su identificador
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
+
+        // Verifica si la entidad de usuario existe
+        if (optionalUserEntity.isPresent() && userRequest != null) {
+
+            UserEntity userEntity = optionalUserEntity.get();
+
+            if (userRequest.getName() == null) {
+                log.info("estoy aqui###########################");
+                userRequest.setName(optionalUserEntity.get().getName());
+            }
+
+            if (userRequest.getEmail() == null) {
+                userRequest.setEmail(optionalUserEntity.get().getEmail());
+            }
+
+            if (userRequest.getPassword() == null) {
+                userRequest.setPassword(optionalUserEntity.get().getPassword());
+            }
+
+            if (userRequest.getRole() == null) {
+                userRequest.setRole(optionalUserEntity.get().getRole().getId());
+            }
+
+            if (userRequest.getProfile() == null) {
+                userRequest.setProfile(optionalUserEntity.get().getProfile().getId());
+            }
+
+            // Mapea la solicitud de actualización a una nueva entidad de usuario
+            UserEntity userEntitySave = modelMapper.map(userRequest, UserEntity.class);
+            // Establece el identificador de la entidad de usuario guardada con el identificador proporcionado
+            userEntitySave.setId(id);
+            // Guarda la entidad de usuario actualizada en la base de datos
+            userRepository.save(userEntitySave);
+            // Registra un mensaje de éxito en el log
+            log.info("Entity successfully updated!!!");
+            // Mapea la entidad de usuario guardada a una respuesta de usuario y la devuelve
+            return modelMapper.map(userEntitySave, UserResponse.class);
+
+        } else {
+            // Registra un mensaje de error si no se encuentra ningún usuario con el identificador dado y lanza una excepción
+            throw new EntityNotFoundException("User not found with ID -> " + id);
         }
 
     }

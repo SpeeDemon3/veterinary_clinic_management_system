@@ -1,17 +1,16 @@
 # veterinary_clinic_management_system
-# User Notification System
+- This project is a system for managing a veterinary clinic of users that allows the management of users, roles, profiles, pets and notifications. It is built using Spring Boot and Hibernate for data persistence.
+- Este proyecto es un sistema para la gestión de una clínica veterinaria de usuarios que permite la gestión de usuarios, roles, perfiles, mascotas y notificaciones. Está construido utilizando Spring Boot y Hibernate para la persistencia de datos.
 
-Este proyecto es un sistema para la gestión de una clínica veterinaria de usuarios que permite la gestión de usuarios, roles, perfiles, mascotas y notificaciones. Está construido utilizando Spring Boot y Hibernate para la persistencia de datos.
+## Characteristics / Características
 
-## Características
+- Register and login users. / Registro e inicio de sesión de usuarios.
+- User role management. / Gestión de roles de usuario.
+- User profile management. / Gestión de perfiles de usuario.
+- Management of pets associated with users. / Gestión de mascotas asociadas a usuarios.
+- Notifications for users. / Notificaciones para usuarios.
 
-- Registro e inicio de sesión de usuarios.
-- Gestión de roles de usuario.
-- Gestión de perfiles de usuario.
-- Gestión de mascotas asociadas a usuarios.
-- Notificaciones para usuarios.
-
-## Tecnologías Utilizadas
+## Used technology / Tecnologías Utilizadas
 
 - Java
 - Spring Boot
@@ -22,55 +21,59 @@ Este proyecto es un sistema para la gestión de una clínica veterinaria de usua
 - Jakarta Persistence API (JPA)
 - Base de datos relacional (por ejemplo, MySQL, PostgreSQL)
 
-## Requisitos Previos
+## Previous requirements / Requisitos Previos
 
-- Java 11 o superior
+- Java 11 or higher / Java 11 o superior
 - Maven
-- Base de datos relacional (configurada en `application.properties`)
+- Relational database (configured in `application.properties`) / Base de datos relacional (configurada en `application.properties`)
 
-## Instalación
+## Installation / Instalación
 
-1. Clona el repositorio:
+1. Clone the repository / Clona el repositorio:
 
    `https://github.com/SpeeDemon3/veterinary_clinic_management_system.git` 
 
-2. Navega al directorio del proyecto:
+
+2. Navigate to the project directory / Navega al directorio del proyecto:
 
 *   cd veterinary_clinic_management_system
 
-3. Compila el proyecto utilizando Maven:
+3. Build the project using Maven / Compila el proyecto utilizando Maven:
 
 * mvn clean install
 
-4. Configura la base de datos en el archivo src/main/resources/application.properties
+4. Configure the database in the src/main/resources/application.properties file / Configura la base de datos en el archivo: 
+ 
+    `src/main/resources/application.properties`
 
-5. Ejecuta la aplicación:
+
+5. Run the application / Ejecuta la aplicación:
 
 * mvn spring-boot:run
 
 ## Endpoints Principales
 
-- Registro de Usuario: `Post /api/user/signup`
-  - Cuerpo de la solicitud: `SignUpRequest`
+- User register / Registro de Usuario: `Post /api/user/signup`
+  - Request body / Cuerpo de la solicitud: `SignUpRequest`
 
-- Inicio de Sesión: `POST /api/user/login`
+- Login / Inicio de Sesión: `POST /api/user/login`
   - Cuerpo de la solicitud: `LoginRequest`
 
 - Crear Mascota: `POST /api/pet/add/{ownerId}`
-  - Cuerpo de la solicitud: `PetRequest` 
+  - Request body / Cuerpo de la solicitud: `PetRequest` 
   
-## Ejemplo de Solicitud para Registrar Usuario
+## Example of Request to Register User / Ejemplo de Solicitud para Registrar Usuario
 POST /api/user/signup
-{
+`{
 "name": "John Cube",
 "email": "johncube@example.com",
 "password": "p@ssword123"
-}
+}`
 
-## Ejemplo de Solicitud para Registrar una Mascota
+## Sample Application to Register a Pet / Ejemplo de Solicitud para Registrar una Mascota
 
 POST /api/pet/add
-{
+`{
 "identificationCode": "123ABC",
 "name": "Tango",
 "description": "Friendly dog",
@@ -78,14 +81,14 @@ POST /api/pet/add
 "img": "image_url",
 "birthdate": "2020-01-01",
 "medication": "None"
-}
+}`
 
-## Contribución
-1. Haz un fork del proyecto.
-2. Crea una nueva rama (git checkout -b feature/nueva-caracteristica).
-3. Realiza tus cambios y haz commit (git commit -am 'Agrega nueva característica').
-4. Haz push a la rama (git push origin feature/nueva-caracteristica).
-5. Abre un Pull Request.
+## Contribution / Contribución
+1. Fork the project. / Haz un fork del proyecto.
+2. Create a new branch (git checkout -b feature/new-feature). / Crea una nueva rama (git checkout -b feature/nueva-caracteristica).
+3. Make your changes and commit (git commit -am 'Add new feature'). / Realiza tus cambios y haz commit (git commit -am 'Agrega nueva característica').
+4. Push to the branch (git push origin feature/new-feature). / Haz push a la rama (git push origin feature/nueva-caracteristica).
+5. Open a Pull Request. / Abre un Pull Request.
 
 ## Licencia
-Este proyecto está licenciado bajo la Licencia GPL-3.0 license. Ver el archivo LICENSE para más detalles.
+This project is licensed under the GPL-3.0 license. See the LICENSE file for more details. / Este proyecto está licenciado bajo la Licencia GPL-3.0 license. Ver el archivo LICENSE para más detalles.

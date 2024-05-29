@@ -21,7 +21,7 @@ public class ProfileController {
     @PostMapping("/add/{id}")
     public ResponseEntity<?> add(@PathVariable  Long id, @RequestBody ProfileRequest profileRequest) {
         try {
-            return ResponseEntity.ok(profileService.save(profileRequest, id));
+            return ResponseEntity.ok(profileService.save(id, profileRequest));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

@@ -90,6 +90,14 @@ public class UserController {
         }
     }
 
+    @PutMapping("/updateByIdT/{id}")
+    public ResponseEntity<?> updateByIdT(@PathVariable Long id, @RequestBody UserRequestUpdate userRequest) {
+        try {
+            return ResponseEntity.ok(userService.updateById(id, userRequest));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 
