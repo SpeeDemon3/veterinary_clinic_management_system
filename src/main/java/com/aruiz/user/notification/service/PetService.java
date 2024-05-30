@@ -26,6 +26,8 @@ public interface PetService {
 
     public byte[] getPetImg(Long id) throws Exception;
 
+    String petsInfoDownloadCsv() throws IOException;
+
     Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception;
 
 

@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/user")
 @Slf4j
@@ -156,7 +158,18 @@ public class UserController {
         }
     }
 
+    @GetMapping(value= "/downloadFileUsers")
+    public ResponseEntity<?> downloadFileUsers() throws IOException {
+        HttpHeaders headers = new HttpHeaders();
 
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "users-data.csv");
+
+        byte[] csvBytes = userService.usersInfoDownloadCsv().getBytes();
+
+        return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
+
+    }
 
 
 

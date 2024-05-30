@@ -1,7 +1,6 @@
 package com.aruiz.user.notification.service;
 
 import com.aruiz.user.notification.controller.dto.SignUpRequest;
-import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.controller.dto.UserResponse;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +26,8 @@ public interface UserService extends UserDetailsService {
     void addUserImg(Long id, MultipartFile imageFile) throws IOException;
 
     byte[] getUserImg(Long id) throws Exception;
+
+    String usersInfoDownloadCsv() throws Exception;
 
     UserDetails loadUserByUsername(String emailUser) throws UsernameNotFoundException;
 }

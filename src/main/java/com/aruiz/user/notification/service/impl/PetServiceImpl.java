@@ -34,6 +34,7 @@ public class PetServiceImpl implements PetService {
     @Autowired
     private ModelMapper modelMapper;
 
+    private final String[] HEADER = {"ID", "Birthdate", "Description", "Identification Code", "Medication", "Name", "Vaccination Data", "Owner ID"};
 
     @Override
     public PetResponse save(Long ownerId, PetRequest petRequest) throws Exception {
@@ -193,6 +194,46 @@ public class PetServiceImpl implements PetService {
         PetEntity petEntity = petRepository.findById(id).orElseThrow(RuntimeException::new);
 
         return Base64.getDecoder().decode(petEntity.getImg());
+    }
+
+    @Override
+    public String petsInfoDownloadCsv() throws IOException {
+
+        List<PetEntity> petEntityList = petRepository.findAll();
+
+        if (!petEntityList.isEmpty()) {
+
+            StringBuilder csvContent = new StringBuilder();
+
+            int count = 1;
+
+            for (String header : HEADER) {
+                csvContent.append(header).append(",");
+
+                if (count == HEADER.length) {
+                    csvContent.append(header).append("\n");
+                }
+                count++;
+            }
+
+            for (PetEntity pet : petEntityList) {
+                //"ID", "Birthdate", "Description", "Identification Code", "Medication", "Name", "Vaccination Data", "Owner ID"
+                csvContent
+                        .append(pet.getId()).append(",")
+                        .append(pet.getBirthdate()).append(",")
+                        .append(pet.getDescription()).append(",")
+                        .append(pet.getIdentificationCode()).append(",")
+                        .append(pet.getMedication()).append(",")
+                        .append(pet.getName()).append(",")
+                        .append(pet.getVaccinationData()).append(",")
+                        .append(pet.getOwner()).append("\n");
+            }
+
+            return csvContent.toString();
+        }
+        log.error("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}", 0);
+        throw new RuntimeException();
+
     }
 
     @Override

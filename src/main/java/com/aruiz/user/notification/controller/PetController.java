@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 
 @RestController
 @RequestMapping("/api/pet")
@@ -130,5 +132,17 @@ public class PetController {
         }
     }
 
+    @GetMapping(value= "/downloadFilePets")
+    public ResponseEntity<?> downloadFileUsers() throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "pets-data.csv");
+
+        byte[] csvBytes = petService.petsInfoDownloadCsv().getBytes();
+
+        return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
+
+    }
 
 }

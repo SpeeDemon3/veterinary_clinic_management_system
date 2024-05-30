@@ -1,7 +1,6 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.*;
-import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.RoleRepository;
@@ -37,6 +36,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    private final String[] HEADERS = {"ID", "Birthdate", "DNI", "EMAIL", "Name", "Phone Number"};
 
 
     /**
@@ -323,6 +324,44 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(RuntimeException::new);
 
         return Base64.getDecoder().decode(userEntity.getImg());
+    }
+
+    @Override
+    public String usersInfoDownloadCsv() throws IOException {
+
+        List<UserEntity> userEntityList = userRepository.findAll();
+
+        if (!userEntityList.isEmpty()) {
+            StringBuilder csvContent = new StringBuilder();
+
+            int count = 1;
+
+            for (String header : HEADERS) {
+
+                csvContent.append(header).append(",");
+
+                if (count == HEADERS.length) {
+                    csvContent.append(header).append("\n");
+                }
+                count++;
+            }
+
+            for (UserEntity user : userEntityList) {
+                csvContent
+                        .append(user.getId()).append(",")
+                        .append(user.getBirthdate()).append(",")
+                        .append(user.getDni()).append(",")
+                        .append(user.getEmail()).append(",")
+                        .append(user.getName()).append(",")
+                        .append(user.getPhoneNumber()).append("\n");
+            }
+
+            return csvContent.toString();
+        }
+
+        log.error("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}", 0);
+        throw new RuntimeException();
+
     }
 
 }
