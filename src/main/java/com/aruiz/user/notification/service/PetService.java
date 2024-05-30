@@ -24,6 +24,8 @@ public interface PetService {
 
     void addPetImg(Long id, MultipartFile imageFile) throws Exception;
 
+    public byte[] getPetImg(Long id) throws Exception;
+
     Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception;
 
 

@@ -7,7 +7,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,6 +105,28 @@ public class PetController {
             log.info(String.valueOf(imageFile.getSize()));
             log.info(imageFile.getContentType());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping("/petImg/{id}")
+    public ResponseEntity<byte[]> getPetImg(@PathVariable Long id) {
+        try {
+
+            byte[] imgBytes = petService.getPetImg(id);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.IMAGE_PNG);
+
+            log.info("Recovering image....");
+
+            return new ResponseEntity<>(imgBytes, httpHeaders, HttpStatus.OK);
+
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

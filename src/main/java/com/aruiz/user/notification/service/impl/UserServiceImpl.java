@@ -317,4 +317,12 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public byte[] getUserImg(Long id) throws Exception {
+
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        return Base64.getDecoder().decode(userEntity.getImg());
+    }
+
 }

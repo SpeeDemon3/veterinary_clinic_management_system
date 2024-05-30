@@ -26,5 +26,7 @@ public interface UserService extends UserDetailsService {
 
     void addUserImg(Long id, MultipartFile imageFile) throws IOException;
 
+    byte[] getUserImg(Long id) throws Exception;
+
     UserDetails loadUserByUsername(String emailUser) throws UsernameNotFoundException;
 }

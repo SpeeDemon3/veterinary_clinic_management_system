@@ -188,6 +188,14 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
+    public byte[] getPetImg(Long id) throws Exception {
+
+        PetEntity petEntity = petRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        return Base64.getDecoder().decode(petEntity.getImg());
+    }
+
+    @Override
     public Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception {
         return Optional.empty();
     }
