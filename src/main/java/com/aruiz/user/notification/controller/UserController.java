@@ -13,6 +13,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/user")
@@ -107,6 +108,29 @@ public class UserController {
     }
 
 
+    @PostMapping("/userImg/{id}/add")
+    public ResponseEntity<String> addPetImg(@PathVariable Long id, @RequestParam("imageFile") MultipartFile imageFile) {
+        try {
+
+            if (!imageFile.getOriginalFilename().contains(".png")) {
+                log.error("The image must be in PNG format!!!!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+
+            userService.addUserImg(id, imageFile);
+
+            log.info("Image name: {}", imageFile.getOriginalFilename());
+            log.info("Image size: {}", imageFile.getSize());
+
+            return ResponseEntity.ok("Image successfully saved!!!");
+        } catch (Exception e) {
+            log.error("The image could not be added to the user.");
+            log.info(imageFile.getOriginalFilename());
+            log.info(String.valueOf(imageFile.getSize()));
+            log.info(imageFile.getContentType());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
 
 

@@ -7,7 +7,9 @@ import com.aruiz.user.notification.controller.dto.UserResponse;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
@@ -21,6 +23,8 @@ public interface UserService extends UserDetailsService {
     String deleteById(Long id) throws Exception;
 
     UserResponse updateById(Long id, UserRequestUpdate userRequest) throws Exception;
+
+    void addUserImg(Long id, MultipartFile imageFile) throws IOException;
 
     UserDetails loadUserByUsername(String emailUser) throws UsernameNotFoundException;
 }

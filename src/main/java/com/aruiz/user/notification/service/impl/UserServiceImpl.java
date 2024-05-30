@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.*;
+import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.RoleRepository;
@@ -13,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -289,6 +293,26 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             // Lanza una excepción de RuntimeException si ocurre algún error durante la búsqueda del usuario
             throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public void addUserImg(Long id, MultipartFile imageFile) throws IOException {
+
+        Optional<UserEntity> userEntityOptional = userRepository.findById(id);
+
+        if (userEntityOptional.isPresent()) {
+            log.info("Saving pet image...");
+
+            UserEntity userEntity = userEntityOptional.get();
+
+            userEntity.setImg(Base64.getEncoder().encodeToString(imageFile.getBytes()));
+
+            userRepository.save(userEntity);
+
+        } else {
+            throw new IOException();
         }
 
     }
