@@ -85,9 +85,23 @@ public class PetController {
     @PostMapping("/petImg/{id}/add")
     public ResponseEntity<String> addPetImg(@PathVariable Long id, @RequestParam("imageFile")MultipartFile imageFile) {
         try {
+
+            if (!imageFile.getOriginalFilename().contains(".png")) {
+                log.error("The image must be in PNG format!!!!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+
             petService.addPetImg(id, imageFile);
+
+            log.info("Image name: {}", imageFile.getOriginalFilename());
+            log.info("Image size: {}", imageFile.getSize());
+
             return ResponseEntity.ok("Image successfully saved!!!");
         } catch (Exception e) {
+            log.error("The image could not be added to the user.");
+            log.info(imageFile.getOriginalFilename());
+            log.info(String.valueOf(imageFile.getSize()));
+            log.info(imageFile.getContentType());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
