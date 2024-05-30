@@ -28,7 +28,10 @@ public class PetEntity {
     private String name;
     private String description;
     private String vaccinationData;
+
+    @Column(columnDefinition = "LONGTEXT")
     private String img;
+
     private String birthdate;
     private String medication;
 }

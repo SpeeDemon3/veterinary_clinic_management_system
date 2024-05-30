@@ -12,8 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.EOFException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -161,6 +165,26 @@ public class PetServiceImpl implements PetService {
 
         log.error("Pet with ID {} is not present!!!", id);
         throw new Exception();
+    }
+
+    @Override
+    public void addPetImg(Long id, MultipartFile imageFile) throws IOException {
+
+        Optional<PetEntity> petEntityOptional = petRepository.findById(id);
+
+        if (petEntityOptional.isPresent()) {
+            log.info("Saving pet image...");
+
+            PetEntity petEntity = petEntityOptional.get();
+
+            petEntity.setImg(Base64.getEncoder().encodeToString(imageFile.getBytes()));
+
+            petRepository.save(petEntity);
+
+        } else {
+            throw new IOException();
+        }
+
     }
 
     @Override

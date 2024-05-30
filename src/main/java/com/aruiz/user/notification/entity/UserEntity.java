@@ -37,6 +37,7 @@ public class UserEntity implements UserDetails {
     @Column(length = 13)
     private String phoneNumber;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String img;
 
     private String birthdate;

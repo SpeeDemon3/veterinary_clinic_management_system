@@ -10,6 +10,7 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -78,6 +79,16 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/petImg/{id}/add")
+    public ResponseEntity<String> addPetImg(@PathVariable Long id, @RequestParam("imageFile")MultipartFile imageFile) {
+        try {
+            petService.addPetImg(id, imageFile);
+            return ResponseEntity.ok("Image successfully saved!!!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
