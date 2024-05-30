@@ -1,11 +1,7 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.*;
-import com.aruiz.user.notification.domain.Profile;
-import com.aruiz.user.notification.domain.Role;
-import com.aruiz.user.notification.domain.User;
 import com.aruiz.user.notification.entity.PetEntity;
-import com.aruiz.user.notification.entity.ProfileEntity;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.UserRepository;
@@ -28,7 +24,6 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
     private final RoleServicesImpl roleServices;
-    private final ProfileServiceImpl profileService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -42,8 +37,6 @@ public class AuthenticationService {
         RoleEntity roleFind;
 
         RoleEntity roleEntity = new RoleEntity();
-
-        ProfileEntity profileEntity = new ProfileEntity();
 
         ArrayList<PetEntity> pets = new ArrayList<>();
 
@@ -64,12 +57,14 @@ public class AuthenticationService {
                     .name(request.getName())
                     .email(request.getEmail())
                     .password(passwordEncoder.encode(request.getPassword()))
+                    .dni(request.getDni())
+                    .phoneNumber(request.getPhoneNumber())
+                    .img(request.getImg())
+                    .birthdate(request.getBirthdate())
                     .role(roleEntity)
-                    //.profile(null)
                     .pets(null)
                     .build();
 
-            profileEntity.setUser(user);
 
             // Guardar el usuario en la base de datos
             userService.saveEntity(user);

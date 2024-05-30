@@ -13,7 +13,10 @@ public class UserRequestUpdate {
     private String name;
     private String email;
     private String password;
+    private String dni;
+    private String phoneNumber;
+    private String img;
+    private String birthdate;
     private Long role;
-    private Long profile;
 
 }

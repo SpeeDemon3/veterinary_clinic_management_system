@@ -15,7 +15,6 @@ public class User {
     private String email;
     private String password;
     private Role role;
-    private Profile profile;
     private List<Notification> notifications;
     private List<Pet> pets;
 

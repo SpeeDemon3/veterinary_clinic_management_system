@@ -6,8 +6,10 @@ import com.aruiz.user.notification.controller.dto.UserRequest;
 import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.service.impl.AuthenticationService;
 import com.aruiz.user.notification.service.impl.UserServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,8 +60,12 @@ public class UserController {
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(userService.findById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -67,8 +73,10 @@ public class UserController {
     public ResponseEntity<?> findAll() {
         try {
             return ResponseEntity.ok(userService.findAll());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -76,8 +84,12 @@ public class UserController {
     public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody UserRequestUpdate userRequest) {
         try {
             return ResponseEntity.ok(userService.updateById(id, userRequest));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -85,19 +97,16 @@ public class UserController {
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(userService.deleteById(id));
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    @PutMapping("/updateByIdT/{id}")
-    public ResponseEntity<?> updateByIdT(@PathVariable Long id, @RequestBody UserRequestUpdate userRequest) {
-        try {
-            return ResponseEntity.ok(userService.updateById(id, userRequest));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+
 
 
 

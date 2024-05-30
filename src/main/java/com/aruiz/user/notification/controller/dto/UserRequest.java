@@ -1,7 +1,5 @@
 package com.aruiz.user.notification.controller.dto;
 
-import com.aruiz.user.notification.domain.Profile;
-import com.aruiz.user.notification.domain.Role;
 import lombok.*;
 
 @Data
@@ -12,5 +10,8 @@ public class UserRequest {
     private String name;
     private String email;
     private String password;
-    private Long profile;
+    private String dni;
+    private String phoneNumber;
+    private String img;
+    private String birthdate;
 }

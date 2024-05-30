@@ -3,7 +3,6 @@ package com.aruiz.user.notification.service.impl;
 import com.aruiz.user.notification.controller.dto.*;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
-import com.aruiz.user.notification.repository.ProfileRepository;
 import com.aruiz.user.notification.repository.RoleRepository;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.UserService;
@@ -33,9 +32,6 @@ public class UserServiceImpl implements UserService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private ProfileRepository profileRepository;
-
-    @Autowired
     private RoleRepository roleRepository;
 
 
@@ -57,13 +53,19 @@ public class UserServiceImpl implements UserService {
         if (roleEntityOptional.isPresent()) {
 
             RoleEntity roleEntity = modelMapper.map(roleEntityOptional.get(), RoleEntity.class);
-
+            /*
             // Mapea la solicitud a un objeto de actualización de usuario
             UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
             // Establece el rol por defecto (1L)
             userRequestUpdate.setRole(roleEntity.getId());
             // Mapea la solicitud a una entidad de usuario
-            UserEntity userEntity = modelMapper.map(userRequestUpdate, UserEntity.class);
+            */
+            UserEntity userEntity = modelMapper.map(userRequest, UserEntity.class);
+
+            if (userEntity.getRole() == null) {
+                userEntity.setRole(roleEntity);
+            }
+
             // Guarda la entidad de usuario en la base de datos
             userRepository.save(userEntity);
             // Registra información sobre la entidad guardada
@@ -203,67 +205,64 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse updateById(Long id, UserRequestUpdate userRequest) throws Exception {
         // Busca la entidad de usuario en la base de datos por su identificador
-        UserEntity userEntity = userRepository.findById(id).orElse(null);
-        // Verifica si la entidad de usuario existe
-        if (userEntity != null) {
-            // Mapea la solicitud de actualización a una nueva entidad de usuario
-            UserEntity userEntitySave = modelMapper.map(userRequest, UserEntity.class);
-            // Establece el identificador de la entidad de usuario guardada con el identificador proporcionado
-            userEntitySave.setId(id);
-            // Guarda la entidad de usuario actualizada en la base de datos
-            userRepository.save(userEntitySave);
-            // Registra un mensaje de éxito en el log
-            log.info("Entity successfully updated!!!");
-            // Mapea la entidad de usuario guardada a una respuesta de usuario y la devuelve
-            return modelMapper.map(userEntitySave, UserResponse.class);
-
-        } else {
-            // Registra un mensaje de error si no se encuentra ningún usuario con el identificador dado y lanza una excepción
-            log.error("User not found!!!");
-            throw new Exception();
-        }
-    }
-
-    public UserResponse updateByIdT(Long id, UserRequestUpdate userRequest) throws Exception {
-        // Busca la entidad de usuario en la base de datos por su identificador
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
-
+        
         // Verifica si la entidad de usuario existe
-        if (optionalUserEntity.isPresent() && userRequest != null) {
+        if (optionalUserEntity.isPresent()) {
 
             UserEntity userEntity = optionalUserEntity.get();
 
             if (userRequest.getName() == null) {
-                log.info("estoy aqui###########################");
-                userRequest.setName(optionalUserEntity.get().getName());
+                userEntity.setName(optionalUserEntity.get().getName());
+            } else {
+                userEntity.setName(userRequest.getName());
             }
 
             if (userRequest.getEmail() == null) {
-                userRequest.setEmail(optionalUserEntity.get().getEmail());
+                userEntity.setEmail(optionalUserEntity.get().getEmail());
+            } else {
+                userEntity.setEmail(userRequest.getEmail());
             }
 
             if (userRequest.getPassword() == null) {
-                userRequest.setPassword(optionalUserEntity.get().getPassword());
+                userEntity.setPassword(optionalUserEntity.get().getPassword());
+            } else {
+                userEntity.setPassword(userRequest.getPassword());
             }
 
-            if (userRequest.getRole() == null) {
-                userRequest.setRole(optionalUserEntity.get().getRole().getId());
+            if (userRequest.getDni() == null) {
+                userEntity.setDni(optionalUserEntity.get().getDni());
+            } else {
+                userEntity.setDni(userRequest.getDni());
             }
 
-            if (userRequest.getProfile() == null) {
-                userRequest.setProfile(optionalUserEntity.get().getProfile().getId());
+            if (userRequest.getPhoneNumber() == null) {
+                userEntity.setPhoneNumber(optionalUserEntity.get().getPhoneNumber());
+            } else {
+                userEntity.setPhoneNumber(userRequest.getPhoneNumber());
             }
 
-            // Mapea la solicitud de actualización a una nueva entidad de usuario
-            UserEntity userEntitySave = modelMapper.map(userRequest, UserEntity.class);
+            if (userRequest.getImg() == null) {
+                userEntity.setImg(optionalUserEntity.get().getImg());
+            } else {
+                userEntity.setImg(userRequest.getImg());
+            }
+
+            if (userRequest.getBirthdate() == null) {
+                userEntity.setBirthdate(optionalUserEntity.get().getBirthdate());
+            } else {
+                userEntity.setBirthdate(userRequest.getBirthdate());
+            }
+
             // Establece el identificador de la entidad de usuario guardada con el identificador proporcionado
-            userEntitySave.setId(id);
+            userEntity.setId(id);
             // Guarda la entidad de usuario actualizada en la base de datos
-            userRepository.save(userEntitySave);
+            userRepository.save(userEntity);
+
             // Registra un mensaje de éxito en el log
             log.info("Entity successfully updated!!!");
             // Mapea la entidad de usuario guardada a una respuesta de usuario y la devuelve
-            return modelMapper.map(userEntitySave, UserResponse.class);
+            return modelMapper.map(userEntity, UserResponse.class);
 
         } else {
             // Registra un mensaje de error si no se encuentra ningún usuario con el identificador dado y lanza una excepción

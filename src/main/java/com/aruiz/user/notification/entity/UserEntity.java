@@ -30,15 +30,27 @@ public class UserEntity implements UserDetails {
     @Column(unique = true)
     private String email;
     private String password;
+    // New
+    @Column(unique = true)
+    private String dni;
 
+    @Column(length = 13)
+    private String phoneNumber;
+
+    private String img;
+
+    private String birthdate;
+    // NEW
     @ManyToOne()
     @JoinColumn(name = "role_id")
     @ToString.Exclude
     private RoleEntity role;
 
+    /*
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @ToString.Exclude
     private ProfileEntity profile;
+     */
 
     @OneToMany(mappedBy = "destinationUser")
     @ToString.Exclude
