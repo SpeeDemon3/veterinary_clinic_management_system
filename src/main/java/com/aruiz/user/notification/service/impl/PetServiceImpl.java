@@ -8,6 +8,7 @@ import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.PetRepository;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.PetService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class PetServiceImpl implements PetService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private final String[] HEADER = {"ID", "Birthdate", "Description", "Identification Code", "Medication", "Name", "Vaccination Data", "Owner ID"};
 
@@ -292,8 +296,59 @@ public class PetServiceImpl implements PetService {
 
     }
 
+    /**
+     * Retrieves a pet by its identification code.
+     *
+     * @param identificationCode The identification code of the pet.
+     * @return An Optional containing the pet entity, if found.
+     * @throws Exception if the pet with the specified identification code is not found.
+     */
     @Override
     public Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception {
-        return Optional.empty();
+
+        Optional<PetEntity> optionalPetEntity = petRepository.findByIdentificationCode(identificationCode);
+
+        if (optionalPetEntity.isPresent()) {
+            return Optional.of(optionalPetEntity.get());
+        }
+
+        log.error("Pet with identification code {} not found!!!", identificationCode);
+
+        throw new Exception();
     }
+
+    /**
+     * Retrieves information about pets from the database and converts it to JSON format.
+     *
+     * @return JSON string containing information about pets.
+     * @throws Exception if there is an error during the process.
+     */
+    @Override
+    public String petsInfoDownloadJson() throws Exception {
+
+        List<PetEntity> petEntityList = petRepository.findAll();
+
+        if (!petEntityList.isEmpty()) {
+            String petsJson = objectMapper.writeValueAsString(petEntityList);
+
+            return petsJson;
+        }
+
+        throw new Exception();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

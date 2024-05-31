@@ -182,8 +182,8 @@ public class PetController {
      * @return ResponseEntity containing the CSV file to download.
      * @throws IOException if an I/O error occurs while creating the CSV file.
      */
-    @GetMapping(value= "/downloadFilePets")
-    public ResponseEntity<?> downloadFileUsers() throws IOException {
+    @GetMapping(value= "/downloadFileCsvPets")
+    public ResponseEntity<?> downloadFileCsvPets() throws IOException {
         HttpHeaders headers = new HttpHeaders();
 
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -192,6 +192,44 @@ public class PetController {
         byte[] csvBytes = petService.petsInfoDownloadCsv().getBytes();
 
         return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
+
+    }
+
+    /**
+     * Retrieves a pet by its identification code.
+     *
+     * @param code The identification code of the pet.
+     * @return The response containing the details of the retrieved pet.
+     */
+    @GetMapping("/findByCode/{code}")
+    public ResponseEntity<?> findByCode(@PathVariable String code) {
+        try {
+            return ResponseEntity.ok(petService.findByIdentificationCode(code));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    /**
+     * Handles HTTP GET requests to download a JSON file containing information about pets.
+     *
+     * @return ResponseEntity containing the JSON file with appropriate headers for download.
+     */
+    @GetMapping("/downloadFileJsonPets")
+    public ResponseEntity<?> downloadFileJsonPets() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setContentDispositionFormData("attachment", "pets.json");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(petService.petsInfoDownloadJson());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error downloading pets JSON!!!!");
+        }
 
     }
 

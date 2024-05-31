@@ -24,11 +24,13 @@ public interface PetService {
 
     void addPetImg(Long id, MultipartFile imageFile) throws Exception;
 
-    public byte[] getPetImg(Long id) throws Exception;
+    byte[] getPetImg(Long id) throws Exception;
 
     String petsInfoDownloadCsv() throws IOException;
 
     Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception;
+
+    String petsInfoDownloadJson() throws Exception;
 
 
 }

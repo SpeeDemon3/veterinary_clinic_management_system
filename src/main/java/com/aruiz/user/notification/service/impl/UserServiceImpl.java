@@ -6,6 +6,7 @@ import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.RoleRepository;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -39,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private final String[] HEADERS = {"ID", "Birthdate", "DNI", "EMAIL", "Name", "Phone Number"};
 
@@ -377,6 +381,27 @@ public class UserServiceImpl implements UserService {
         log.error("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}", 0);
         throw new RuntimeException();
 
+    }
+
+    /**
+     * Retrieves information about users from the database and converts it to JSON format.
+     *
+     * @return JSON string containing information about users.
+     * @throws Exception if there is an error during the process.
+     */
+    @Override
+    public String usersInfoDownloadJson() throws Exception {
+
+        List<UserEntity> userEntityList = userRepository.findAll();
+
+        if (!userEntityList.isEmpty()) {
+            // Convert the list of user entities to JSON format using ObjectMapper
+            String usersJson = objectMapper.writeValueAsString(userEntityList);
+
+            return usersJson;
+        }
+
+        throw new Exception();
     }
 
 }

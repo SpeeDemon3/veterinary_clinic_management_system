@@ -29,5 +29,7 @@ public interface UserService extends UserDetailsService {
 
     String usersInfoDownloadCsv() throws Exception;
 
+    String usersInfoDownloadJson() throws Exception;
+
     UserDetails loadUserByUsername(String emailUser) throws UsernameNotFoundException;
 }

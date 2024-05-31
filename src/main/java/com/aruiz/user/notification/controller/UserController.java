@@ -204,7 +204,7 @@ public class UserController {
      * @return ResponseEntity containing the CSV file to download.
      * @throws IOException if an I/O error occurs while creating the CSV file.
      */
-    @GetMapping(value= "/downloadFileUsers")
+    @GetMapping(value= "/downloadFileCsvUsers")
     public ResponseEntity<?> downloadFileUsers() throws IOException {
         HttpHeaders headers = new HttpHeaders();
 
@@ -214,6 +214,27 @@ public class UserController {
         byte[] csvBytes = userService.usersInfoDownloadCsv().getBytes();
 
         return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
+
+    }
+
+    /**
+     * Handles HTTP GET requests to download a JSON file containing information about users.
+     *
+     * @return ResponseEntity containing the JSON file with appropriate headers for download.
+     */
+    @GetMapping("/downloadFileJsonUsers")
+    public ResponseEntity<?> downloadFileJsonPets() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setContentDispositionFormData("attachment", "users.json");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(userService.usersInfoDownloadJson());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error downloading pets JSON!!!!");
+        }
 
     }
 
