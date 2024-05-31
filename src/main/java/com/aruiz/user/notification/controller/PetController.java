@@ -25,6 +25,13 @@ public class PetController {
 
     private final PetServiceImpl petService;
 
+    /**
+     * Handles HTTP POST requests to add a new pet.
+     *
+     * @param ownerId The ID of the owner of the pet.
+     * @param petRequest The request containing pet information.
+     * @return ResponseEntity containing the details of the added pet.
+     */
     @PostMapping("/add/{ownerId}")
     public ResponseEntity<?> addPet(@PathVariable Long ownerId, @RequestBody PetRequest petRequest) {
         try {
@@ -36,6 +43,12 @@ public class PetController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to retrieve a pet by ID.
+     *
+     * @param id The ID of the pet to retrieve.
+     * @return ResponseEntity containing the details of the retrieved pet.
+     */
     @GetMapping("/findById/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
@@ -49,6 +62,11 @@ public class PetController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to retrieve all pets.
+     *
+     * @return ResponseEntity containing the list of pets.
+     */
     @GetMapping("/findAll")
     public ResponseEntity<?> findAllPets() {
         try {
@@ -60,6 +78,12 @@ public class PetController {
         }
     }
 
+    /**
+     * Handles HTTP DELETE requests to delete a pet by ID.
+     *
+     * @param id The ID of the pet to delete.
+     * @return ResponseEntity indicating the status of the deletion.
+     */
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
@@ -73,6 +97,13 @@ public class PetController {
         }
     }
 
+    /**
+     * Handles HTTP PUT requests to update a pet by ID.
+     *
+     * @param id The ID of the pet.
+     * @param petRequestUpdate The updated information of the pet.
+     * @return ResponseEntity containing the updated pet details.
+     */
     @PutMapping("/updateById/{id}")
     public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody PetRequestUpdate petRequestUpdate) {
         try {
@@ -86,6 +117,13 @@ public class PetController {
         }
     }
 
+    /**
+     * Handles HTTP POST requests to add an image to a pet.
+     *
+     * @param id The ID of the pet.
+     * @param imageFile The image file to be added.
+     * @return ResponseEntity indicating the status of the image addition.
+     */
     @PostMapping("/petImg/{id}/add")
     public ResponseEntity<String> addPetImg(@PathVariable Long id, @RequestParam("imageFile")MultipartFile imageFile) {
         try {
@@ -110,6 +148,12 @@ public class PetController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to retrieve a pet's image.
+     *
+     * @param id The ID of the pet.
+     * @return ResponseEntity containing the pet's image.
+     */
     @GetMapping("/petImg/{id}")
     public ResponseEntity<byte[]> getPetImg(@PathVariable Long id) {
         try {
@@ -132,6 +176,12 @@ public class PetController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to download a CSV file containing pet information.
+     *
+     * @return ResponseEntity containing the CSV file to download.
+     * @throws IOException if an I/O error occurs while creating the CSV file.
+     */
     @GetMapping(value= "/downloadFilePets")
     public ResponseEntity<?> downloadFileUsers() throws IOException {
         HttpHeaders headers = new HttpHeaders();

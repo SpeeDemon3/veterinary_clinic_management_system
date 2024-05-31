@@ -14,6 +14,11 @@ public class RoleInitializer {
     @Autowired
     private RoleRepository roleRepository;
 
+    /**
+     * Initializes the system by creating a default user role if it doesn't exist.
+     *
+     * @throws Exception if there is an error during initialization.
+     */
     @PostConstruct
     public void init() throws Exception {
 

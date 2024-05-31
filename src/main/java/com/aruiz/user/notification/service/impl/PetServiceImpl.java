@@ -36,6 +36,14 @@ public class PetServiceImpl implements PetService {
 
     private final String[] HEADER = {"ID", "Birthdate", "Description", "Identification Code", "Medication", "Name", "Vaccination Data", "Owner ID"};
 
+    /**
+     * Saves a new pet.
+     *
+     * @param ownerId The ID of the owner of the pet.
+     * @param petRequest The details of the pet to be saved.
+     * @return The response containing the details of the saved pet.
+     * @throws Exception if the owner with the specified ID is not found or there is an error saving the pet.
+     */
     @Override
     public PetResponse save(Long ownerId, PetRequest petRequest) throws Exception {
 
@@ -61,6 +69,12 @@ public class PetServiceImpl implements PetService {
         return null;
     }
 
+    /**
+     * Retrieves all pets.
+     *
+     * @return A list containing the details of all pets.
+     * @throws Exception if there are no pets to recover.
+     */
     @Override
     public List<PetResponse> findAll() throws Exception {
 
@@ -81,6 +95,13 @@ public class PetServiceImpl implements PetService {
         return petResponseList;
     }
 
+    /**
+     * Retrieves a pet by its ID.
+     *
+     * @param id The ID of the pet.
+     * @return The response containing the details of the retrieved pet.
+     * @throws Exception if the pet with the specified ID is not found.
+     */
     @Override
     public PetResponse findById(Long id) throws Exception {
 
@@ -98,6 +119,13 @@ public class PetServiceImpl implements PetService {
         throw new Exception();
     }
 
+    /**
+     * Deletes a pet by its ID.
+     *
+     * @param id The ID of the pet to delete.
+     * @return A message indicating the status of the deletion.
+     * @throws Exception if the pet with the specified ID is not found.
+     */
     @Override
     public String deleteById(Long id) throws Exception {
 
@@ -114,6 +142,14 @@ public class PetServiceImpl implements PetService {
         throw new Exception();
     }
 
+    /**
+     * Updates a pet by its ID.
+     *
+     * @param id The ID of the pet.
+     * @param petRequestUpdate The updated information of the pet.
+     * @return The response containing the updated pet details.
+     * @throws Exception if the pet with the specified ID is not found.
+     */
     @Override
     public PetResponse updateById(Long id, PetRequestUpdate petRequestUpdate) throws Exception {
 
@@ -168,6 +204,13 @@ public class PetServiceImpl implements PetService {
         throw new Exception();
     }
 
+    /**
+     * Adds an image to a pet.
+     *
+     * @param id The ID of the pet.
+     * @param imageFile The image file to be added.
+     * @throws IOException if an I/O error occurs while adding the image.
+     */
     @Override
     public void addPetImg(Long id, MultipartFile imageFile) throws IOException {
 
@@ -188,6 +231,13 @@ public class PetServiceImpl implements PetService {
 
     }
 
+    /**
+     * Retrieves the image of a pet by its ID.
+     *
+     * @param id The ID of the pet.
+     * @return The image byte array.
+     * @throws Exception if the pet image cannot be retrieved.
+     */
     @Override
     public byte[] getPetImg(Long id) throws Exception {
 
@@ -196,6 +246,12 @@ public class PetServiceImpl implements PetService {
         return Base64.getDecoder().decode(petEntity.getImg());
     }
 
+    /**
+     * Generates a CSV file containing information about pets.
+     *
+     * @return The CSV content as a string.
+     * @throws IOException if an I/O error occurs while generating the CSV file.
+     */
     @Override
     public String petsInfoDownloadCsv() throws IOException {
 

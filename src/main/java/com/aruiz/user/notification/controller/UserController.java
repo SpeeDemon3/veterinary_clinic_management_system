@@ -39,7 +39,12 @@ public class UserController {
         }
     }
 
-
+    /**
+     * Handles HTTP POST requests for user signup.
+     *
+     * @param userRequest The request body containing user signup information.
+     * @return ResponseEntity containing the result of the signup operation.
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest userRequest) {
         try {
@@ -52,6 +57,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles HTTP POST requests for user login.
+     *
+     * @param loginRequest The request body containing user login information.
+     * @return ResponseEntity containing the result of the login operation.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
@@ -61,6 +72,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to find a user by ID.
+     *
+     * @param id The ID of the user to find.
+     * @return ResponseEntity containing the result of the find operation.
+     */
     @GetMapping("/findById/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
@@ -85,6 +102,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to find all users.
+     *
+     * @return ResponseEntity containing the result of the find all operation.
+     */
     @PutMapping("/updateById/{id}")
     public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody UserRequestUpdate userRequest) {
         try {
@@ -98,6 +120,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles HTTP DELETE requests to delete a user by ID.
+     *
+     * @param id The ID of the user to delete.
+     * @return ResponseEntity containing the result of the delete operation.
+     */
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
@@ -111,7 +139,13 @@ public class UserController {
         }
     }
 
-
+    /**
+     * Handles HTTP POST requests to add an image to a user profile.
+     *
+     * @param id The ID of the user.
+     * @param imageFile The image file to be added.
+     * @return ResponseEntity indicating the status of the operation.
+     */
     @PostMapping("/userImg/{id}/add")
     public ResponseEntity<String> addPetImg(@PathVariable Long id, @RequestParam("imageFile") MultipartFile imageFile) {
         try {
@@ -136,6 +170,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to retrieve a user's profile image.
+     *
+     * @param id The ID of the user.
+     * @return ResponseEntity containing the user's profile image.
+     */
     @GetMapping("/userImg/{id}")
     public ResponseEntity<byte[]> getUserImg(@PathVariable Long id) {
         try {
@@ -158,6 +198,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to download a CSV file containing user information.
+     *
+     * @return ResponseEntity containing the CSV file to download.
+     * @throws IOException if an I/O error occurs while creating the CSV file.
+     */
     @GetMapping(value= "/downloadFileUsers")
     public ResponseEntity<?> downloadFileUsers() throws IOException {
         HttpHeaders headers = new HttpHeaders();

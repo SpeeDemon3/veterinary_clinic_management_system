@@ -22,7 +22,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementación del servicio de usuario.
+ * Implement User Service
+ *
+ * @author Antonio Ruiz - speedemon
+ * @version 1.0
  */
 @Service
 @Slf4j
@@ -39,16 +42,12 @@ public class UserServiceImpl implements UserService {
 
     private final String[] HEADERS = {"ID", "Birthdate", "DNI", "EMAIL", "Name", "Phone Number"};
 
-
     /**
-     * Guarda un nuevo usuario en la base de datos.
+     * Saves a new user based on the provided SignUpRequest.
      *
-     * @autor: Antonio Ruiz
-     * @version: 27/05/2024 V.1
-     *
-     * @param userRequest La solicitud de registro del usuario.
-     * @return La respuesta del usuario guardado.
-     * @throws Exception Si ocurre un error durante el proceso de guardado.
+     * @param userRequest The SignUpRequest containing user information.
+     * @return UserResponse containing the details of the saved user.
+     * @throws Exception if there is an error during the save process.
      */
     @Override
     public UserResponse save(SignUpRequest userRequest) throws Exception {
@@ -85,14 +84,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Saves a given UserEntity with a default role.
+     * Saves a UserEntity to the database.
      *
-     * <p>This method fetches the default role with ID 1, sets it to the provided UserEntity,
-     * and saves the entity in the database. If the role is not found, it logs a message and returns null.</p>
-     *
-     * @param userEntity the UserEntity to be saved
-     * @return the saved UserEntity with the default role set, or null if the role is not found
-     * @throws Exception if there is an issue during the role fetching or user saving process
+     * @param userEntity The UserEntity to save.
+     * @return The saved UserEntity.
+     * @throws Exception if there is an error during the save process.
      */
     UserEntity saveEntity(UserEntity userEntity) throws Exception {
 
@@ -120,10 +116,10 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Obtiene todos los usuarios almacenados en la base de datos.
+     * Finds all users.
      *
-     * @return Una lista de respuestas de usuario.
-     * @throws Exception Si no se encuentran usuarios en la base de datos.
+     * @return List of UserResponse containing details of all users.
+     * @throws Exception if there is an error during the search process.
      */
     @Override
     public List<UserResponse> findAll() throws Exception {
@@ -147,11 +143,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Busca un usuario por su identificador único.
+     * Finds a user by ID.
      *
-     * @param id El identificador único del usuario a buscar.
-     * @return La respuesta del usuario encontrado.
-     * @throws Exception Si no se encuentra ningún usuario con el identificador proporcionado.
+     * @param id The ID of the user to find.
+     * @return UserResponse containing the details of the found user.
+     * @throws Exception if there is an error during the search process.
      */
     @Override
     public UserResponse findById(Long id) throws Exception {
@@ -175,11 +171,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Elimina un usuario por su identificador único.
+     * Deletes a user by ID.
      *
-     * @param id El identificador único del usuario a eliminar.
-     * @return Un mensaje indicando que el usuario ha sido eliminado exitosamente.
-     * @throws Exception Si no se encuentra ningún usuario con el identificador proporcionado.
+     * @param id The ID of the user to delete.
+     * @return A message indicating the success of the deletion.
+     * @throws Exception if there is an error during the deletion process.
      */
     @Override
     public String deleteById(Long id) throws Exception {
@@ -200,12 +196,12 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Actualiza un usuario por su identificador único.
+     * Updates a user by ID with the provided information.
      *
-     * @param id El identificador único del usuario a actualizar.
-     * @param userRequest La solicitud de actualización del usuario.
-     * @return La respuesta del usuario actualizado.
-     * @throws Exception Si no se encuentra ningún usuario con el identificador proporcionado.
+     * @param id The ID of the user to update.
+     * @param userRequest  The request containing updated user information.
+     * @return UserResponse containing the updated user details.
+     * @throws Exception if there is an error during the update process.
      */
     @Override
     public UserResponse updateById(Long id, UserRequestUpdate userRequest) throws Exception {
@@ -277,12 +273,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Carga un usuario por su nombre de usuario (en este caso, el correo electrónico).
+     * Loads user details by username (email).
      *
-     * @param emailUser El correo electrónico del usuario.
-     * @return Los detalles del usuario cargado.
-     * @throws UsernameNotFoundException Si no se encuentra ningún usuario con el correo electrónico proporcionado.
-     * @throws RuntimeException          Si ocurre algún error durante la búsqueda del usuario en la base de datos.
+     * @param emailUser The email of the user to load.
+     * @return UserDetails containing the details of the user.
+     * @throws UsernameNotFoundException if the user with the given email is not found.
      */
     @Override
     public UserDetails loadUserByUsername(String emailUser) {
@@ -298,6 +293,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Adds an image to the user identified by the given ID.
+     *
+     * @param id The ID of the user.
+     * @param imageFile The image file to be added.
+     * @throws IOException if there is an error reading the image file or if the user with the given ID is not found.
+     */
     @Override
     public void addUserImg(Long id, MultipartFile imageFile) throws IOException {
 
@@ -318,6 +320,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Retrieves the image associated with the user identified by the given ID.
+     *
+     * @param id The ID of the user.
+     * @return Byte array containing the user's image.
+     * @throws Exception if the user with the given ID is not found or if there is an error decoding the image.
+     */
     @Override
     public byte[] getUserImg(Long id) throws Exception {
 
@@ -326,6 +335,12 @@ public class UserServiceImpl implements UserService {
         return Base64.getDecoder().decode(userEntity.getImg());
     }
 
+    /**
+     * Generates CSV content containing information about all users in the database.
+     *
+     * @return String containing CSV content.
+     * @throws IOException if an I/O error occurs.
+     */
     @Override
     public String usersInfoDownloadCsv() throws IOException {
 
