@@ -14,7 +14,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,16 +30,6 @@ public class UserController {
     private final AuthenticationService authenticationService;
 
     private final UserServiceImpl userService;
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
-        try {
-            return ResponseEntity.ok("Hello world");
-        } catch (Exception e) {
-            log.info("Estoy aqui");
-            return ResponseEntity.internalServerError().build();
-        }
-    }
 
     /**
      * Handles HTTP POST requests for user signup.
@@ -64,6 +56,7 @@ public class UserController {
      * @return ResponseEntity containing the result of the login operation.
      */
     @PostMapping("/login")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_VETERINARIAN','ROLE_ADMIN')")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             return ResponseEntity.ok(authenticationService.login(loginRequest));
@@ -79,6 +72,7 @@ public class UserController {
      * @return ResponseEntity containing the result of the find operation.
      */
     @GetMapping("/findById/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN', 'ROLE_ADMIN')")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(userService.findById(id));
@@ -91,7 +85,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Handles HTTP GET requests to find all users.
+     *
+     * @return ResponseEntity containing the result of the find all operation.
+     */
     @GetMapping("/findAll")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN', 'ROLE_ADMIN')")
     public ResponseEntity<?> findAll() {
         try {
             return ResponseEntity.ok(userService.findAll());
@@ -103,11 +103,14 @@ public class UserController {
     }
 
     /**
-     * Handles HTTP GET requests to find all users.
+     * Updates the user information by the given ID.
      *
-     * @return ResponseEntity containing the result of the find all operation.
+     * @param id the ID of the user to be updated.
+     * @param userRequest the updated user information.
+     * @return ResponseEntity containing the updated user information or an appropriate error status.
      */
     @PutMapping("/updateById/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN', 'ROLE_ADMIN')")
     public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody UserRequestUpdate userRequest) {
         try {
             return ResponseEntity.ok(userService.updateById(id, userRequest));
@@ -127,6 +130,7 @@ public class UserController {
      * @return ResponseEntity containing the result of the delete operation.
      */
     @DeleteMapping("/deleteById/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(userService.deleteById(id));
@@ -147,7 +151,8 @@ public class UserController {
      * @return ResponseEntity indicating the status of the operation.
      */
     @PostMapping("/userImg/{id}/add")
-    public ResponseEntity<String> addPetImg(@PathVariable Long id, @RequestParam("imageFile") MultipartFile imageFile) {
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_VETERINARIAN', 'ROLE_ADMIN')")
+    public ResponseEntity<String> addUserImg(@PathVariable Long id, @RequestParam("imageFile") MultipartFile imageFile) {
         try {
 
             if (!imageFile.getOriginalFilename().contains(".png")) {
@@ -177,6 +182,7 @@ public class UserController {
      * @return ResponseEntity containing the user's profile image.
      */
     @GetMapping("/userImg/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_VETERINARIAN', 'ROLE_ADMIN')")
     public ResponseEntity<byte[]> getUserImg(@PathVariable Long id) {
         try {
 
@@ -205,6 +211,7 @@ public class UserController {
      * @throws IOException if an I/O error occurs while creating the CSV file.
      */
     @GetMapping(value= "/downloadFileCsvUsers")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> downloadFileUsers() throws IOException {
         HttpHeaders headers = new HttpHeaders();
 
@@ -223,6 +230,7 @@ public class UserController {
      * @return ResponseEntity containing the JSON file with appropriate headers for download.
      */
     @GetMapping("/downloadFileJsonUsers")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> downloadFileJsonPets() {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -238,6 +246,29 @@ public class UserController {
 
     }
 
+    /**
+     * Updates the role of a user identified by their DNI.
+     *
+     * @param dni    The DNI (Documento Nacional de Identidad) of the user.
+     * @param idRole The ID of the role to be assigned to the user.
+     * @return ResponseEntity containing the updated user with the new role if successful.
+     *         Returns a bad request response if the request is invalid,
+     *         a not found response if the user or role is not found,
+     *         or an internal server error response if an unexpected error occurs.
+     */
+    @PutMapping("/updateRoleUser/{dni}/{idRole}")
+    @PreAuthorize("hasRole('ROLE_ADMIN'")
+    public ResponseEntity<?> updateRoleUser(@PathVariable String dni, @PathVariable Long idRole) {
+        try{
+            return ResponseEntity.ok(userService.updateRoleByDni(dni, idRole));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
 
 }

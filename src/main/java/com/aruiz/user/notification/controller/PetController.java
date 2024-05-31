@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +34,7 @@ public class PetController {
      * @return ResponseEntity containing the details of the added pet.
      */
     @PostMapping("/add/{ownerId}")
+    @PreAuthorize("hasRole('ROLE_VETERINARIAN')")
     public ResponseEntity<?> addPet(@PathVariable Long ownerId, @RequestBody PetRequest petRequest) {
         try {
             return ResponseEntity.ok(petService.save(ownerId, petRequest));
@@ -50,6 +52,7 @@ public class PetController {
      * @return ResponseEntity containing the details of the retrieved pet.
      */
     @GetMapping("/findById/{id}")
+    @PreAuthorize("hasRole('ROLE_VETERINARIAN')")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(petService.findById(id));
@@ -68,6 +71,7 @@ public class PetController {
      * @return ResponseEntity containing the list of pets.
      */
     @GetMapping("/findAll")
+    @PreAuthorize("hasRole('ROLE_VETERINARIAN')")
     public ResponseEntity<?> findAllPets() {
         try {
             return ResponseEntity.ok(petService.findAll());
@@ -85,6 +89,7 @@ public class PetController {
      * @return ResponseEntity indicating the status of the deletion.
      */
     @DeleteMapping("/deleteById/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN'. 'ROLE_VETERINARIAN')")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(petService.deleteById(id));
@@ -105,6 +110,7 @@ public class PetController {
      * @return ResponseEntity containing the updated pet details.
      */
     @PutMapping("/updateById/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN','ROLE_ADMIN')")
     public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody PetRequestUpdate petRequestUpdate) {
         try {
             return ResponseEntity.ok(petService.updateById(id, petRequestUpdate));
@@ -125,6 +131,7 @@ public class PetController {
      * @return ResponseEntity indicating the status of the image addition.
      */
     @PostMapping("/petImg/{id}/add")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN','ROLE_USER')")
     public ResponseEntity<String> addPetImg(@PathVariable Long id, @RequestParam("imageFile")MultipartFile imageFile) {
         try {
 
@@ -155,6 +162,7 @@ public class PetController {
      * @return ResponseEntity containing the pet's image.
      */
     @GetMapping("/petImg/{id}")
+    @PreAuthorize("hasRole('ROLE_VETERINARIAN')")
     public ResponseEntity<byte[]> getPetImg(@PathVariable Long id) {
         try {
 
@@ -183,6 +191,7 @@ public class PetController {
      * @throws IOException if an I/O error occurs while creating the CSV file.
      */
     @GetMapping(value= "/downloadFileCsvPets")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN','ROLE_ADMIN')")
     public ResponseEntity<?> downloadFileCsvPets() throws IOException {
         HttpHeaders headers = new HttpHeaders();
 
@@ -202,6 +211,7 @@ public class PetController {
      * @return The response containing the details of the retrieved pet.
      */
     @GetMapping("/findByCode/{code}")
+    @PreAuthorize("hasRole('ROLE_VETERINARIAN')")
     public ResponseEntity<?> findByCode(@PathVariable String code) {
         try {
             return ResponseEntity.ok(petService.findByIdentificationCode(code));
@@ -218,6 +228,7 @@ public class PetController {
      * @return ResponseEntity containing the JSON file with appropriate headers for download.
      */
     @GetMapping("/downloadFileJsonPets")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN','ROLE_ADMIN')")
     public ResponseEntity<?> downloadFileJsonPets() {
         try {
             HttpHeaders headers = new HttpHeaders();

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class RoleController {
     private final RoleServicesImpl roleServices;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> save(@RequestBody RoleRequest roleRequest) {
         try {
             log.info("ROLE: {}" + roleRequest);
@@ -27,6 +29,7 @@ public class RoleController {
     }
 
     @GetMapping("/findById/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(roleServices.findById(id));
@@ -36,6 +39,7 @@ public class RoleController {
     }
 
     @GetMapping("/findAll")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> findAll() {
         try {
             return ResponseEntity.ok(roleServices.findAll());
@@ -45,6 +49,7 @@ public class RoleController {
     }
 
     @GetMapping("/findAllByName/{name}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> findAllByName(@PathVariable String name) {
         try {
             return ResponseEntity.ok(roleServices.findAllByName(name));
@@ -54,6 +59,7 @@ public class RoleController {
     }
 
     @PutMapping("/updateById/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody RoleRequest roleRequest) {
         try {
             return ResponseEntity.ok(roleServices.updateById(id, roleRequest));
@@ -63,6 +69,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/deleteById/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(roleServices.deleteById(id));

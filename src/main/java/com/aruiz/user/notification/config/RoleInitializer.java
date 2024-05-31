@@ -23,7 +23,19 @@ public class RoleInitializer {
     public void init() throws Exception {
 
         final String roleName = "ROLE_USER";
-        final String description = "unprivileged user role";
+        final String roleName2 = "ROLE_VETERINARIAN";
+        final String roleName3 = "ROLE_ADMIN";
+        final String descriptionRoleName = "unprivileged user role";
+        final String descriptionRoleName2 = "veterinary role privileges";
+        final String descriptionRoleName3 = "administrator role with all privileges";
+
+        createRoles(roleName, descriptionRoleName);
+        createRoles(roleName2, descriptionRoleName2);
+        createRoles(roleName3, descriptionRoleName3);
+
+    }
+
+    private void createRoles(String roleName, String description) throws Exception {
 
         Optional<RoleEntity> entityOptional = roleRepository.findByName(roleName);
 
@@ -39,7 +51,6 @@ public class RoleInitializer {
             System.out.println("The role -> " + roleName + " was created automatically.");
 
         }
-
     }
 
 }

@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.*;
+import com.aruiz.user.notification.domain.Role;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;

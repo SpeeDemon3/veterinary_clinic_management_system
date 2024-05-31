@@ -404,4 +404,36 @@ public class UserServiceImpl implements UserService {
         throw new Exception();
     }
 
+    /**
+     * Updates the role of a user identified by their DNI.
+     *
+     * @param dni The DNI (Documento Nacional de Identidad) of the user.
+     * @param idRole The ID of the role to be assigned to the user.
+     * @return A message indicating the success of the role update operation.
+     * @throws Exception If the user or role is not found, or if an unexpected error occurs.
+     */
+    public String updateRoleByDni (String dni, Long idRole) throws Exception {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByDni(dni);
+
+        Optional<RoleEntity> optionalRoleEntity = roleRepository.findById(idRole);
+
+        if (optionalUserEntity.isPresent() && optionalRoleEntity.isPresent()) {
+
+            UserEntity userEntity = optionalUserEntity.get();
+            RoleEntity roleEntity = optionalRoleEntity.get();
+
+            userEntity.setRole(roleEntity);
+
+            userRepository.save(userEntity);
+
+            log.info("Role update user with DNI -> {}", dni);
+            log.info("Role updated successfully!!!");
+
+
+        }
+
+        throw new Exception();
+
+    }
+
 }
