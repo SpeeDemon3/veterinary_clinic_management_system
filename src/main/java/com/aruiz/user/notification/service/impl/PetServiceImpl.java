@@ -277,7 +277,7 @@ public class PetServiceImpl implements PetService {
             }
 
             for (PetEntity pet : petEntityList) {
-                //"ID", "Birthdate", "Description", "Identification Code", "Medication", "Name", "Vaccination Data", "Owner ID"
+
                 csvContent
                         .append(pet.getId()).append(",")
                         .append(pet.getBirthdate()).append(",")

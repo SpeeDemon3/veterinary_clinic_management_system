@@ -47,12 +47,6 @@ public class UserEntity implements UserDetails {
     @ToString.Exclude
     private RoleEntity role;
 
-    /*
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private ProfileEntity profile;
-     */
-
     @OneToMany(mappedBy = "destinationUser")
     @ToString.Exclude
     private List<NotificationEntity> notifications;
