@@ -55,6 +55,9 @@ public class UserEntity implements UserDetails {
     @ToString.Exclude
     private List<PetEntity> pets;
 
+    @OneToMany(mappedBy = "veterinarian")
+    @ToString.Exclude
+    private List<AppointmentEntity> appointments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

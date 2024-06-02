@@ -20,7 +20,7 @@ public interface AppointmentService {
 
     List<AppointmentResponse> findAppointmentsByVeterinarianId (Long idVeterinarian) throws Exception;
 
-    List<AppointmentResponse> findAppointmentsByDate (String date) throws Exception;
+    List<AppointmentResponse> findAppointmentsByDateOfAppointment (String dateOfAppointment) throws Exception;
 
     String deleteById (Long id) throws Exception;
 

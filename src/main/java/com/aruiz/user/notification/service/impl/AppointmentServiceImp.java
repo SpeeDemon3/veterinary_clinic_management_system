@@ -164,9 +164,9 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponse> findAppointmentsByDate(String date) throws Exception {
+    public List<AppointmentResponse> findAppointmentsByDateOfAppointment(String date) throws Exception {
 
-        List<AppointmentEntity> appointmentEntityList = appointmentRepository.findAppointmentsByDate(date);
+        List<AppointmentEntity> appointmentEntityList = appointmentRepository.findAppointmentsByDateOfAppointment(date);
 
         if (!appointmentEntityList.isEmpty()) {
             List<AppointmentResponse> appointmentResponses = new ArrayList<>();

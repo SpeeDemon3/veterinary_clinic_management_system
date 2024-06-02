@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -24,11 +23,11 @@ public class AppointmentEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="veterinarian_id")
     private UserEntity veterinarian;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="pet_id")
     private PetEntity pet;
 
 }

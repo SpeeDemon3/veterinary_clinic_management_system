@@ -84,10 +84,10 @@ public class AppointmentController {
         }
     }
 
-    @GetMapping("/findAppointmentsByDate/{date}")
-    public ResponseEntity<?> findAppointmentsByDate (@PathVariable String date) {
+    @GetMapping("/findAppointmentsByDate/{dateOfAppointment}")
+    public ResponseEntity<?> findAppointmentsByDate (@PathVariable String dateOfAppointment) {
         try {
-            return ResponseEntity.ok(appointmentService.findAppointmentsByDate(date));
+            return ResponseEntity.ok(appointmentService.findAppointmentsByDateOfAppointment(dateOfAppointment));
         } catch (EntityNotFoundException ntf) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {

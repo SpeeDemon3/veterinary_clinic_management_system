@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, Long> {
-    List<AppointmentEntity> findAppointmentsByDate(String date);
+    List<AppointmentEntity> findAppointmentsByDateOfAppointment(String dateOfAppointment);
 }
