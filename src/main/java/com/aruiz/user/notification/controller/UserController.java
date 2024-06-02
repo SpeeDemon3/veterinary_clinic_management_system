@@ -212,7 +212,7 @@ public class UserController {
      */
     @GetMapping(value= "/downloadFileCsvUsers")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> downloadFileUsers() throws IOException {
+    public ResponseEntity<?> downloadFileCsvUsers() throws IOException {
         HttpHeaders headers = new HttpHeaders();
 
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
