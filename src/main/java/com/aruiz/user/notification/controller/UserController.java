@@ -257,7 +257,7 @@ public class UserController {
      *         or an internal server error response if an unexpected error occurs.
      */
     @PutMapping("/updateRoleUser/{dni}/{idRole}")
-    @PreAuthorize("hasRole('ROLE_ADMIN'")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateRoleUser(@PathVariable String dni, @PathVariable Long idRole) {
         try{
             return ResponseEntity.ok(userService.updateRoleByDni(dni, idRole));
