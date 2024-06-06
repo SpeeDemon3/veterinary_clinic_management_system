@@ -34,6 +34,7 @@ public class AppointmentController {
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
+            log.error(e.toString());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -49,15 +50,16 @@ public class AppointmentController {
         }
     }
 
-    @GetMapping("/findById/{idApointment}")
-    public ResponseEntity<?> findById (@PathVariable Long idApointment) {
+    @GetMapping("/findById/{idAppointment}")
+    public ResponseEntity<?> findById (@PathVariable Long idAppointment) {
         try {
-            return ResponseEntity.ok(appointmentService.findById(idApointment));
+            return ResponseEntity.ok(appointmentService.findById(idAppointment));
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (EntityNotFoundException ntf) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
+            log.error(e.toString());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -69,6 +71,7 @@ public class AppointmentController {
         } catch (EntityNotFoundException ntf) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
+            log.error(e.toString());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -86,6 +89,7 @@ public class AppointmentController {
 
     @GetMapping("/findAppointmentsByDate/{dateOfAppointment}")
     public ResponseEntity<?> findAppointmentsByDate (@PathVariable String dateOfAppointment) {
+        log.info("Date enter controller {}", dateOfAppointment);
         try {
             return ResponseEntity.ok(appointmentService.findAppointmentsByDateOfAppointment(dateOfAppointment));
         } catch (EntityNotFoundException ntf) {

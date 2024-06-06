@@ -3,7 +3,7 @@ package com.aruiz.user.notification.service.impl;
 import com.aruiz.user.notification.controller.dto.AppointmentRequest;
 import com.aruiz.user.notification.controller.dto.AppointmentRequestUpdate;
 import com.aruiz.user.notification.controller.dto.AppointmentResponse;
-import com.aruiz.user.notification.domain.Appointment;
+import com.aruiz.user.notification.controller.dto.AppointmentResponseFindByIdPet;
 import com.aruiz.user.notification.entity.AppointmentEntity;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.UserEntity;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +64,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
             log.info("Saved appointment -> {}", appointmentEntity.toString());
 
-
+            return modelMapper.map(appointmentEntity, AppointmentResponse.class);
         }
 
         throw new Exception();
@@ -101,35 +100,34 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponse> findAppointmentsByPetId(Long idPet) throws Exception {
-
-        Optional<List<AppointmentEntity>> appointmentEntityList = Optional.of(appointmentRepository.findAll());
+    public List<AppointmentResponseFindByIdPet> findAppointmentsByPetId(Long idPet) throws Exception {
 
         Optional<PetEntity> optionalPetEntity = petRepository.findById(idPet);
 
-        if (!appointmentEntityList.isEmpty() && optionalPetEntity.isPresent()) {
+        if (optionalPetEntity.isPresent()) {
 
-            List<AppointmentEntity> appointmentEntities = appointmentEntityList.get();
             PetEntity petEntity = optionalPetEntity.get();
-            List<AppointmentResponse> appointmentResponsesList = new ArrayList<>();
+            log.info("Pet found with ID -> {}", optionalPetEntity.get().getId());
+
+            List<AppointmentEntity> appointmentEntities = appointmentRepository.findAll();
+            List<AppointmentResponseFindByIdPet> appointmentResponsesList = new ArrayList<>();
 
             log.info("Recovering appintments with pet ID -> {}", idPet);
 
             for (AppointmentEntity appointment : appointmentEntities) {
 
-                if (appointment.getPet() == petEntity) {
-                    appointmentResponsesList.add(modelMapper.map(appointment, AppointmentResponse.class));
+                if (appointment.getPet().equals(petEntity)) {
+                    log.info(appointment.toString());
+                    appointmentResponsesList.add(modelMapper.map(appointment, AppointmentResponseFindByIdPet.class));
                 }
 
             }
 
-            log.error("Appointments not found for pet ID -> {}", idPet);
             return appointmentResponsesList;
 
         }
-
-
-        throw new Exception();
+        log.error("Pet not found with ID -> {}", idPet);
+        throw new Exception("Pet not found");
     }
 
     @Override

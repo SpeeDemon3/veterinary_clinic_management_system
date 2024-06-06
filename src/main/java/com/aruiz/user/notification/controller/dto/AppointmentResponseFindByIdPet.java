@@ -13,11 +13,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AppointmentResponse {
+public class AppointmentResponseFindByIdPet {
     private Long id;
     private String dateOfAppointment;
     private String appointmentTime;
     private String description;
-    private User veterinarian;
     private Pet pet;
 }

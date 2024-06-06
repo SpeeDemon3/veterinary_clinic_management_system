@@ -56,7 +56,6 @@ public class UserController {
      * @return ResponseEntity containing the result of the login operation.
      */
     @PostMapping("/login")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_VETERINARIAN','ROLE_ADMIN')")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             return ResponseEntity.ok(authenticationService.login(loginRequest));

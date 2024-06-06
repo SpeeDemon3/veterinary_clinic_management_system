@@ -3,6 +3,7 @@ package com.aruiz.user.notification.service;
 import com.aruiz.user.notification.controller.dto.AppointmentRequest;
 import com.aruiz.user.notification.controller.dto.AppointmentRequestUpdate;
 import com.aruiz.user.notification.controller.dto.AppointmentResponse;
+import com.aruiz.user.notification.controller.dto.AppointmentResponseFindByIdPet;
 import com.aruiz.user.notification.entity.AppointmentEntity;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public interface AppointmentService {
 
     AppointmentResponse findById (Long id) throws Exception;
 
-    List<AppointmentResponse> findAppointmentsByPetId (Long idPet) throws Exception;
+    List<AppointmentResponseFindByIdPet> findAppointmentsByPetId (Long idPet) throws Exception;
 
     List<AppointmentResponse> findAppointmentsByVeterinarianId (Long idVeterinarian) throws Exception;
 
