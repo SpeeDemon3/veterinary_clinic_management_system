@@ -3,7 +3,6 @@ package com.aruiz.user.notification.service.impl;
 import com.aruiz.user.notification.controller.dto.AppointmentRequest;
 import com.aruiz.user.notification.controller.dto.AppointmentRequestUpdate;
 import com.aruiz.user.notification.controller.dto.AppointmentResponse;
-import com.aruiz.user.notification.controller.dto.AppointmentResponseFindByIdPet;
 import com.aruiz.user.notification.entity.AppointmentEntity;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.UserEntity;
@@ -11,6 +10,7 @@ import com.aruiz.user.notification.repository.AppointmentRepository;
 import com.aruiz.user.notification.repository.PetRepository;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.AppointmentService;
+import com.aruiz.user.notification.service.converter.AppointmentConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,9 +30,6 @@ public class AppointmentServiceImp implements AppointmentService {
     private AppointmentRepository appointmentRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -40,6 +37,9 @@ public class AppointmentServiceImp implements AppointmentService {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private AppointmentConverter appointmentConverter;
 
     private final String[] HEADER = {"ID", "DATE OF APPOINTMENT", "DESCRIPTION", "VETERINARIAN", "PET"};
 
@@ -52,7 +52,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
         if (optionalPetEntity.isPresent() && optionalUserEntity.isPresent() && appointmentRequest != null) {
 
-            AppointmentEntity appointmentEntity =  modelMapper.map(appointmentRequest, AppointmentEntity.class);
+            AppointmentEntity appointmentEntity =  appointmentConverter.toAppointmentEntity(appointmentRequest);
 
             log.info("Appointment received -> {}", appointmentEntity.toString());
 
@@ -64,7 +64,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
             log.info("Saved appointment -> {}", appointmentEntity.toString());
 
-            return modelMapper.map(appointmentEntity, AppointmentResponse.class);
+            return appointmentConverter.toAppointmentResponse(appointmentEntity);
         }
 
         throw new Exception();
@@ -93,14 +93,14 @@ public class AppointmentServiceImp implements AppointmentService {
 
             log.info("Appointment found successfully -> ID {}", appointmentEntity.getId());
 
-            return modelMapper.map(appointmentEntity, AppointmentResponse.class);
+            return appointmentConverter.toAppointmentResponse(appointmentEntity);
         }
 
         throw new Exception();
     }
 
     @Override
-    public List<AppointmentResponseFindByIdPet> findAppointmentsByPetId(Long idPet) throws Exception {
+    public List<AppointmentResponse> findAppointmentsByPetId(Long idPet) throws Exception {
 
         Optional<PetEntity> optionalPetEntity = petRepository.findById(idPet);
 
@@ -110,7 +110,7 @@ public class AppointmentServiceImp implements AppointmentService {
             log.info("Pet found with ID -> {}", optionalPetEntity.get().getId());
 
             List<AppointmentEntity> appointmentEntities = appointmentRepository.findAll();
-            List<AppointmentResponseFindByIdPet> appointmentResponsesList = new ArrayList<>();
+            List<AppointmentResponse> appointmentResponsesList = new ArrayList<>();
 
             log.info("Recovering appintments with pet ID -> {}", idPet);
 
@@ -118,7 +118,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
                 if (appointment.getPet().equals(petEntity)) {
                     log.info(appointment.toString());
-                    appointmentResponsesList.add(modelMapper.map(appointment, AppointmentResponseFindByIdPet.class));
+                    appointmentResponsesList.add(appointmentConverter.toAppointmentResponse(appointment));
                 }
 
             }
@@ -148,7 +148,7 @@ public class AppointmentServiceImp implements AppointmentService {
             for (AppointmentEntity appointment : appointmentEntities) {
 
                 if (appointment.getVeterinarian() == userEntity) {
-                    appointmentResponsesList.add(modelMapper.map(appointment, AppointmentResponse.class));
+                    appointmentResponsesList.add(appointmentConverter.toAppointmentResponse(appointment));
                 }
 
             }
@@ -170,7 +170,7 @@ public class AppointmentServiceImp implements AppointmentService {
             List<AppointmentResponse> appointmentResponses = new ArrayList<>();
 
             for (AppointmentEntity appointment : appointmentEntityList) {
-                appointmentResponses.add(modelMapper.map(appointment, AppointmentResponse.class));
+                appointmentResponses.add(appointmentConverter.toAppointmentResponse(appointment));
             }
 
             log.info("Recovering appointments...");
@@ -187,7 +187,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
         if (optionalAppointmentEntity.isPresent()) {
             appointmentRepository.deleteById(id);
-
+            log.info("Apointment successfully deleted -> ID: {}", id);
             return "Apointment successfully deleted -> ID: " + id;
         }
 
@@ -233,7 +233,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
             log.info("Appointment updated successfully: ID -> {}", id);
 
-            return modelMapper.map(appointmentEntitysave, AppointmentResponse.class);
+            return appointmentConverter.toAppointmentResponse(appointmentEntitysave);
 
         }
 
