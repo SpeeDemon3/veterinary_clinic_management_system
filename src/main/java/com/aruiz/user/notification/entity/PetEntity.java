@@ -24,13 +24,10 @@ public class PetEntity {
     @JoinColumn(name="user_id")
     private UserEntity veterinarian;
 
-    /*
-    // Crear una clase OWNER que herede de userentity
-    private String nameOwner;
-    private String lastNameOwner;
-    private String dni;
+    @ManyToOne
+    @JoinColumn(name="owner_id")
+    private OwnerEntity owner;
 
-     */
     private String identificationCode;
     private String name;
     private String description;
