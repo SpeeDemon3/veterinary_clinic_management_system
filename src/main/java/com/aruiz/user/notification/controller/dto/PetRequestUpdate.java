@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PetRequestUpdate {
-    private UserEntity owner;
+    private UserEntity veterinarian;
     private String identificationCode;
     private String name;
     private String description;

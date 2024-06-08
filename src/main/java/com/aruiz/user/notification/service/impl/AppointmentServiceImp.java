@@ -39,6 +39,9 @@ public class AppointmentServiceImp implements AppointmentService {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private AppointmentConverter appointmentConverter;
 
     private final String[] HEADER = {"ID", "DATE OF APPOINTMENT", "DESCRIPTION", "VETERINARIAN", "PET"};
@@ -199,37 +202,54 @@ public class AppointmentServiceImp implements AppointmentService {
 
         Optional<AppointmentEntity> optionalAppointmentEntity = appointmentRepository.findById(id);
 
+        log.info("appointmentRequestUpdate value -> {}", appointmentRequestUpdate.toString());
+
         if (optionalAppointmentEntity.isPresent()) {
 
-            AppointmentEntity appointmentEntityfound = optionalAppointmentEntity.get();
+            log.info("ID found {}", id);
+
+            AppointmentEntity appointmentEntityFound = optionalAppointmentEntity.get();
+
+            log.info("AppointmentEntityFound -> {}", appointmentEntityFound.toString());
 
             AppointmentEntity appointmentEntitysave = new AppointmentEntity();
 
-            if (appointmentEntityfound.getDateOfAppointment() == null) {
-                appointmentEntitysave.setAppointmentTime(appointmentEntityfound.getDateOfAppointment());
+            if (appointmentRequestUpdate.getDateOfAppointment() == null) {
+                appointmentEntitysave.setDateOfAppointment(appointmentEntityFound.getDateOfAppointment());
+            } else {
+                appointmentEntitysave.setDateOfAppointment(appointmentRequestUpdate.getDateOfAppointment());
             }
 
-            if (appointmentEntityfound.getAppointmentTime() == null) {
-                appointmentEntitysave.setAppointmentTime(appointmentEntityfound.getAppointmentTime());
+            if (appointmentRequestUpdate.getAppointmentTime() == null) {
+                appointmentEntitysave.setAppointmentTime(appointmentEntityFound.getAppointmentTime());
+            } else {
+                appointmentEntitysave.setAppointmentTime(appointmentRequestUpdate.getAppointmentTime());
             }
 
-            if (appointmentEntityfound.getDescription() == null) {
-                appointmentEntitysave.setDescription(appointmentEntityfound.getDescription());
+            if (appointmentRequestUpdate.getDescription() == null) {
+                appointmentEntitysave.setDescription(appointmentEntityFound.getDescription());
+            } else {
+                appointmentEntitysave.setDescription(appointmentRequestUpdate.getDescription());
             }
 
-            if (appointmentEntityfound.getVeterinarian() == null) {
-                appointmentEntitysave.setVeterinarian(appointmentEntityfound.getVeterinarian());
+            if (appointmentRequestUpdate.getVeterinarian() == null) {
+                appointmentEntitysave.setVeterinarian(appointmentEntityFound.getVeterinarian());
+            } else {
+                appointmentEntitysave.setVeterinarian(modelMapper.map(appointmentRequestUpdate.getVeterinarian(), UserEntity.class));
             }
 
-            if (appointmentEntityfound.getPet() == null) {
-                appointmentEntitysave.setPet(appointmentEntityfound.getPet());
+            if (appointmentRequestUpdate.getPet() == null) {
+                appointmentEntitysave.setPet(appointmentEntityFound.getPet());
+            } else {
+                appointmentEntitysave.setPet(modelMapper.map(appointmentRequestUpdate.getPet(), PetEntity.class));
             }
 
-            appointmentEntitysave = appointmentEntityfound;
 
             appointmentEntitysave.setId(id);
 
             appointmentRepository.save(appointmentEntitysave);
+
+            log.info(appointmentEntitysave.toString());
 
             log.info("Appointment updated successfully: ID -> {}", id);
 
@@ -237,7 +257,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
         }
 
-        throw new Exception();
+        throw new Exception("Appointment not found!!!!");
     }
 
     @Override
@@ -261,7 +281,6 @@ public class AppointmentServiceImp implements AppointmentService {
                 }
                 count++;
             }
-            //"ID", "DATE OF APPOINTMENT", "DESCRIPTION", "VETERINARIAN", "PET"
 
             for (AppointmentEntity appointment : appointmentEntityList) {
                 csvContent

@@ -22,8 +22,15 @@ public class PetEntity {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    private UserEntity owner;
+    private UserEntity veterinarian;
 
+    /*
+    // Crear una clase OWNER que herede de userentity
+    private String nameOwner;
+    private String lastNameOwner;
+    private String dni;
+
+     */
     private String identificationCode;
     private String name;
     private String description;

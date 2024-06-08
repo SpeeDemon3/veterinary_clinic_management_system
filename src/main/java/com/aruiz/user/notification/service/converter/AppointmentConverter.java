@@ -1,9 +1,6 @@
 package com.aruiz.user.notification.service.converter;
 
-import com.aruiz.user.notification.controller.dto.AppointmentRequest;
-import com.aruiz.user.notification.controller.dto.AppointmentResponse;
-import com.aruiz.user.notification.controller.dto.PetResponse;
-import com.aruiz.user.notification.controller.dto.UserResponse;
+import com.aruiz.user.notification.controller.dto.*;
 import com.aruiz.user.notification.domain.Pet;
 import com.aruiz.user.notification.domain.User;
 import com.aruiz.user.notification.entity.AppointmentEntity;
@@ -68,6 +65,28 @@ public class AppointmentConverter {
         appointmentEntity.setDescription(appointmentRequest.getDescription());
 
         return appointmentEntity;
+    }
+
+    public AppointmentEntity toAppointmentEntity (AppointmentRequestUpdate appointmentRequestUpdate) {
+
+        AppointmentEntity appointmentEntity = new AppointmentEntity();
+
+        appointmentEntity.setDateOfAppointment(appointmentRequestUpdate.getDateOfAppointment());
+        appointmentEntity.setAppointmentTime(appointmentRequestUpdate.getAppointmentTime());
+        appointmentEntity.setDescription(appointmentRequestUpdate.getDescription());
+
+        if (appointmentRequestUpdate.getVeterinarian().getId() > 0) {
+            UserEntity veterinarian = modelMapper.map(appointmentRequestUpdate.getVeterinarian(), UserEntity.class);
+            appointmentEntity.setVeterinarian(veterinarian);
+        }
+
+        if (appointmentRequestUpdate.getPet().getId() > 0) {
+            PetEntity petEntity = modelMapper.map(appointmentRequestUpdate.getPet(), PetEntity.class);
+            appointmentEntity.setPet(petEntity);
+        }
+
+        return appointmentEntity;
+
     }
 
 }

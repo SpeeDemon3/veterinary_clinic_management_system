@@ -38,7 +38,7 @@ public class PetServiceImpl implements PetService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private final String[] HEADER = {"ID", "Birthdate", "Description", "Identification Code", "Medication", "Name", "Vaccination Data", "Owner ID"};
+    private final String[] HEADER = {"ID", "Birthdate", "Description", "Identification Code", "Medication", "Name", "Vaccination Data", "Veterinarian ID"};
 
     /**
      * Saves a new pet.
@@ -57,7 +57,7 @@ public class PetServiceImpl implements PetService {
 
             PetEntity petEntity = modelMapper.map(petRequest, PetEntity.class);
 
-            petEntity.setOwner(optionalUserEntity.get());
+            petEntity.setVeterinarian(optionalUserEntity.get());
 
             petRepository.save(petEntity);
 
@@ -161,8 +161,8 @@ public class PetServiceImpl implements PetService {
 
         if (optionalPetEntity.isPresent()) {
 
-            if (petRequestUpdate.getOwner() == null) {
-                petRequestUpdate.setOwner(optionalPetEntity.get().getOwner());
+            if (petRequestUpdate.getVeterinarian() == null) {
+                petRequestUpdate.setVeterinarian(optionalPetEntity.get().getVeterinarian());
             }
 
             if (petRequestUpdate.getIdentificationCode() == null) {
@@ -286,7 +286,7 @@ public class PetServiceImpl implements PetService {
                         .append(pet.getMedication()).append(",")
                         .append(pet.getName()).append(",")
                         .append(pet.getVaccinationData()).append(",")
-                        .append(pet.getOwner()).append("\n");
+                        .append(pet.getVeterinarian()).append("\n");
             }
 
             return csvContent.toString();

@@ -1,7 +1,6 @@
 package com.aruiz.user.notification.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class UserEntity implements UserDetails {
     @Column(unique = true)
     private String email;
     private String password;
-    // New
+
     @Column(unique = true)
     private String dni;
 
@@ -41,7 +39,7 @@ public class UserEntity implements UserDetails {
     private String img;
 
     private String birthdate;
-    // NEW
+
     @ManyToOne()
     @JoinColumn(name = "role_id")
     @ToString.Exclude
@@ -51,7 +49,7 @@ public class UserEntity implements UserDetails {
     @ToString.Exclude
     private List<NotificationEntity> notifications;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<PetEntity> pets;
 

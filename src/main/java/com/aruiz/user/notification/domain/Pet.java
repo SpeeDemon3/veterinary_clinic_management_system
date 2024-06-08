@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Pet {
 
     private Long id;
-    private UserEntity owner;
+    private UserEntity veterinarian;
     private String identificationCode;
     private String name;
     private String description;
