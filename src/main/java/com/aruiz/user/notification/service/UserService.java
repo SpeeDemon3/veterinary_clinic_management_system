@@ -19,6 +19,8 @@ public interface UserService extends UserDetailsService {
 
     UserResponse findById(Long id) throws Exception;
 
+    UserResponse findByDni (String dni) throws Exception;
+
     String deleteById(Long id) throws Exception;
 
     UserResponse updateById(Long id, UserRequestUpdate userRequest) throws Exception;

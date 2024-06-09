@@ -1,12 +1,9 @@
 package com.aruiz.user.notification.controller.dto;
 
-import com.aruiz.user.notification.entity.PetEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +16,5 @@ public class OwnerRequest {
     private String email;
     private String dni;
     private String phoneNumber;
-    private List<PetEntity> pets;
 
 }

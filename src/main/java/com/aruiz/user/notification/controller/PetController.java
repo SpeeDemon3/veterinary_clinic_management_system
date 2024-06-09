@@ -29,15 +29,15 @@ public class PetController {
     /**
      * Handles HTTP POST requests to add a new pet.
      *
-     * @param ownerId The ID of the owner of the pet.
+     * @param veterinarian The ID of the veterinarian of the pet.
      * @param petRequest The request containing pet information.
      * @return ResponseEntity containing the details of the added pet.
      */
     @PostMapping("/add/{ownerId}")
     @PreAuthorize("hasRole('ROLE_VETERINARIAN')")
-    public ResponseEntity<?> addPet(@PathVariable Long ownerId, @RequestBody PetRequest petRequest) {
+    public ResponseEntity<?> addPet(@PathVariable Long veterinarian, @RequestBody PetRequest petRequest) {
         try {
-            return ResponseEntity.ok(petService.save(ownerId, petRequest));
+            return ResponseEntity.ok(petService.save(veterinarian, petRequest));
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {

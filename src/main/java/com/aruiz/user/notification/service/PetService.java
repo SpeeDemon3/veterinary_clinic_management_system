@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface PetService {
 
-    PetResponse save(Long ownerId, PetRequest petRequest) throws Exception;
+    PetResponse save(Long veterinarian, PetRequest petRequest) throws Exception;
 
     List<PetResponse> findAll() throws Exception;
 

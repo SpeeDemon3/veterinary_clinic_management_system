@@ -174,6 +174,20 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserResponse findByDni(String dni) throws Exception {
+
+        Optional<UserEntity> optionalUserEntity = userRepository.findByDni(dni);
+
+        if (optionalUserEntity.isPresent()) {
+            UserResponse userResponse = modelMapper.map(optionalUserEntity.get(), UserResponse.class);
+            log.info("User found with email -> {}", dni);
+            return userResponse;
+        }
+
+        return null;
+    }
+
     /**
      * Deletes a user by ID.
      *
