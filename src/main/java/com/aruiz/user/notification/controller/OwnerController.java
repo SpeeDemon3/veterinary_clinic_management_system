@@ -56,6 +56,19 @@ public class OwnerController {
         }
     }
 
+    @GetMapping(value = "/findById/{id}")
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(ownerServiceImp.findById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll() {
         try {
@@ -66,5 +79,32 @@ public class OwnerController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(ownerServiceImp.deleteById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PutMapping("/updateById/{id}")
+    public ResponseEntity<?> updateById(@PathVariable Long id, @RequestBody OwnerRequest ownerRequest) {
+        try {
+            return ResponseEntity.ok(ownerServiceImp.updateById(id, ownerRequest));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 
 }

@@ -82,17 +82,81 @@ public class OwnerServiceImp implements OwnerService {
 
     @Override
     public OwnerResponse findById(Long id) throws Exception {
-        return null;
+
+        Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findById(id);
+
+        if (optionalOwnerEntity.isPresent()) {
+            return modelMapper.map(optionalOwnerEntity.get(), OwnerResponse.class);
+        }
+
+        throw new Exception();
     }
 
     @Override
     public String deleteById(Long id) throws Exception {
-        return "";
+
+        Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findById(id);
+
+        if (optionalOwnerEntity.isPresent()) {
+            ownerRepository.deleteById(id);
+            return "Owner with ID -> " + id + " successfully deleted!!!!";
+        }
+
+        throw new Exception();
     }
 
     @Override
     public OwnerResponse updateById(Long id, OwnerRequest ownerRequest) throws Exception {
-        return null;
+
+        Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findById(id);
+
+        if (optionalOwnerEntity.isPresent()) {
+
+            OwnerEntity ownerEntitySave = new OwnerEntity();
+
+            if (ownerRequest.getName() == null) {
+                ownerEntitySave.setName(optionalOwnerEntity.get().getName());
+            } else {
+                ownerEntitySave.setName(ownerRequest.getName());
+            }
+
+            if (ownerRequest.getLastName() == null) {
+                ownerEntitySave.setLastName(optionalOwnerEntity.get().getLastName());
+            } else {
+                ownerEntitySave.setLastName(ownerRequest.getLastName());
+            }
+
+            if (ownerRequest.getEmail() == null) {
+                ownerEntitySave.setEmail(optionalOwnerEntity.get().getEmail());
+            } else {
+                ownerEntitySave.setEmail(ownerRequest.getEmail());
+            }
+
+            if (ownerRequest.getDni() == null) {
+                ownerEntitySave.setDni(optionalOwnerEntity.get().getDni());
+            } else {
+                ownerEntitySave.setDni(ownerRequest.getDni());
+            }
+
+            if (ownerRequest.getPhoneNumber() == null) {
+                ownerEntitySave.setPhoneNumber(optionalOwnerEntity.get().getPhoneNumber());
+            } else {
+                ownerEntitySave.setPhoneNumber(ownerRequest.getPhoneNumber());
+            }
+
+            List<PetEntity> petEntityList = ownerRepository.findById(id).get().getPets();
+
+            ownerEntitySave.setPets(petEntityList);
+
+            ownerEntitySave.setId(id);
+
+            ownerRepository.save(ownerEntitySave);
+
+            return modelMapper.map(ownerEntitySave, OwnerResponse.class);
+
+        }
+
+        throw new Exception();
     }
 
     @Override
