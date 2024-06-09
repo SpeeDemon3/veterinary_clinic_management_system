@@ -14,9 +14,7 @@ import java.util.List;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class OwnerEntity {
-    /* ESTA CLASE SOLO ES PARA IDENTIFICAR AL DUEÑ0 DE LA MASCOTA, NO ES NECESARIO APLICAR NINGUN
-    TIPO DE ROL PORQUE NO VA A ENTRAR EN LA APLICACION, tampoco le hace falta imagen
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
