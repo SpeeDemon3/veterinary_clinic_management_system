@@ -56,4 +56,15 @@ public class OwnerController {
         }
     }
 
+    @GetMapping("/findAll")
+    public ResponseEntity<?> findAll() {
+        try {
+            return ResponseEntity.ok(ownerServiceImp.findAll());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }

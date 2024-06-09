@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +62,22 @@ public class OwnerServiceImp implements OwnerService {
 
     @Override
     public List<OwnerResponse> findAll() throws Exception {
-        return List.of();
+
+        Optional<List<OwnerEntity>> optionalOwnerEntity = Optional.of(ownerRepository.findAll());
+
+        if (!optionalOwnerEntity.isEmpty()) {
+            List<OwnerEntity> ownerEntityList = optionalOwnerEntity.get();
+            List<OwnerResponse> ownerResponseList = new ArrayList<>();
+
+            for (OwnerEntity owner : ownerEntityList) {
+                ownerResponseList.add(modelMapper.map(owner, OwnerResponse.class));
+            }
+
+            return ownerResponseList;
+
+        }
+
+        throw new Exception("List owners is empty!!!! SIZE -> " + optionalOwnerEntity.get().size());
     }
 
     @Override
