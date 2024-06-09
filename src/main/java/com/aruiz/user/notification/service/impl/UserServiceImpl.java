@@ -61,13 +61,7 @@ public class UserServiceImpl implements UserService {
         if (roleEntityOptional.isPresent()) {
 
             RoleEntity roleEntity = modelMapper.map(roleEntityOptional.get(), RoleEntity.class);
-            /*
-            // Mapea la solicitud a un objeto de actualización de usuario
-            UserRequestUpdate userRequestUpdate = modelMapper.map(userRequest, UserRequestUpdate.class);
-            // Establece el rol por defecto (1L)
-            userRequestUpdate.setRole(roleEntity.getId());
-            // Mapea la solicitud a una entidad de usuario
-            */
+
             UserEntity userEntity = modelMapper.map(userRequest, UserEntity.class);
 
             if (userEntity.getRole() == null) {

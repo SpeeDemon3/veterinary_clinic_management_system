@@ -6,7 +6,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,5 +108,38 @@ public class OwnerController {
         }
     }
 
+    @GetMapping("/downloadInfoFileCsv")
+    public ResponseEntity<?> downloadInfoFileCsv() {
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "owners-data.csv");
+
+            byte[] csvBytes = ownerServiceImp.ownerInfoDownloadCsv().getBytes();
+
+            return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+    }
+
+    @GetMapping("/downloadInfoFileJson")
+    public ResponseEntity<?> downloadInfoFileJson() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setContentDispositionFormData("attachment", "owners.json");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(ownerServiceImp.ownerInfoDownloadJson());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 
 }

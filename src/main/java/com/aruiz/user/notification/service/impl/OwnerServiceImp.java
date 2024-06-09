@@ -9,6 +9,7 @@ import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.repository.OwnerRepository;
 import com.aruiz.user.notification.service.OwnerService;
 import com.aruiz.user.notification.service.PetService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class OwnerServiceImp implements OwnerService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private final String[] HEADERS = {"ID", "DNI", "EMAIL", "NAME", "LAST_NAME", "Phone_Number"};
 
 
     @Override
@@ -156,17 +162,60 @@ public class OwnerServiceImp implements OwnerService {
 
         }
 
-        throw new Exception();
+        throw new Exception("Owner not found!!!");
     }
 
     @Override
     public String ownerInfoDownloadCsv() throws Exception {
-        return "";
+
+        List<OwnerEntity> ownerEntityList = ownerRepository.findAll();
+
+        if (!ownerEntityList.isEmpty()) {
+            StringBuilder csvContent = new StringBuilder();
+
+            int count = 1;
+
+            for (String header: HEADERS) {
+
+                csvContent.append(header).append(",");
+
+                if (count == HEADERS.length) {
+                    csvContent.append(header).append("\n");
+                }
+                count++;
+            }
+
+            for (OwnerEntity owner : ownerEntityList) {
+                csvContent
+                        .append(owner.getId()).append(",")
+                        .append(owner.getDni()).append(",")
+                        .append(owner.getEmail()).append(",")
+                        .append(owner.getName()).append(",")
+                        .append(owner.getLastName()).append(",")
+                        .append(owner.getPhoneNumber()).append("\n");
+
+            }
+
+            return csvContent.toString();
+
+        }
+
+        log.error("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}", 0);
+        throw new RuntimeException();
     }
 
     @Override
     public String ownerInfoDownloadJson() throws Exception {
-        return "";
+
+        List<OwnerEntity> ownerEntityList = ownerRepository.findAll();
+
+        if (!ownerEntityList.isEmpty()) {
+            String ownerJson = objectMapper.writeValueAsString(ownerEntityList);
+
+            return ownerJson;
+        }
+
+        throw new Exception("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}" + 0);
     }
 
     @Override
