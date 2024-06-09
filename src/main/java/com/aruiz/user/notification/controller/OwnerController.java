@@ -42,4 +42,18 @@ public class OwnerController {
         }
     }
 
+    @GetMapping("/findByDni/{dni}")
+    public ResponseEntity<?> findByDni(@PathVariable String dni) {
+        try {
+            log.info(dni);
+            return ResponseEntity.ok(ownerServiceImp.findByDni(dni));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }

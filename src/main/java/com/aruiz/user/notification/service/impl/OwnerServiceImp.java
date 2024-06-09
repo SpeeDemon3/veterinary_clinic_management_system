@@ -105,6 +105,15 @@ public class OwnerServiceImp implements OwnerService {
 
     @Override
     public OwnerResponse findByDni(String dni) throws Exception {
-        return null;
+        Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findByDni(dni);
+
+        if (optionalOwnerEntity.isPresent()) {
+            OwnerResponse ownerResponse = modelMapper.map(optionalOwnerEntity.get(), OwnerResponse.class);
+            log.info("Owner found with DNI -> {}", dni);
+            return ownerResponse;
+        }
+
+        throw new Exception("Owner not found with DNI -> " + dni);
     }
+
 }
