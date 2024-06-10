@@ -31,6 +31,10 @@ public class OwnerEntity {
     @Column(length = 13)
     private String phoneNumber;
 
+    @OneToMany(mappedBy = "client")
+    @ToString.Exclude
+    private List<InvoiceEntity> invoices;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<PetEntity> pets;

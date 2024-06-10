@@ -1,5 +1,6 @@
 package com.aruiz.user.notification.controller.dto;
 
+import com.aruiz.user.notification.domain.Invoice;
 import com.aruiz.user.notification.entity.PetEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +21,5 @@ public class OwnerResponse {
     private String dni;
     private String phoneNumber;
     private List<PetEntity> pets;
+    private List<Invoice> invoices;
 }
