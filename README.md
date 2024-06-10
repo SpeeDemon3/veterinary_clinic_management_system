@@ -19,7 +19,7 @@
 - ModelMapper
 - Lombok
 - Jakarta Persistence API (JPA)
-- Base de datos relacional (por ejemplo, MySQL, PostgreSQL)
+- Base de datos relacional (MySQL)
 
 ## Previous requirements / Requisitos Previos
 
