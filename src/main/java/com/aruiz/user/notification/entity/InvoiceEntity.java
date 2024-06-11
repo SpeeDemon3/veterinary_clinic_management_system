@@ -24,6 +24,9 @@ public class InvoiceEntity {
 
     private String invoiceNumber;
 
+    @Column(columnDefinition = "DOUBLE")
+    private Double totalPrice;
+
     @ManyToOne
     @JoinColumn(name="client_id")
     private OwnerEntity client;
