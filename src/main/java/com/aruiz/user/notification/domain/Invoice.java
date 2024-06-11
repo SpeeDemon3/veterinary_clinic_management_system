@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public class Invoice {
     private Long id;
     private String invoiceNumber;
+    private Double totalPrice;
     private Owner client;
     private LocalDate dateOfIssue;
     private String state;

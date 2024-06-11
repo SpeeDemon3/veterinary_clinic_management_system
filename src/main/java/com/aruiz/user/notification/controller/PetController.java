@@ -33,7 +33,7 @@ public class PetController {
      * @param petRequest The request containing pet information.
      * @return ResponseEntity containing the details of the added pet.
      */
-    @PostMapping("/add/{ownerId}")
+    @PostMapping("/add/{veterinarian}")
     @PreAuthorize("hasRole('ROLE_VETERINARIAN')")
     public ResponseEntity<?> addPet(@PathVariable Long veterinarian, @RequestBody PetRequest petRequest) {
         try {
