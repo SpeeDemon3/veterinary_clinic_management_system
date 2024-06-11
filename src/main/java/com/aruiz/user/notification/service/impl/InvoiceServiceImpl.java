@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,17 +60,68 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceResponse findById(Long id) throws Exception {
-        return null;
+
+        Optional<InvoiceEntity> optionalInvoiceEntity = invoiceRepository.findById(id);
+
+        if (optionalInvoiceEntity.isPresent()) {
+            return modelMapper.map(optionalInvoiceEntity, InvoiceResponse.class);
+        }
+
+        throw new Exception("Invoice not found!!!");
     }
 
     @Override
-    public InvoiceResponse findByClient(OwnerEntity client) throws Exception {
-        return null;
+    public List<InvoiceResponse> findByClientDni(String clientDni) throws Exception {
+
+        Optional<OwnerResponse> optionalOwner = Optional.ofNullable(ownerService.findByDni(clientDni));
+
+        if (optionalOwner.isPresent()) {
+
+            Optional<List<InvoiceEntity>> optionalInvoiceEntity = Optional.of(invoiceRepository.findAll());
+
+            if (optionalInvoiceEntity.isPresent()) {
+
+                List<InvoiceResponse> invoiceResponseList = new ArrayList<>();
+
+                for (InvoiceEntity invoice : optionalInvoiceEntity.get()) {
+
+                    if (invoice.getClient().getDni().equals(optionalOwner.get().getDni())) {
+
+                        invoiceResponseList.add(modelMapper.map(invoice, InvoiceResponse.class));
+
+                        return invoiceResponseList;
+                    }
+
+                }
+
+            }
+
+        }
+
+        throw new Exception("Client DNI not found!!!");
     }
 
     @Override
     public List<InvoiceResponse> findByState(String state) throws Exception {
-        return List.of();
+
+        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+
+        log.info("Size invoiceEntityList -> {}",invoiceEntityList.size());
+
+        if (!invoiceEntityList.isEmpty()) {
+
+            List<InvoiceResponse> invoiceResponseList = new ArrayList<>();
+
+            for (InvoiceEntity invoice : invoiceEntityList) {
+                log.info("State is -> {}", invoice.getState());
+                if (state.trim().equalsIgnoreCase(invoice.getState().trim().toString())) {
+
+                    invoiceResponseList.add(modelMapper.map(invoice, InvoiceResponse.class));
+                }
+            }
+
+        }
+        throw new Exception("Not found STATES with value -> " + state);
     }
 
     @Override

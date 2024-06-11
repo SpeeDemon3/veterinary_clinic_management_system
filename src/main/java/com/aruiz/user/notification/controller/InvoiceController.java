@@ -2,8 +2,10 @@ package com.aruiz.user.notification.controller;
 
 import com.aruiz.user.notification.controller.dto.InvoiceRequest;
 import com.aruiz.user.notification.service.impl.InvoiceServiceImpl;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +25,37 @@ public class InvoiceController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping("findById/{id}")
+    public ResponseEntity<?> findById (@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(invoiceService.findById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/findByClientDNI/{clientDni}")
+    public ResponseEntity<?> findByClientDni (@PathVariable String clientDni) {
+        try {
+            return ResponseEntity.ok(invoiceService.findByClientDni(clientDni));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/findByState/{state}")
+    public ResponseEntity<?> findByState (@PathVariable String state) {
+        try {
+            return ResponseEntity.ok(invoiceService.findByState(state));
+        } catch (Exception e) {
+            log.error(e.toString());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }
