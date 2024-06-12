@@ -131,17 +131,79 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceResponse> findAll() throws Exception {
-        return List.of();
+
+        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+
+        if (!invoiceEntityList.isEmpty()) {
+
+            List<InvoiceResponse> invoiceResponseList = new ArrayList<>();
+
+            for (InvoiceEntity invoice : invoiceEntityList) {
+
+                invoiceResponseList.add(modelMapper.map(invoice, InvoiceResponse.class));
+
+            }
+
+            return invoiceResponseList;
+        }
+
+        throw new Exception("List is empty!!!! Size -> " + invoiceEntityList.size());
     }
 
     @Override
     public InvoiceResponse updateById(Long id, InvoiceRequest invoiceRequest) throws Exception {
-        return null;
+
+        Optional<InvoiceEntity> optionalInvoiceEntity = invoiceRepository.findById(id);
+
+        if (optionalInvoiceEntity.isPresent()) {
+
+            InvoiceEntity invoiceEntitySave = new InvoiceEntity();
+
+            if (invoiceRequest.getInvoiceNumber() == null) {
+                invoiceEntitySave.setInvoiceNumber(optionalInvoiceEntity.get().getInvoiceNumber());
+            } else {
+                invoiceEntitySave.setInvoiceNumber(invoiceRequest.getInvoiceNumber());
+            }
+
+            if (invoiceRequest.getTotalPrice() == null) {
+                invoiceEntitySave.setTotalPrice(optionalInvoiceEntity.get().getTotalPrice());
+            } else {
+                invoiceEntitySave.setTotalPrice(invoiceRequest.getTotalPrice());
+            }
+
+            if (invoiceRequest.getState() == null) {
+                invoiceEntitySave.setState(optionalInvoiceEntity.get().getState());
+            } else {
+                invoiceEntitySave.setState(invoiceRequest.getState());
+            }
+
+            invoiceEntitySave.setId(optionalInvoiceEntity.get().getId());
+            invoiceEntitySave.setClient(optionalInvoiceEntity.get().getClient());
+            invoiceEntitySave.setDateOfIssue(optionalInvoiceEntity.get().getDateOfIssue());
+
+            invoiceRepository.save(invoiceEntitySave);
+
+            return modelMapper.map(invoiceEntitySave, InvoiceResponse.class);
+
+        }
+
+        throw new Exception("Something has gone wrong!!!");
     }
 
     @Override
     public Boolean deleteById(Long id) throws Exception {
-        return null;
+
+        Optional<InvoiceEntity> optionalInvoiceEntity = invoiceRepository.findById(id);
+
+        if (optionalInvoiceEntity.isPresent()) {
+
+            invoiceRepository.deleteById(id);
+
+            return  true;
+
+        }
+
+        throw new Exception("FALSE: Entity not found with ID -> " + id);
     }
 
     @Override
