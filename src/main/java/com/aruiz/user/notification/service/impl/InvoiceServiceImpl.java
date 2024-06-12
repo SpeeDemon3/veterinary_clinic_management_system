@@ -120,6 +120,11 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
             }
 
+            if (!invoiceResponseList.isEmpty()) {
+                return invoiceResponseList;
+            } else {
+                throw new Exception("List response empty!!! Size -> " + invoiceResponseList.size());
+            }
         }
         throw new Exception("Not found STATES with value -> " + state);
     }
