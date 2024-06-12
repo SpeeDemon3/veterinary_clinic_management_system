@@ -35,7 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // private final String[] HEADERS =
+    private final String[] HEADERS = {"ID", "DATE OF ISSUE", "INVOICE NUMBER", "STATE", "TOTAL PRICE", "CLIENT ID"};
 
     @Override
     public InvoiceResponse save(String clientDni, InvoiceRequest invoiceRequest) throws Exception {
@@ -208,11 +208,52 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public String invoicesInfoDownloadCsv() throws Exception {
-        return "";
+
+        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+
+        if (!invoiceEntityList.isEmpty()) {
+            StringBuilder csvContent = new StringBuilder();
+
+            int count = 1;
+
+            for (String header : HEADERS) {
+                csvContent.append(header).append(",");
+
+                if (count == HEADERS.length) {
+                    csvContent.append(header).append("\n");
+                }
+                count++;
+            }
+
+            for (InvoiceEntity invoice : invoiceEntityList) {
+                csvContent
+                        .append(invoice.getId()).append(",")
+                        .append(invoice.getInvoiceNumber()).append(",")
+                        .append(invoice.getTotalPrice()).append(",")
+                        .append(invoice.getClient()).append(",")
+                        .append(invoice.getDateOfIssue()).append(",")
+                        .append(invoice.getState()).append("\n");
+            }
+
+            return csvContent.toString();
+
+        }
+
+        log.error("There aren't entities in database!!!!!!!!!!!!!! Number entities= {}", 0);
+        throw new RuntimeException();
     }
 
     @Override
     public String invoicesInfoDownloadJson() throws Exception {
-        return "";
+
+        List<InvoiceEntity> invoiceEntityList = invoiceRepository.findAll();
+
+        if (!invoiceEntityList.isEmpty()) {
+            String invoicesJson = objectMapper.writeValueAsString(invoiceEntityList);
+
+            return invoicesJson;
+        }
+
+        throw new Exception("There aren't entities in database!!!!!!!!!!!!!! Number entities= " + 0);
     }
 }

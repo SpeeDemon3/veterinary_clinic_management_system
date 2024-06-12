@@ -291,7 +291,7 @@ public class PetServiceImpl implements PetService {
 
             return csvContent.toString();
         }
-        log.error("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}", 0);
+        log.error("There aren't entities in database!!!!!!!!!!!!!! Number entities= {}", 0);
         throw new RuntimeException();
 
     }

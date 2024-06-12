@@ -6,7 +6,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,6 +87,37 @@ public class InvoiceController {
             return ResponseEntity.ok(invoiceService.deleteById(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/downloadFileCsvInvoices")
+    public ResponseEntity<?> downloadFileCsvInvoices () {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "invoices-data.csv");
+
+            byte[] csvBytes = invoiceService.invoicesInfoDownloadCsv().getBytes();
+
+            return new ResponseEntity<>(csvBytes, headers, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error downloading invoices data CSV!!!!");
+        }
+    }
+
+    @GetMapping("/downloadFileJsonInvoices")
+    public ResponseEntity<?> downloadFileJsonInvoices () {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setContentDispositionFormData("attachment", "invoices-data.json");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(invoiceService.invoicesInfoDownloadJson());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error downloading invoices data JSON!!!!");
         }
     }
 
