@@ -200,7 +200,7 @@ public class OwnerServiceImp implements OwnerService {
 
         }
 
-        log.error("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}", 0);
+        log.error("There aren't entities in database!!!!!!!!!!!!!! Number entities= {}", 0);
         throw new RuntimeException();
     }
 
@@ -215,7 +215,7 @@ public class OwnerServiceImp implements OwnerService {
             return ownerJson;
         }
 
-        throw new Exception("There aren't entities in database!!!!!!!!!!!!!! Numer entities= {}" + 0);
+        throw new Exception("There aren't entities in database!!!!!!!!!!!!!! Number entities= {}" + 0);
     }
 
     @Override
