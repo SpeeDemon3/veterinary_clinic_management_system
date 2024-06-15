@@ -9,6 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class for handling role-related HTTP requests.
+ *
+ * @author Antonio Ruiz
+ */
 @RestController
 @RequestMapping("/api/role")
 @Slf4j

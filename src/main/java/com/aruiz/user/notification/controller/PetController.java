@@ -17,7 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-
+/**
+ * Controller class for handling pet-related HTTP requests.
+ *
+ * @author Antonio Ruiz
+ */
 @RestController
 @RequestMapping("/api/pet")
 @Slf4j
