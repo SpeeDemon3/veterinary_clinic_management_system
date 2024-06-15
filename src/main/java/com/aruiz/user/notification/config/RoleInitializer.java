@@ -35,6 +35,13 @@ public class RoleInitializer {
 
     }
 
+    /**
+     * Creates a new role with the specified name and description if it does not already exist.
+     *
+     * @param roleName The name of the role to create.
+     * @param description The description of the role.
+     * @throws Exception If there are issues while creating or saving the role entity.
+     */
     private void createRoles(String roleName, String description) throws Exception {
 
         Optional<RoleEntity> entityOptional = roleRepository.findByName(roleName);

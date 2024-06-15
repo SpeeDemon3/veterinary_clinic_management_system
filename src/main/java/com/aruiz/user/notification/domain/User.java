@@ -5,6 +5,11 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * Represents a User domain in the system.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +22,5 @@ public class User {
     private Role role;
     private List<Notification> notifications;
     private List<Pet> pets;
-
 
 }

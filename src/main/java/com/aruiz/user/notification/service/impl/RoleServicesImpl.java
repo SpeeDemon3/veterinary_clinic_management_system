@@ -17,6 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service Roles
+ *
+ * @author Antonio Ruiz
+ */
 @Service
 @Slf4j
 public class RoleServicesImpl implements RoleService {
@@ -30,6 +35,13 @@ public class RoleServicesImpl implements RoleService {
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * Saves a new role.
+     *
+     * @param roleRequest The role details to be saved.
+     * @return A RoleResponse object representing the saved role.
+     * @throws Exception Throws an exception if there are issues during the saving process or if required fields are missing.
+     */
     @Override
     public RoleResponse save(RoleRequest roleRequest) throws Exception {
 
@@ -50,6 +62,13 @@ public class RoleServicesImpl implements RoleService {
 
     }
 
+    /**
+     * Finds a role by its ID.
+     *
+     * @param id The ID of the role to find.
+     * @return A RoleResponse object representing the found role.
+     * @throws Exception Throws an exception if the role with the specified ID is not found or if there are issues during the retrieval process.
+     */
     @Override
     public RoleResponse findById(Long id) throws Exception {
         Optional<RoleEntity> roleEntityOptional = roleRepository.findById(id);
@@ -66,6 +85,12 @@ public class RoleServicesImpl implements RoleService {
 
     }
 
+    /**
+     * Retrieves all roles.
+     *
+     * @return A list of RoleResponse objects representing all roles.
+     * @throws Exception Throws an exception if no roles are found or if there are issues during the retrieval process.
+     */
     @Override
     public List<RoleResponse> findAll() throws Exception {
 
@@ -91,6 +116,14 @@ public class RoleServicesImpl implements RoleService {
 
     }
 
+    /**
+     * Updates a role by its ID.
+     *
+     * @param id The ID of the role to update.
+     * @param roleRequest The updated role details.
+     * @return A RoleResponse object representing the updated role.
+     * @throws Exception Throws an exception if the role with the specified ID does not exist or if there are issues during the update process.
+     */
     @Override
     public RoleResponse updateById(Long id, RoleRequest roleRequest) throws Exception {
         Optional<RoleEntity> optionalRoleEntity = roleRepository.findById(id);
@@ -107,6 +140,13 @@ public class RoleServicesImpl implements RoleService {
 
     }
 
+    /**
+     * Deletes a role by its ID.
+     *
+     * @param id The ID of the role to delete.
+     * @return true if the role was successfully deleted, false otherwise.
+     * @throws Exception Throws an exception if the role with the specified ID does not exist or if there are issues during the deletion process.
+     */
     @Override
     public Boolean deleteById(Long id) throws Exception {
 
@@ -123,6 +163,13 @@ public class RoleServicesImpl implements RoleService {
         }
     }
 
+    /**
+     * Finds all roles by their name.
+     *
+     * @param name The name of the roles to find.
+     * @return A list of RoleResponse objects representing the found roles.
+     * @throws Exception Throws an exception if roles with the specified name are not found or if there are issues during the retrieval process.
+     */
     @Override
     public List<RoleResponse> findAllByName(String name) throws Exception {
 
@@ -147,10 +194,17 @@ public class RoleServicesImpl implements RoleService {
 
     }
 
+    /**
+     * Finds a role by its name.
+     *
+     * @param name The name of the role to find.
+     * @return A Role object representing the found role, or null if not found.
+     * @throws Exception Throws an exception if there are issues during the retrieval process.
+     */
     @Override
-    public Role findByName(String nane) throws Exception {
+    public Role findByName(String name) throws Exception {
 
-        Optional<RoleEntity> roleEntityOptional = roleRepository.findByName(nane);
+        Optional<RoleEntity> roleEntityOptional = roleRepository.findByName(name);
 
         if (roleEntityOptional.isPresent()) {
 

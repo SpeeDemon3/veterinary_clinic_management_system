@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Role Repository extends JpaRepository
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
 

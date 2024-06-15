@@ -6,6 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * User Repository extends to JpaRepository
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 

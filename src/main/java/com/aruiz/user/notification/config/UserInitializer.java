@@ -1,12 +1,10 @@
 package com.aruiz.user.notification.config;
 
 import com.aruiz.user.notification.controller.dto.SignUpRequest;
-import com.aruiz.user.notification.controller.dto.UserResponse;
 import com.aruiz.user.notification.entity.RoleEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.RoleRepository;
 import com.aruiz.user.notification.repository.UserRepository;
-import com.aruiz.user.notification.service.UserService;
 import com.aruiz.user.notification.service.impl.AuthenticationService;
 import com.aruiz.user.notification.service.impl.UserServiceImpl;
 import jakarta.annotation.PostConstruct;
@@ -16,6 +14,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * Component responsible for initializing the application with default admin user if not present.
+ * It creates the admin user based on predefined parameters and assigns the "ROLE_ADMIN" role.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Component
 public class UserInitializer {
 
@@ -34,6 +38,12 @@ public class UserInitializer {
     @Autowired
     private UserServiceImpl userService;
 
+    /**
+     * Initializes the application by creating an admin user if not already present in the database.
+     * This method is executed after the bean is constructed.
+     *
+     * @throws Exception If there are issues while creating the admin user or assigning roles.
+     */
     @PostConstruct
     public void init() throws Exception {
 
@@ -45,11 +55,23 @@ public class UserInitializer {
         final String img = "never.png";
         final String birthdate = "2024-01-01";
 
-        createUser(name, email, password, dni, phoneNumber, img, birthdate);
+        createUserAdmin(name, email, password, dni, phoneNumber, img, birthdate);
 
     }
 
-    private void createUser(String name, String email, String password, String dni,
+    /**
+     * Creates an admin user with the specified details if not already present.
+     *
+     * @param name Name of the admin user.
+     * @param email Email address of the admin user.
+     * @param password Password of the admin user.
+     * @param dni DNI (identity document number) of the admin user.
+     * @param phoneNumber Phone number of the admin user.
+     * @param img Image URL or path of the admin user.
+     * @param birthdate Birthdate of the admin user.
+     * @throws Exception If there are issues while creating the admin user or assigning roles.
+     */
+    private void createUserAdmin(String name, String email, String password, String dni,
                             String phoneNumber, String img, String birthdate) throws Exception {
 
         try {
@@ -82,10 +104,15 @@ public class UserInitializer {
 
     }
 
-
+    /**
+     * Updates the role of a user based on their DNI.
+     *
+     * @param user The user entity whose role needs to be updated.
+     * @throws Exception If there are issues while updating the user's role.
+     */
     private void updateRoleUser(UserEntity user) throws Exception {
         userRepository.findByDni(user.getDni());
-        userService.updateRoleByDni(user.getDni(), 3L);
+        userService.updateRoleByDni(user.getDni(), 3L); // Assuming 3L represents a specific role ID.
     }
 
 

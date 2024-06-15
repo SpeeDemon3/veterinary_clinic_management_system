@@ -21,6 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * Controller class for handling user-related HTTP requests.
+ *
+ * @author Antonio Ruiz
+ */
 @RestController
 @RequestMapping("/api/user")
 @Slf4j
@@ -84,16 +89,26 @@ public class UserController {
         }
     }
 
+    /**
+     * Retrieves a user by their DNI (Documento Nacional de Identidad).
+     *
+     * @param dni The DNI of the user to find.
+     * @return ResponseEntity with user information if found, otherwise appropriate error response.
+     */
     @GetMapping("/findByDni/{dni}")
     @PreAuthorize(("hasRole('ROLE_ADMIN')"))
     public ResponseEntity<?> findByDni(@PathVariable String dni) {
         try {
+            // Attempt to find the user by DNI using the userService
             return ResponseEntity.ok(userService.findByDni(dni));
         } catch (EntityNotFoundException e) {
+            // Handle case where user with given DNI is not found
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (BadRequestException e) {
+            // Handle case where DNI format or input is invalid
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
+            // Handle any other unexpected exceptions with a generic server error response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

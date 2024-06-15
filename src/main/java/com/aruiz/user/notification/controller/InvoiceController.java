@@ -12,6 +12,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class for handling invoice-related HTTP requests.
+ *
+ * @author Antonio Ruiz
+ */
 @RestController
 @RequestMapping("/api/invoice")
 @Slf4j
@@ -20,6 +25,15 @@ public class InvoiceController {
 
     private final InvoiceServiceImpl invoiceService;
 
+    /**
+     * Handles POST requests to add a new invoice for the specified owner.
+     *
+     * @param dniOwner        The DNI (identification number) of the owner for whom the invoice is being added.
+     * @param invoiceRequest  The request body containing the details of the invoice to be added.
+     * @return                A ResponseEntity containing the result of the invoice save operation. If successful,
+     *                        returns an OK response with the saved invoice data. If an error occurs,
+     *                        returns an internal server error response.
+     */
     @PostMapping("/add/{dniOwner}")
     public ResponseEntity<?> add(@PathVariable String dniOwner, @RequestBody InvoiceRequest invoiceRequest) {
         try {
@@ -29,6 +43,14 @@ public class InvoiceController {
         }
     }
 
+    /**
+     * Handles GET requests to find an invoice by its ID.
+     *
+     * @param id  The ID of the invoice to be retrieved.
+     * @return    A ResponseEntity containing the invoice data if found.
+     *            If the invoice is not found, returns a 404 Not Found response.
+     *            If an internal server error occurs, returns a 500 Internal Server Error response.
+     */
     @GetMapping("findById/{id}")
     public ResponseEntity<?> findById (@PathVariable Long id) {
         try {
@@ -40,6 +62,13 @@ public class InvoiceController {
         }
     }
 
+    /**
+     * Handles GET requests to find invoices by the client's DNI (identification number).
+     *
+     * @param clientDni  The DNI of the client whose invoices are to be retrieved.
+     * @return           A ResponseEntity containing the list of invoices associated with the specified client DNI.
+     *                   If an internal server error occurs, logs the error and returns a 500 Internal Server Error response.
+     */
     @GetMapping("/findByClientDNI/{clientDni}")
     public ResponseEntity<?> findByClientDni (@PathVariable String clientDni) {
         try {
@@ -50,6 +79,13 @@ public class InvoiceController {
         }
     }
 
+    /**
+     * Handles GET requests to find invoices by their state.
+     *
+     * @param state  The state of the invoices to be retrieved.
+     * @return       A ResponseEntity containing the list of invoices with the specified state.
+     *               If an internal server error occurs, logs the error and returns a 404 Not Found response.
+     */
     @GetMapping("/findByState/{state}")
     public ResponseEntity<?> findByState (@PathVariable String state) {
         try {
@@ -60,6 +96,12 @@ public class InvoiceController {
         }
     }
 
+    /**
+     * Handles GET requests to retrieve all invoices.
+     *
+     * @return  A ResponseEntity containing the list of all invoices.
+     *          If an internal server error occurs, returns a 404 Not Found response.
+     */
     @GetMapping("/findAll")
     public ResponseEntity<?> findAll () {
         try {
@@ -69,6 +111,15 @@ public class InvoiceController {
         }
     }
 
+    /**
+     * Handles PUT requests to update an existing invoice by its ID.
+     *
+     * @param id              The ID of the invoice to be updated.
+     * @param invoiceRequest  The request body containing the updated invoice details.
+     * @return                A ResponseEntity containing the updated invoice data.
+     *                        If the request is invalid, returns a 400 Bad Request response.
+     *                        If an internal server error occurs, returns a 500 Internal Server Error response.
+     */
     @PutMapping("/updateById/{id}")
     public ResponseEntity<?> updateById (@PathVariable Long id, @RequestBody InvoiceRequest invoiceRequest) {
         try {
@@ -81,6 +132,14 @@ public class InvoiceController {
 
     }
 
+    /**
+     * Handles DELETE requests to delete an invoice by its ID.
+     *
+     * @param id  The ID of the invoice to be deleted.
+     * @return    A ResponseEntity indicating the result of the delete operation.
+     *            If successful, returns an OK response.
+     *            If an error occurs, returns a 404 Not Found response.
+     */
     @DeleteMapping("/deleteById/{id}")
     public ResponseEntity<?> deleteById (@PathVariable Long id) {
         try {
@@ -90,6 +149,12 @@ public class InvoiceController {
         }
     }
 
+    /**
+     * Handles GET requests to download a CSV file containing invoices data.
+     *
+     * @return  A ResponseEntity containing the CSV file as a byte array with appropriate headers for file download.
+     *          If an error occurs, returns a 500 Internal Server Error response with an error message.
+     */
     @GetMapping("/downloadFileCsvInvoices")
     public ResponseEntity<?> downloadFileCsvInvoices () {
         try {
@@ -106,6 +171,12 @@ public class InvoiceController {
         }
     }
 
+    /**
+     * Handles GET requests to download a JSON file containing invoices data.
+     *
+     * @return  A ResponseEntity containing the JSON file with appropriate headers for file download.
+     *          If an error occurs, returns a 500 Internal Server Error response with an error message.
+     */
     @GetMapping("/downloadFileJsonInvoices")
     public ResponseEntity<?> downloadFileJsonInvoices () {
         try {

@@ -8,6 +8,12 @@ import com.aruiz.user.notification.entity.AppointmentEntity;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Service interface for managing appointments.
+ * Defines methods for appointment-related operations.
+ *
+ * @author Antonio Ruiz
+ */
 public interface AppointmentService {
 
     AppointmentResponse save (Long idVeterinarian, Long idPet, AppointmentRequest appointmentRequest) throws Exception;

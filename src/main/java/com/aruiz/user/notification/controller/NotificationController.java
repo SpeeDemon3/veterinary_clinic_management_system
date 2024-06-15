@@ -8,6 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller class for handling notification-related HTTP requests.
+ *
+ * @author Antonio Ruiz
+ */
 @RestController
 @RequestMapping("/api/notify")
 @Slf4j

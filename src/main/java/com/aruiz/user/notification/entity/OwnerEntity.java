@@ -7,6 +7,11 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * Entity class representing an owner/client.
+ *
+ * @author Antonio Ruiz Benito
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

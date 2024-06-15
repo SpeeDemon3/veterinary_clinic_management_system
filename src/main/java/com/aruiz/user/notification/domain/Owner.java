@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Represents an Owner domain in the system.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

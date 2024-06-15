@@ -11,6 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Service interface for managing users, extending UserDetailsService.
+ * Provides additional methods for user management beyond authentication.
+ *
+ * @author Antonio Ruiz
+ */
 public interface UserService extends UserDetailsService {
 
     UserResponse save(SignUpRequest userRequest) throws Exception;

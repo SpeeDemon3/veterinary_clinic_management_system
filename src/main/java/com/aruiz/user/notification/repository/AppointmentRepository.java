@@ -6,6 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Appointment Repository extends to JpaRepository
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Repository
 public interface AppointmentRepository extends JpaRepository<AppointmentEntity, Long> {
     List<AppointmentEntity> findAppointmentsByDateOfAppointment(String dateOfAppointment);

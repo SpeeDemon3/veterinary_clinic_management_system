@@ -6,6 +6,10 @@ import com.aruiz.user.notification.entity.OwnerEntity;
 
 import java.util.List;
 
+/**
+ * Service interface for managing invoices.
+ * @author Antonio Ruiz
+ */
 public interface InvoiceService {
 
     InvoiceResponse save (String clientDni, InvoiceRequest invoiceRequest) throws Exception;

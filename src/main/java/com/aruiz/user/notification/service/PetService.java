@@ -10,6 +10,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service interface for managing pets.
+ * Defines methods for pet-related operations.
+ *
+ * @author Antonio Ruiz
+ */
 public interface PetService {
 
     PetResponse save(Long veterinarian, PetRequest petRequest) throws Exception;
