@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a Pet domain in the system.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

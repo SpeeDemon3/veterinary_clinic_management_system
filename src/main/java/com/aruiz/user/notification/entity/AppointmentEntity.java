@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-
-
+/**
+ * Represents an appointment entity in the system.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

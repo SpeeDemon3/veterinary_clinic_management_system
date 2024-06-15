@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Represents an Appointment domain in the system.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

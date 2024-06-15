@@ -4,6 +4,11 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a Notification domain in the system.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

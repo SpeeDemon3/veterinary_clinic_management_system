@@ -10,6 +10,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Represents an invoice entity in the system.
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

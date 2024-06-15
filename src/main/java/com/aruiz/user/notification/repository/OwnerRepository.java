@@ -6,6 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Owner Repository extends JpaRepository
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Repository
 public interface OwnerRepository extends JpaRepository<OwnerEntity, Long> {
 
