@@ -22,6 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implement Appointment Service
+ *
+ * @author Antonio Ruiz = speedemon
+ */
 @Service
 @Slf4j
 public class AppointmentServiceImp implements AppointmentService {
@@ -46,7 +51,15 @@ public class AppointmentServiceImp implements AppointmentService {
 
     private final String[] HEADER = {"ID", "DATE OF APPOINTMENT", "DESCRIPTION", "VETERINARIAN", "PET"};
 
-
+    /**
+     * Creates a new appointment for a pet with a veterinarian.
+     *
+     * @param idVeterinarian  The ID of the veterinarian assigned to the appointment.
+     * @param idPet           The ID of the pet involved in the appointment.
+     * @param appointmentRequest The appointment details.
+     * @return The created {@link AppointmentResponse}.
+     * @throws Exception If there's an issue with creating the appointment.
+     */
     @Override
     public AppointmentResponse save(Long idVeterinarian, Long idPet, AppointmentRequest appointmentRequest) throws Exception {
 
@@ -74,6 +87,12 @@ public class AppointmentServiceImp implements AppointmentService {
 
     }
 
+    /**
+     * Retrieves all appointments from the database.
+     *
+     * @return A list of {@link AppointmentEntity} representing all appointments.
+     * @throws Exception If no appointments are found in the database.
+     */
     @Override
     public List<AppointmentEntity> findAll() throws Exception {
 
@@ -86,6 +105,13 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new Exception();
     }
 
+    /**
+     * Finds an appointment by its ID.
+     *
+     * @param id The ID of the appointment to find.
+     * @return The {@link AppointmentResponse} representing the appointment found.
+     * @throws Exception If no appointment is found with the specified ID.
+     */
     @Override
     public AppointmentResponse findById(Long id) throws Exception {
 
@@ -102,6 +128,13 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new Exception();
     }
 
+    /**
+     * Finds appointments associated with a pet based on pet ID.
+     *
+     * @param idPet The ID of the pet to search appointments for.
+     * @return A list of {@link AppointmentResponse} containing appointments associated with the pet.
+     * @throws Exception If no pet is found with the specified ID or if no appointments are found for the pet.
+     */
     @Override
     public List<AppointmentResponse> findAppointmentsByPetId(Long idPet) throws Exception {
 
@@ -133,6 +166,13 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new Exception("Pet not found");
     }
 
+    /**
+     * Finds appointments assigned to a veterinarian based on veterinarian ID.
+     *
+     * @param idVeterinarian The ID of the veterinarian to search appointments for.
+     * @return A list of {@link AppointmentResponse} containing appointments assigned to the veterinarian.
+     * @throws Exception If no appointments are found for the specified veterinarian ID.
+     */
     @Override
     public List<AppointmentResponse> findAppointmentsByVeterinarianId(Long idVeterinarian) throws Exception {
 
@@ -164,6 +204,13 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new Exception();
     }
 
+    /**
+     * Finds appointments by the date of appointment.
+     *
+     * @param date The date of appointment to search for in "yyyy-MM-dd" format.
+     * @return A list of {@link AppointmentResponse} containing appointments found for the specified date.
+     * @throws Exception If no appointments are found for the specified date.
+     */
     @Override
     public List<AppointmentResponse> findAppointmentsByDateOfAppointment(String date) throws Exception {
 
@@ -183,6 +230,13 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new Exception();
     }
 
+    /**
+     * Deletes an appointment by its ID.
+     *
+     * @param id The ID of the appointment to delete.
+     * @return A message indicating the success of the deletion.
+     * @throws Exception If the appointment with the specified ID is not found.
+     */
     @Override
     public String deleteById(Long id) throws Exception {
 
@@ -197,6 +251,14 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new Exception();
     }
 
+    /**
+     * Updates an appointment by its ID with the details provided in the {@code appointmentRequestUpdate}.
+     *
+     * @param id The ID of the appointment to update.
+     * @param appointmentRequestUpdate The updated appointment details.
+     * @return The updated appointment response.
+     * @throws Exception If the appointment with the specified ID is not found or if there's an error during update.
+     */
     @Override
     public AppointmentResponse updateById(Long id, AppointmentRequestUpdate appointmentRequestUpdate) throws Exception {
 
@@ -260,13 +322,21 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new Exception("Appointment not found!!!!");
     }
 
+
+    /**
+     * Retrieves all appointment information and returns it in CSV format.
+     *
+     * @return CSV content containing all appointment information.
+     * @throws IOException if an error occurs during CSV content creation.
+     * @throws RuntimeException if no appointments are found in the database.
+     */
     @Override
     public String appointmentInfoDownloadCsv() throws IOException {
 
         List<AppointmentEntity> appointmentEntityList = appointmentRepository.findAll();
 
         if (!appointmentEntityList.isEmpty()) {
-
+            // Prepare StringBuilder to hold CSV content
             StringBuilder csvContent = new StringBuilder();
 
             int count = 1;
@@ -297,12 +367,20 @@ public class AppointmentServiceImp implements AppointmentService {
         throw new RuntimeException();
     }
 
+    /**
+     * Retrieves all appointment information and returns it in JSON format.
+     *
+     * @return JSON string containing all appointment information.
+     * @throws IOException if an error occurs during JSON processing.
+     * @throws RuntimeException if no appointments are found in the database.
+     */
     @Override
     public String appointmentInfoDownloadJson() throws IOException {
 
         List<AppointmentEntity> appointmentEntityList = appointmentRepository.findAll();
 
         if (!appointmentEntityList.isEmpty()) {
+            // Convert the list of appointment entities to a JSON string
             String apointmentsJson = objectMapper.writeValueAsString(appointmentEntityList);
 
             return apointmentsJson;
@@ -310,4 +388,5 @@ public class AppointmentServiceImp implements AppointmentService {
 
         throw new RuntimeException();
     }
+
 }

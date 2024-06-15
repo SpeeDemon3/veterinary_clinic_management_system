@@ -8,6 +8,11 @@ import com.aruiz.user.notification.entity.OwnerEntity;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service interface for managing owners.
+ *
+ * @author Antonio Ruiz
+ */
 public interface OwnerService {
 
     OwnerResponse save (Long petId, OwnerRequest ownerRequest) throws Exception;
