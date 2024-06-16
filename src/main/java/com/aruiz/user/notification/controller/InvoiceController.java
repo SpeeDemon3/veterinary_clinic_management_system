@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -35,6 +36,7 @@ public class InvoiceController {
      *                        returns an internal server error response.
      */
     @PostMapping("/add/{dniOwner}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> add(@PathVariable String dniOwner, @RequestBody InvoiceRequest invoiceRequest) {
         try {
             return ResponseEntity.ok(invoiceService.save(dniOwner, invoiceRequest));
@@ -52,6 +54,7 @@ public class InvoiceController {
      *            If an internal server error occurs, returns a 500 Internal Server Error response.
      */
     @GetMapping("findById/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> findById (@PathVariable Long id) {
         try {
             return ResponseEntity.ok(invoiceService.findById(id));
@@ -70,6 +73,7 @@ public class InvoiceController {
      *                   If an internal server error occurs, logs the error and returns a 500 Internal Server Error response.
      */
     @GetMapping("/findByClientDNI/{clientDni}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> findByClientDni (@PathVariable String clientDni) {
         try {
             return ResponseEntity.ok(invoiceService.findByClientDni(clientDni));
@@ -87,6 +91,7 @@ public class InvoiceController {
      *               If an internal server error occurs, logs the error and returns a 404 Not Found response.
      */
     @GetMapping("/findByState/{state}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> findByState (@PathVariable String state) {
         try {
             return ResponseEntity.ok(invoiceService.findByState(state));
@@ -103,6 +108,7 @@ public class InvoiceController {
      *          If an internal server error occurs, returns a 404 Not Found response.
      */
     @GetMapping("/findAll")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> findAll () {
         try {
             return ResponseEntity.ok(invoiceService.findAll());
@@ -121,6 +127,7 @@ public class InvoiceController {
      *                        If an internal server error occurs, returns a 500 Internal Server Error response.
      */
     @PutMapping("/updateById/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> updateById (@PathVariable Long id, @RequestBody InvoiceRequest invoiceRequest) {
         try {
             return ResponseEntity.ok(invoiceService.updateById(id, invoiceRequest));
@@ -141,6 +148,7 @@ public class InvoiceController {
      *            If an error occurs, returns a 404 Not Found response.
      */
     @DeleteMapping("/deleteById/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteById (@PathVariable Long id) {
         try {
             return ResponseEntity.ok(invoiceService.deleteById(id));
@@ -156,6 +164,7 @@ public class InvoiceController {
      *          If an error occurs, returns a 500 Internal Server Error response with an error message.
      */
     @GetMapping("/downloadFileCsvInvoices")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> downloadFileCsvInvoices () {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -178,6 +187,7 @@ public class InvoiceController {
      *          If an error occurs, returns a 500 Internal Server Error response with an error message.
      */
     @GetMapping("/downloadFileJsonInvoices")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> downloadFileJsonInvoices () {
         try {
             HttpHeaders headers = new HttpHeaders();
