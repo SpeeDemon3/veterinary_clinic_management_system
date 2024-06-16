@@ -1,6 +1,5 @@
 package com.aruiz.user.notification.controller;
 
-import com.aruiz.user.notification.controller.dto.NotificationRequest;
 import com.aruiz.user.notification.service.impl.NotificationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
