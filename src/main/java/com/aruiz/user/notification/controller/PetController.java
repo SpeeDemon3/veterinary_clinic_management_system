@@ -232,7 +232,7 @@ public class PetController {
      * @return ResponseEntity containing the JSON file with appropriate headers for download.
      */
     @GetMapping("/downloadFileJsonPets")
-    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN','ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> downloadFileJsonPets() {
         try {
             HttpHeaders headers = new HttpHeaders();
