@@ -175,7 +175,21 @@ public class UserServiceImpl implements UserService {
 
         if (optionalUserEntity.isPresent()) {
             UserResponse userResponse = modelMapper.map(optionalUserEntity.get(), UserResponse.class);
-            log.info("User found with email -> {}", dni);
+            log.info("User found with DNI -> {}", dni);
+            return userResponse;
+        }
+
+        throw new RuntimeException();
+    }
+
+    @Override
+    public UserResponse findByEmail(String email) throws Exception {
+
+        Optional<UserEntity> optionalUserEntity = userRepository.findByEmail(email);
+
+        if (optionalUserEntity.isPresent()) {
+            UserResponse userResponse = modelMapper.map(optionalUserEntity.get(), UserResponse.class);
+            log.info("User found with email -> {}", email);
             return userResponse;
         }
 

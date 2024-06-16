@@ -20,7 +20,7 @@ public class User {
     private String email;
     private String password;
     private Role role;
-    private List<Notification> notifications;
+    //private List<Notification> notifications;
     private List<Pet> pets;
 
 }

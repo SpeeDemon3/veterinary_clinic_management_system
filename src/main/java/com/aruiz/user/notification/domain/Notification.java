@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Notification {
     private Long id;
-    private String content;
+    private String message;
     private LocalDateTime creationDate;
+    private String email;
     
-    private User destinationUser;
 }

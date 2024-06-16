@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -21,11 +22,13 @@ public class NotificationController {
 
     private final NotificationServiceImpl notificationService;
 
-    @PostMapping("/add/{id}")
-    public ResponseEntity<?> addNotify(@RequestBody NotificationRequest notificationRequest, @PathVariable Long id) {
+    @PostMapping("/send/{email}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.isOwner(#email)")
+    public ResponseEntity<String> sendNotification(@PathVariable String email, @RequestBody String message) {
 
         try {
-            return ResponseEntity.ok(notificationService.save(notificationRequest, id));
+            notificationService.sendNotification(message, email);
+            return ResponseEntity.ok("The notification was sent correctly to -> " + email);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class NotificationRequest {
-    private String content;
+    private String message;
     private LocalDateTime creationDate;
+    private String email;
+
 }

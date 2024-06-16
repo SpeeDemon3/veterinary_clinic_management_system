@@ -51,9 +51,11 @@ public class UserEntity implements UserDetails {
     @ToString.Exclude
     private RoleEntity role;
 
+    /*
     @OneToMany(mappedBy = "destinationUser")
     @ToString.Exclude
     private List<NotificationEntity> notifications;
+    */
 
     @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
