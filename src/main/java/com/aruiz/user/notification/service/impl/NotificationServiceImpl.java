@@ -36,7 +36,13 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-
+    /**
+     * Sends a notification message to the specified owner via Kafka, saves the notification in MongoDB,
+     * and sends an email to the owner.
+     *
+     * @param message The notification message to be sent.
+     * @param ownerEmail The email address of the owner to whom the notification is to be sent.
+     */
     @Override
     public void sendNotification(String message, String ownerEmail) {
         kafkaTemplate.send(TOPIC, message);
@@ -52,6 +58,14 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
+    /**
+     * Sends an email notification to the specified email address with the provided message.
+     * This method retrieves the user information based on the email and sends the email
+     * if the user exists. Logs an error if the email is not found.
+     *
+     * @param destinationEmail The email address to which the notification will be sent.
+     * @param message The message to be included in the email notification.
+     */
     @Override
     public void sendEmail(String destinationEmail, String message) {
 

@@ -21,6 +21,14 @@ public class NotificationController {
 
     private final NotificationServiceImpl notificationService;
 
+    /**
+     * Endpoint to send a notification to a specified email.
+     * This endpoint is secured such that only users with the 'ROLE_ADMIN' role or the owner of the email can access it.
+     *
+     * @param email The email address to which the notification will be sent.
+     * @param message The message to be included in the notification.
+     * @return ResponseEntity with a status of 200 OK if the notification was sent successfully, or 500 Internal Server Error if there was an error.
+     */
     @PostMapping("/send/{email}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.isOwner(#email)")
     public ResponseEntity<String> sendNotification(@PathVariable String email, @RequestBody String message) {

@@ -168,6 +168,17 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Retrieves a user by their DNI (Documento Nacional de Identidad).
+     *
+     * This method searches for a user entity in the database using the provided DNI.
+     * If the user is found, it maps the UserEntity to a UserResponse object and returns it.
+     * If no user is found with the specified DNI, the method throws a RuntimeException.
+     *
+     * @param dni The DNI of the user to retrieve.
+     * @return UserResponse containing user details if found.
+     * @throws Exception if any error occurs during the process.
+     */
     @Override
     public UserResponse findByDni(String dni) throws Exception {
 
@@ -182,6 +193,17 @@ public class UserServiceImpl implements UserService {
         throw new RuntimeException();
     }
 
+    /**
+     * Retrieves a user by their email address.
+     *
+     * This method searches for a user entity in the database using the provided email address.
+     * If the user is found, it maps the UserEntity to a UserResponse object and returns it.
+     * If no user is found with the specified email, the method returns null.
+     *
+     * @param email The email address of the user to retrieve.
+     * @return UserResponse containing user details if found, otherwise null.
+     * @throws Exception if any error occurs during the process.
+     */
     @Override
     public UserResponse findByEmail(String email) throws Exception {
 

@@ -7,9 +7,21 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+/**
+ * Configuration class for setting up JavaMailSender bean.
+ * This configuration sets up the properties needed to send emails using Gmail's SMTP server.
+ */
 @Configuration
 public class MailConfig {
 
+    /**
+     * Configures and provides a JavaMailSender bean.
+     *
+     * This method sets up a JavaMailSenderImpl with the necessary SMTP properties to connect to Gmail's SMTP server.
+     * The properties include the host, port, username, and password for the email account, as well as various SMTP settings.
+     *
+     * @return A configured JavaMailSender bean.
+     */
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
