@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class NotificationResponse {
     private Long id;
-    private String content;
+    private String message;
     private LocalDateTime creationDate;
-    private Long destinationUserId;
+    private String email;
 }

@@ -13,20 +13,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Document(collection = "notifications")
 public class NotificationEntity {
 
     @Id
-    @GeneratedValue
     private String id;
 
-    private String content;
+    private String message;
     private LocalDateTime creationDate;
+    private String email;
 
 
+    /*
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity destinationUser;
-
+    */
 }

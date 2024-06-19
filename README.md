@@ -19,7 +19,13 @@
 - ModelMapper
 - Lombok
 - Jakarta Persistence API (JPA)
+<<<<<<< HEAD
 - Base de datos relacional (MySQL)
+=======
+- Relational database (e.g. MySQL, PostgreSQL) / Base de datos relacional (por ejemplo, MySQL, PostgreSQL)
+- Non-relational database (e.g. MongoDb) / Base de datos no relacional (por ejemplo, MongoDb)
+- Kafka
+>>>>>>> origin/v1.0.1
 
 ## Previous requirements / Requisitos Previos
 
