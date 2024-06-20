@@ -30,6 +30,7 @@ import java.io.IOException;
 @RequestMapping("/api/user")
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final AuthenticationService authenticationService;
