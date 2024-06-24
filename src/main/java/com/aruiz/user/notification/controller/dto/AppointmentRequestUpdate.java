@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AppointmentRequestUpdate {
-
     private String dateOfAppointment;
     private String appointmentTime;
     private String description;

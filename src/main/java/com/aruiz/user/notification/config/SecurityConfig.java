@@ -19,6 +19,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * Configuration class for Spring Security setup.
@@ -76,6 +80,14 @@ public class SecurityConfig {
         http
                 // Disables CSRF protection // Deshabilita la protección CSRF
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200"));
+                    corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfiguration.setAllowedHeaders(List.of("*"));
+                    corsConfiguration.setAllowCredentials(true);
+                    return corsConfiguration;
+                }))
                 // Configures session management to create stateless sessions // Configura la gestión de sesiones para crear sesiones sin estado
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Configures authorization for HTTP requests // Configura la autorización de las solicitudes HTTP
@@ -106,6 +118,22 @@ public class SecurityConfig {
         // Builds and returns the configured security filter chain
         // Construye y devuelve la cadena de filtros de seguridad configurada
         return http.build();
+    }
+
+
+    // Define un bean WebMvcConfigurer para configurar CORS globalmente en la aplicación
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**") // Configura CORS para todas las rutas (/**)
+                        .allowedOrigins("http://localhost:4200") // Permite solicitudes desde http://localhost:4200 (Angular)
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Permite los métodos HTTP GET, POST, PUT, DELETE, OPTIONS
+                        .allowedHeaders("*") // Permite todas las cabeceras
+                        .allowCredentials(true); // Permite el uso de credenciales (cookies, headers de autorización, etc.)
+            }
+        };
     }
 
 }

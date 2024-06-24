@@ -30,7 +30,6 @@ import java.io.IOException;
 @RequestMapping("/api/user")
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     private final AuthenticationService authenticationService;
@@ -44,6 +43,7 @@ public class UserController {
      * @return ResponseEntity containing the result of the signup operation.
      */
     @PostMapping("/signup")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest userRequest) {
         try {
             log.info(userRequest.toString());
@@ -62,6 +62,7 @@ public class UserController {
      * @return ResponseEntity containing the result of the login operation.
      */
     @PostMapping("/login")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             return ResponseEntity.ok(authenticationService.login(loginRequest));

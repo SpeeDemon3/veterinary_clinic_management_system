@@ -31,7 +31,6 @@ public class NotificationController {
      */
     @PostMapping("/send/{email}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.isOwner(#email)")
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<String> sendNotification(@PathVariable String email, @RequestBody String message) {
 
         try {
