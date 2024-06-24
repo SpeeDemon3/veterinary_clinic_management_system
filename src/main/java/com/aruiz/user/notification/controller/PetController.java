@@ -26,7 +26,6 @@ import java.io.IOException;
 @RequestMapping("/api/pet")
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class PetController {
 
     private final PetServiceImpl petService;
