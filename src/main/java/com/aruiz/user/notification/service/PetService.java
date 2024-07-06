@@ -34,7 +34,7 @@ public interface PetService {
 
     String petsInfoDownloadCsv() throws IOException;
 
-    Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception;
+    PetResponse findByIdentificationCode(String identificationCode) throws Exception;
 
     String petsInfoDownloadJson() throws Exception;
 

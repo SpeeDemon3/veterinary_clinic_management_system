@@ -309,12 +309,13 @@ public class PetServiceImpl implements PetService {
      * @throws Exception if the pet with the specified identification code is not found.
      */
     @Override
-    public Optional<PetEntity> findByIdentificationCode(String identificationCode) throws Exception {
+    public PetResponse findByIdentificationCode(String identificationCode) throws Exception {
 
         Optional<PetEntity> optionalPetEntity = petRepository.findByIdentificationCode(identificationCode);
 
         if (optionalPetEntity.isPresent()) {
-            return Optional.of(optionalPetEntity.get());
+            PetResponse petResponse = modelMapper.map(optionalPetEntity.get(), PetResponse.class);
+            return petResponse;
         }
 
         log.error("Pet with identification code {} not found!!!", identificationCode);
