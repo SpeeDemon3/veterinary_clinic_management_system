@@ -17,5 +17,6 @@ import java.util.Optional;
 public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Long> {
 
     // Optional<InvoiceEntity> findByClient(OwnerEntity client) throws Exception;
+    Optional<List<InvoiceEntity>> findByClientDni(String clientDni) throws Exception;
     Optional<List<InvoiceEntity>> findByState(String state) throws Exception;
 }

@@ -300,6 +300,7 @@ public class OwnerServiceImp implements OwnerService {
      */
     @Override
     public OwnerResponse findByDni(String dni) throws Exception {
+
         Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findByDni(dni);
 
         if (optionalOwnerEntity.isPresent()) {

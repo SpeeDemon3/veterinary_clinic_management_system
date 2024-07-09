@@ -1,6 +1,6 @@
 # veterinary_clinic_management_system
-- This project is a system for managing a veterinary clinic of users that allows the management of users, roles, profiles, pets and notifications. It is built using Spring Boot and Hibernate for data persistence.
-- Este proyecto es un sistema para la gestión de una clínica veterinaria de usuarios que permite la gestión de usuarios, roles, perfiles, mascotas y notificaciones. Está construido utilizando Spring Boot y Hibernate para la persistencia de datos.
+- This project is a system for managing a veterinary clinic of users that allows the management of pets, roles, profiles, pets and notifications. It is built using Spring Boot and Hibernate for data persistence.
+- Este proyecto es un sistema para la gestión de una clínica veterinaria de usuarios que permite la gestión de mascotas, roles, perfiles, mascotas y notificaciones. Está construido utilizando Spring Boot y Hibernate para la persistencia de datos.
 
 ## Characteristics / Características
 

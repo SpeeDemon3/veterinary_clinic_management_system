@@ -14,7 +14,7 @@ public interface InvoiceService {
 
     InvoiceResponse save (String clientDni, InvoiceRequest invoiceRequest) throws Exception;
     InvoiceResponse findById(Long id) throws Exception;
-    List<InvoiceResponse> findByClientDni(String clientDni) throws Exception;
+    List<InvoiceResponse>  findByClientDni(String clientDni) throws Exception;
     List<InvoiceResponse> findByState(String state) throws Exception;
     List<InvoiceResponse> findAll() throws Exception;
     InvoiceResponse updateById(Long id, InvoiceRequest invoiceRequest) throws Exception;

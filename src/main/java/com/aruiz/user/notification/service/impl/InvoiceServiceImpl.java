@@ -8,6 +8,7 @@ import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.repository.InvoiceRepository;
 import com.aruiz.user.notification.service.InvoiceService;
 import com.aruiz.user.notification.service.OwnerService;
+import com.aruiz.user.notification.service.converter.InvoiceConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -40,6 +41,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private InvoiceConverter invoiceConverter;
 
     /**
      * Array containing headers for invoice data, including ID, date of issue, invoice number, state, total price, and client ID.
@@ -105,24 +109,33 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceResponse> findByClientDni(String clientDni) throws Exception {
 
-        Optional<OwnerResponse> optionalOwner = Optional.ofNullable(ownerService.findByDni(clientDni));
+        log.info("Service: Finding invoices for client DNI: {}", clientDni);
+        OwnerResponse ownerResponse = ownerService.findByDni(clientDni);
+        log.info("Owner response: {}", ownerResponse);
 
-        if (optionalOwner.isPresent()) {
+        if (ownerResponse != null) {
+            log.info("Owner DNI FOUND -> {}", ownerResponse.getDni());
 
-            Optional<List<InvoiceEntity>> optionalInvoiceEntity = Optional.of(invoiceRepository.findAll());
+            Optional<List<InvoiceEntity>> optionalInvoiceEntities = invoiceRepository.findByClientDni(clientDni);
+            log.info("Invoices found: {}", optionalInvoiceEntities.isPresent() ? optionalInvoiceEntities.get().size() : 0);
 
-            if (optionalInvoiceEntity.isPresent()) {
+            if (optionalInvoiceEntities.isPresent()) {
 
-                List<InvoiceResponse> invoiceResponseList = new ArrayList<>();
+                List<InvoiceEntity> invoiceEntityList = optionalInvoiceEntities.get();
 
-                for (InvoiceEntity invoice : optionalInvoiceEntity.get()) {
+                if (!invoiceEntityList.isEmpty()) {
 
-                    if (invoice.getClient().getDni().equals(optionalOwner.get().getDni())) {
+                    List<InvoiceResponse> invoiceResponseList = new ArrayList<>();
 
-                        invoiceResponseList.add(modelMapper.map(invoice, InvoiceResponse.class));
+                    for (InvoiceEntity invoice : invoiceEntityList) {
 
-                        return invoiceResponseList;
-                    }
+                            log.info("Invoice value -> {}", invoice.getClient());
+
+                            invoiceResponseList.add(invoiceConverter.toInvoiceResponse(invoice));
+
+                        }
+
+                    return invoiceResponseList;
 
                 }
 
@@ -132,6 +145,36 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         throw new Exception("Client DNI not found!!!");
     }
+
+
+    /*
+    @Override
+    public List<InvoiceResponse> findByClientDni(String clientDni) throws Exception {
+        // Encuentra al propietario por DNI
+        OwnerResponse owner = ownerService.findByDni(clientDni);
+        log.info("DNI Owner {} ", owner.getDni());
+        if (owner == null) {
+            throw new Exception("Client DNI not found!!!");
+        }
+
+        // Encuentra las facturas del propietario
+        List<InvoiceEntity> invoiceEntities = invoiceRepository.findByClientDni(clientDni);
+        if (invoiceEntities == null || invoiceEntities.isEmpty()) {
+            throw new Exception("No invoices found for the given client DNI!!!");
+        }
+
+        // Convierte las entidades de facturas a respuestas de facturas
+        List<InvoiceResponse> invoiceResponseList = new ArrayList<>();
+        for (InvoiceEntity invoice : invoiceEntities) {
+            InvoiceResponse response = invoiceConverter.toInvoiceResponse(invoice);
+            invoiceResponseList.add(response);
+            log.info(response.toString());
+        }
+
+        return invoiceResponseList;
+    }
+
+     */
 
     /**
      * Finds invoices based on their state.

@@ -41,6 +41,7 @@ public class InvoiceController {
         try {
             return ResponseEntity.ok(invoiceService.save(dniOwner, invoiceRequest));
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -72,14 +73,16 @@ public class InvoiceController {
      * @return           A ResponseEntity containing the list of invoices associated with the specified client DNI.
      *                   If an internal server error occurs, logs the error and returns a 500 Internal Server Error response.
      */
-    @GetMapping("/findByClientDNI/{clientDni}")
+    @GetMapping(value = "/findByClientDni/{clientDni}")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> findByClientDni (@PathVariable String clientDni) {
+        log.info(" I'm controller");
         try {
+            log.info("Finding invoice by client DNI: {}", clientDni);
             return ResponseEntity.ok(invoiceService.findByClientDni(clientDni));
         } catch (Exception e) {
-            log.error(e.toString());
-            return ResponseEntity.internalServerError().build();
+            log.error("Invoice not found error -> ", e.getMessage());
+            return ResponseEntity.notFound().build();
         }
     }
 
