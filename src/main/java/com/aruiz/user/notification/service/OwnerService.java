@@ -18,7 +18,7 @@ public interface OwnerService {
     OwnerResponse save (Long petId, OwnerRequest ownerRequest) throws Exception;
     List<OwnerResponse> findAll () throws Exception;
     OwnerResponse findById (Long id) throws Exception;
-    String deleteById (Long id) throws Exception;
+    Boolean deleteById (Long id) throws Exception;
     OwnerResponse updateById (Long id, OwnerRequest ownerRequest) throws Exception;
     String ownerInfoDownloadCsv () throws Exception;
     String ownerInfoDownloadJson () throws Exception;

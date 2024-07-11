@@ -131,13 +131,13 @@ public class OwnerServiceImp implements OwnerService {
      * @throws Exception Throws an exception if the owner with the specified ID is not found.
      */
     @Override
-    public String deleteById(Long id) throws Exception {
+    public Boolean deleteById(Long id) throws Exception {
 
         Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findById(id);
 
         if (optionalOwnerEntity.isPresent()) {
             ownerRepository.deleteById(id);
-            return "Owner with ID -> " + id + " successfully deleted!!!!";
+            return true;
         }
 
         throw new Exception();

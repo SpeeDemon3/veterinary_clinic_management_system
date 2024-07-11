@@ -24,7 +24,7 @@ public interface PetService {
 
     PetResponse findById(Long id) throws Exception;
 
-    String deleteById(Long id) throws Exception;
+    Boolean deleteById(Long id) throws Exception;
 
     PetResponse updateById(Long id, PetRequestUpdate petRequestUpdate) throws Exception;
 

@@ -226,7 +226,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception if there is an error during the deletion process.
      */
     @Override
-    public String deleteById(Long id) throws Exception {
+    public Boolean deleteById(Long id) throws Exception {
         // Verifica si existe un usuario con el identificador dado
         if(userRepository.existsById(id)) {
             // Elimina el usuario de la base de datos
@@ -234,7 +234,7 @@ public class UserServiceImpl implements UserService {
             // Registra un mensaje de éxito en el log
             log.info("User successfully deleted");
             // Devuelve un mensaje indicando que el usuario ha sido eliminado exitosamente
-            return "User with ID -> " + id + " successfully deleted!!!";
+            return true;
         } else {
             // Registra un mensaje de error si no se encuentra ningún usuario con el identificador dado y lanza una excepción
             log.error("User not found!!!");

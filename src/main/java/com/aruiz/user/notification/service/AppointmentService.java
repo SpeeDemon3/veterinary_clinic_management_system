@@ -28,7 +28,7 @@ public interface AppointmentService {
 
     List<AppointmentResponse> findAppointmentsByDateOfAppointment (String dateOfAppointment) throws Exception;
 
-    String deleteById (Long id) throws Exception;
+    Boolean deleteById (Long id) throws Exception;
 
     AppointmentResponse updateById (Long id, AppointmentRequestUpdate appointmentRequestUpdate) throws Exception;
 

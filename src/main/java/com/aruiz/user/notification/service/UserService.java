@@ -29,7 +29,7 @@ public interface UserService extends UserDetailsService {
 
     UserResponse findByEmail (String email) throws Exception;
 
-    String deleteById(Long id) throws Exception;
+    Boolean deleteById(Long id) throws Exception;
 
     UserResponse updateById(Long id, UserRequestUpdate userRequest) throws Exception;
 

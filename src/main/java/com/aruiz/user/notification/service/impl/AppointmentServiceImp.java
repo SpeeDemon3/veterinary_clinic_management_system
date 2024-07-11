@@ -238,14 +238,14 @@ public class AppointmentServiceImp implements AppointmentService {
      * @throws Exception If the appointment with the specified ID is not found.
      */
     @Override
-    public String deleteById(Long id) throws Exception {
+    public Boolean deleteById(Long id) throws Exception {
 
         Optional<AppointmentEntity> optionalAppointmentEntity = appointmentRepository.findById(id);
 
         if (optionalAppointmentEntity.isPresent()) {
             appointmentRepository.deleteById(id);
             log.info("Apointment successfully deleted -> ID: {}", id);
-            return "Apointment successfully deleted -> ID: " + id;
+            return true;
         }
 
         throw new Exception();

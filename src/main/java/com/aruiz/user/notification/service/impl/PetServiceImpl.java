@@ -136,7 +136,7 @@ public class PetServiceImpl implements PetService {
      * @throws Exception if the pet with the specified ID is not found.
      */
     @Override
-    public String deleteById(Long id) throws Exception {
+    public Boolean deleteById(Long id) throws Exception {
 
         Optional<PetEntity> optionalPetEntity = petRepository.findById(id);
 
@@ -144,7 +144,7 @@ public class PetServiceImpl implements PetService {
             petRepository.deleteById(id);
 
             log.info("Pet successfully deleted");
-            return "Pet with ID -> " + id + " successfully deleted!!";
+            return true;
         }
 
         log.error("Pet with ID {} not found", id);
