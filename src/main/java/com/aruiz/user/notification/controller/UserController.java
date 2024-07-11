@@ -20,6 +20,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller class for handling user-related HTTP requests.
@@ -43,7 +45,7 @@ public class UserController {
      * @return ResponseEntity containing the result of the signup operation.
      */
     @PostMapping("/signup")
-    @CrossOrigin(origins = "http://localhost:4200")
+    //@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest userRequest) {
         try {
             log.info(userRequest.toString());
@@ -62,7 +64,7 @@ public class UserController {
      * @return ResponseEntity containing the result of the login operation.
      */
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:4200")
+    //@CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             return ResponseEntity.ok(authenticationService.login(loginRequest));
@@ -165,11 +167,11 @@ public class UserController {
         try {
             return ResponseEntity.ok(userService.deleteById(id));
         } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Bad request");
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
     }
 

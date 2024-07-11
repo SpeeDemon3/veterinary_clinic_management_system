@@ -56,7 +56,7 @@ public class OwnerServiceImp implements OwnerService {
 
         Optional<PetResponse> optionalPet = Optional.ofNullable(petService.findById(petId));
 
-        if (ownerRequest != null && optionalPet != null) {
+        if (ownerRequest != null && optionalPet.isPresent()) {
 
             List<PetEntity> petEntityList = new ArrayList<>();
             PetEntity petEntity = modelMapper.map(optionalPet.get(), PetEntity.class);

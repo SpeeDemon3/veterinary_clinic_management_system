@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PetResponse {
+    private Long id;
     private UserEntity veterinarian;
     private String identificationCode;
     private String name;

@@ -93,16 +93,17 @@ public class PetController {
      * @return ResponseEntity indicating the status of the deletion.
      */
     @DeleteMapping("/deleteById/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN'. 'ROLE_VETERINARIAN')")
+    @PreAuthorize("hasAnyRole('ROLE_VETERINARIAN','ROLE_USER')")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(petService.deleteById(id));
         } catch (BadRequestException e) {
+            log.error(e.getMessage());
             return ResponseEntity.badRequest().build();
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found 404");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error 500");
         }
     }
 
