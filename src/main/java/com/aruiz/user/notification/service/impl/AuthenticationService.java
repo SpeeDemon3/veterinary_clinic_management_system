@@ -91,6 +91,11 @@ public class AuthenticationService {
             // Generar un token JWT para el usuario registrado
             var jwt = jwtService.generateToken(user);
 
+            // Verificar si el token es nulo después de intentar generarlo
+            if (jwt == null) {
+                throw new IllegalStateException("Failed to generate JWT token.");
+            }
+
             // Build and return a JwtResponse containing the generated token
             // Construir y devolver una respuesta de inicio de sesión con el token JWT generado
             return JwtResponse.builder().token(jwt).build();

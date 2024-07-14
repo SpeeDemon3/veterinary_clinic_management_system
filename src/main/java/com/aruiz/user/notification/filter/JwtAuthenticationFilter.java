@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserServiceImpl userService;
 
+
     /**
      * Filter method to perform JWT authentication and authorization.
      *
@@ -49,12 +51,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
-        if (StringUtils.isEmpty(authHeader)) {
+        log.info("Request URL: " + request.getRequestURI());
+        log.info("Request Method: " + request.getMethod());
+        log.info("Authorization Header: " + request.getHeader("Authorization"));
+
+        // TEST START
+        /*
+        // Verificar si la solicitud es para crear un usuario y permitirlo sin JWT
+        if (request.getMethod().equals("POST") && request.getRequestURI().equals("/api/user/signup")) {
             filterChain.doFilter(request, response);
+            return;
+        }
+         */
+        // Verificar si la solicitud es para crear un usuario y permitirlo sin JWT
+        if (isSignupRequest(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        //TEST END
+
+        if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            //filterChain.doFilter(request, response);
             return;
         }
 
         jwt = authHeader.substring(7);
+
+        if (StringUtils.isEmpty(jwt)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
         log.info("JWT -> {}", jwt);
 
@@ -87,11 +114,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Set security context in the current context
                 // Establecemos el contexto de seguridad en el contexto actual
                 SecurityContextHolder.setContext(securityContext);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
 
         }
         // Continue with the filter chain
         // Continuamos con la cadena de filtros
         filterChain.doFilter(request, response);
+    }
+
+    // Metodo de prueba
+    private boolean isSignupRequest(HttpServletRequest request) {
+        return request.getMethod().equals(HttpMethod.POST.name()) && request.getRequestURI().equals("/api/user/signup");
     }
 }

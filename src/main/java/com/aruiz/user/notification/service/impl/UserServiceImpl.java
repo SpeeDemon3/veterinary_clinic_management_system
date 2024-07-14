@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,7 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+
     @Autowired
     private UserRepository userRepository;
 
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ObjectMapper objectMapper;
+
 
     private final String[] HEADERS = {"ID", "Birthdate", "DNI", "EMAIL", "Name", "Phone Number"};
 
@@ -70,6 +73,8 @@ public class UserServiceImpl implements UserService {
 
             // Guarda la entidad de usuario en la base de datos
             userRepository.save(userEntity);
+
+
             // Registra información sobre la entidad guardada
             log.info("Saving entity ID, name {}{}", userEntity.getId(), userEntity.getName());
             // Mapea la entidad de usuario a una respuesta de usuario y la devuelve

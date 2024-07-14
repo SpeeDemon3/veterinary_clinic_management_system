@@ -94,7 +94,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Allows unauthenticated access to /login and /signup endpoints via POST method
                         // Permite el acceso sin autenticación a las rutas /login y /signup mediante el método POST
-                        .requestMatchers(HttpMethod.POST, "/api/user/signup", "/api/user/login").permitAll()
+                        //.requestMatchers(HttpMethod.POST, "/api/user/signup", "/api/user/login").permitAll()
                         // Allows unauthenticated access to GET requests under /api/**
                         // Permite el acceso sin autenticación a las solicitudes GET en la ruta "/api/**".
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()

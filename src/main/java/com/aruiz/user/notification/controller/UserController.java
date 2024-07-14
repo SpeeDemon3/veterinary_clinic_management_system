@@ -1,9 +1,6 @@
 package com.aruiz.user.notification.controller;
 
-import com.aruiz.user.notification.controller.dto.LoginRequest;
-import com.aruiz.user.notification.controller.dto.SignUpRequest;
-import com.aruiz.user.notification.controller.dto.UserRequest;
-import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
+import com.aruiz.user.notification.controller.dto.*;
 import com.aruiz.user.notification.service.impl.AuthenticationService;
 import com.aruiz.user.notification.service.impl.UserServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,15 +42,17 @@ public class UserController {
      * @return ResponseEntity containing the result of the signup operation.
      */
     @PostMapping("/signup")
-    //@CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest userRequest) {
         try {
-            log.info(userRequest.toString());
-            return ResponseEntity.ok(authenticationService.signup(userRequest));
+            log.info("Received signup request: {}", userRequest);
+            JwtResponse response = authenticationService.signup(userRequest);
+            log.info("User signed up successfully: {}", response);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            log.error(e.toString());
+            log.error("Error during signup: ", e);
             log.info("user Request: {}", userRequest);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
