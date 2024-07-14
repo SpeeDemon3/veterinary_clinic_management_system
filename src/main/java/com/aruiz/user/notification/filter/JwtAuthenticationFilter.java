@@ -55,37 +55,67 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("Request Method: " + request.getMethod());
         log.info("Authorization Header: " + request.getHeader("Authorization"));
 
-        // TEST START
-        /*
-        // Verificar si la solicitud es para crear un usuario y permitirlo sin JWT
-        if (request.getMethod().equals("POST") && request.getRequestURI().equals("/api/user/signup")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-         */
-        // Verificar si la solicitud es para crear un usuario y permitirlo sin JWT
         if (isSignupRequest(request)) {
+            log.error("Authorization header is missing or does not start with Bearer");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // Preuba
             filterChain.doFilter(request, response);
             return;
         }
-        //TEST END
 
+
+        // Verificar si la solicitud es para crear un usuario y permitirlo sin JWT
         if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            //filterChain.doFilter(request, response);
+            if (isSignupRequest(request)) {
+                log.error("Authorization header is missing or does not start with Bearer");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                // Preuba
+                filterChain.doFilter(request, response);
+                return;
+            } else if (isLoginRequest(request) || !isSignupRequest(request)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            log.error("Authorization header is missing or does not start with Bearer");
+            //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            filterChain.doFilter(request, response);
             return;
+
+
         }
 
         jwt = authHeader.substring(7);
 
         if (StringUtils.isEmpty(jwt)) {
+            log.error("JWT token is missing in the Authorization header");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         log.info("JWT -> {}", jwt);
 
-        userEmail = jwtService.extractUserName(jwt);
+        try {
+            userEmail = jwtService.extractUserName(jwt);
+            UserDetails userDetails = userService.loadUserByUsername(userEmail);
+
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                // Establecer la autenticación en el contexto de seguridad
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities()
+                );
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } else {
+                log.error("JWT token is not valid for user: {}", userEmail);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+        } catch (Exception e) {
+            log.error("Error processing JWT: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
         if (!StringUtils.isEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.loadUserByUsername(userEmail);
@@ -115,6 +145,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Establecemos el contexto de seguridad en el contexto actual
                 SecurityContextHolder.setContext(securityContext);
             } else {
+                log.error("JWT token is not valid for user: {}", userEmail);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
@@ -128,5 +159,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // Metodo de prueba
     private boolean isSignupRequest(HttpServletRequest request) {
         return request.getMethod().equals(HttpMethod.POST.name()) && request.getRequestURI().equals("/api/user/signup");
+    }
+    private boolean isLoginRequest(HttpServletRequest request) {
+        return request.getMethod().equals(HttpMethod.POST.name()) && request.getRequestURI().equals("/api/user/login");
     }
 }

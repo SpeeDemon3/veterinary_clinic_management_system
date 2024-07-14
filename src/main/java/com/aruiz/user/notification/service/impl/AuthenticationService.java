@@ -115,9 +115,16 @@ public class AuthenticationService {
      * @throws Exception If authentication fails due to invalid credentials or other errors.
      */
     public JwtResponse login(LoginRequest loginRequest) throws Exception {
-        // Authenticate the user using the AuthenticationManager (provided by Spring Security)
-        // Autenticar al usuario utilizando el AuthenticationManager
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+        try {
+            // Authenticate the user using the AuthenticationManager (provided by Spring Security)
+            // Autenticar al usuario utilizando el AuthenticationManager
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+        } catch (Exception e) {
+            log.error("Authentication failed for user: {}", loginRequest.getEmail());
+            throw new IllegalArgumentException("Invalid email or password.");
+        }
+
 
         // Retrieve the user details from the database based on email
         // Buscar al usuario en la base de datos por su dirección de correo electrónico
@@ -127,6 +134,8 @@ public class AuthenticationService {
         // Generate a JWT token for the authenticated user
         // Generar un token JWT para el usuario que ha iniciado sesión
         var jwt = jwtService.generateToken(user);
+
+        log.info("Generated JWT for user {}: {}", user.getUsername(), jwt);
 
         // Build and return a JwtResponse containing the generated token
         // Construir y devolver una respuesta de inicio de sesión con el token JWT generado

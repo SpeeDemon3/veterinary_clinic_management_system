@@ -63,13 +63,17 @@ public class UserController {
      * @return ResponseEntity containing the result of the login operation.
      */
     @PostMapping("/login")
-    //@CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            return ResponseEntity.ok(authenticationService.login(loginRequest));
+            log.info("Received login request: {}", loginRequest);
+            JwtResponse response = authenticationService.login(loginRequest);
+            log.info("User loged up successfully: {}", response);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+            log.error("Error during login: ", e);
+            log.info("user Login: {}", loginRequest);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());        }
     }
 
     /**

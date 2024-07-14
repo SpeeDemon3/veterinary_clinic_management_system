@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@Slf4j
 public class JwtService {
 
     @Value("${token.secret.key}")
@@ -25,12 +27,25 @@ public class JwtService {
     Long jwtExpirationMs;
 
     public String extractUserName(String token) {
-        return extractClain(token, Claims::getSubject);
+
+        try {
+            return extractClain(token, Claims::getSubject);
+        } catch (Exception e) {
+            log.error("Error extracting username from token: {}", e.getMessage());
+            throw e;
+        }
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String userName = extractUserName(token);
-        return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        try {
+            final String userName = extractUserName(token);
+            boolean isValid = userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
+            log.info("Token valid for user {}: {}", userDetails.getUsername(), isValid);
+            return isValid;
+        } catch (Exception e) {
+            log.error("Error validating token: {}", e.getMessage());
+            return false;
+        }
     }
 
     private <T> T extractClain(String token, Function<Claims, T> claimsResolvers) {
@@ -64,13 +79,20 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        // Construye un analizador de tokens JWT, configura la clave de firma y extrae las reclamaciones del cuerpo del token
-        return Jwts
-                .parser()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+
+        try {
+            // Construye un analizador de tokens JWT, configura la clave de firma y extrae las reclamaciones del cuerpo del token
+            return Jwts
+                    .parser()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+        } catch (Exception e) {
+            log.error("Error extracting all claims from token: {}", e.getMessage());
+            throw e;
+        }
 
     }
 
