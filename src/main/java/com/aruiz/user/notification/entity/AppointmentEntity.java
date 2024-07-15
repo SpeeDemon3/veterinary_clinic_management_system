@@ -28,10 +28,12 @@ public class AppointmentEntity {
 
     @ManyToOne
     @JoinColumn(name="veterinarian_id")
+    @ToString.Exclude
     private UserEntity veterinarian;
 
     @ManyToOne
     @JoinColumn(name="pet_id")
+    @ToString.Exclude
     private PetEntity pet;
 
 }

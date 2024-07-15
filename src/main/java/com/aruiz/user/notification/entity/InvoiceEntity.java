@@ -3,10 +3,7 @@ package com.aruiz.user.notification.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -34,6 +31,7 @@ public class InvoiceEntity {
 
     @ManyToOne
     @JoinColumn(name="client_id")
+    @ToString.Exclude
     private OwnerEntity client;
 
     @Column(columnDefinition = "DATE")

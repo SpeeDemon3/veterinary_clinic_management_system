@@ -9,6 +9,7 @@ import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.repository.OwnerRepository;
 import com.aruiz.user.notification.service.OwnerService;
 import com.aruiz.user.notification.service.PetService;
+import com.aruiz.user.notification.service.converter.OwnerConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -41,6 +42,9 @@ public class OwnerServiceImp implements OwnerService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private OwnerConverter ownerConverter;
+
     private final String[] HEADERS = {"ID", "DNI", "EMAIL", "NAME", "LAST_NAME", "Phone_Number"};
 
     /**
@@ -60,19 +64,24 @@ public class OwnerServiceImp implements OwnerService {
 
             List<PetEntity> petEntityList = new ArrayList<>();
             PetEntity petEntity = modelMapper.map(optionalPet.get(), PetEntity.class);
+            log.info("Pet entity name: {}", petEntity.getName());
             petEntityList.add(petEntity);
 
-            OwnerEntity ownerEntity = modelMapper.map(ownerRequest, OwnerEntity.class);
+            log.info("Owner Request: {}", ownerRequest);
+            //OwnerEntity ownerEntity = modelMapper.map(ownerRequest, OwnerEntity.class);
+            OwnerEntity ownerEntity = ownerConverter.toOwnerEntity(ownerRequest);
 
             ownerEntity.setPets(petEntityList);
             petEntity.setOwner(ownerEntity);
 
             petService.updateById(petId, modelMapper.map(petEntity, PetRequestUpdate.class));
 
+            System.out.println("I'm HERE!!!!!");
             ownerRepository.save(ownerEntity);
-            log.info("Owner created successfully!!! -> {}", ownerEntity.toString());
+            log.info("Owner created successfully!!!");
 
-            return modelMapper.map(ownerEntity, OwnerResponse.class);
+            //return modelMapper.map(ownerEntity, OwnerResponse.class);
+            return ownerConverter.toOwnerResponse(ownerEntity);
         }
 
         throw new Exception("Something went wrong!!!!");

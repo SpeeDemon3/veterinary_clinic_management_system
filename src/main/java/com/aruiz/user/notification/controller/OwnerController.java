@@ -41,6 +41,7 @@ public class OwnerController {
         try {
             return ResponseEntity.ok(ownerServiceImp.save(petId, ownerRequest));
         } catch (Exception e) {
+            log.error("Error add owner: {}", e.getCause());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
