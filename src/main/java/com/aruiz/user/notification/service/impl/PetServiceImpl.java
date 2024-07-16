@@ -3,8 +3,11 @@ package com.aruiz.user.notification.service.impl;
 import com.aruiz.user.notification.controller.dto.PetRequest;
 import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
 import com.aruiz.user.notification.controller.dto.PetResponse;
+import com.aruiz.user.notification.domain.Owner;
+import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.UserEntity;
+import com.aruiz.user.notification.repository.OwnerRepository;
 import com.aruiz.user.notification.repository.PetRepository;
 import com.aruiz.user.notification.repository.UserRepository;
 import com.aruiz.user.notification.service.PetService;
@@ -37,6 +40,9 @@ public class PetServiceImpl implements PetService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OwnerRepository ownerRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -169,6 +175,10 @@ public class PetServiceImpl implements PetService {
 
             if (optionalPetEntity.isPresent()) {
 
+                if (petRequestUpdate.getOwner() == null) {
+                    petRequestUpdate.setOwner(optionalPetEntity.get().getOwner());
+                }
+
                 if (petRequestUpdate.getVeterinarian() == null) {
                     petRequestUpdate.setVeterinarian(optionalPetEntity.get().getVeterinarian());
                 }
@@ -216,7 +226,6 @@ public class PetServiceImpl implements PetService {
             throw new Exception();
         } catch (Exception e) {
             log.error("Error updating pet: {}", e.getMessage(), e);
-            // Aquí es donde podrías lanzar una excepción personalizada si lo prefieres
             throw new Exception("Error updating pet: " + e.getMessage(), e);
         }
 

@@ -41,7 +41,7 @@ public class OwnerEntity {
     private List<InvoiceEntity> invoices;
 
     //@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
     @ToString.Exclude
     private List<PetEntity> pets;
 }

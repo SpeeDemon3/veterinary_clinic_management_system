@@ -1,9 +1,6 @@
 package com.aruiz.user.notification.service.impl;
 
-import com.aruiz.user.notification.controller.dto.OwnerRequest;
-import com.aruiz.user.notification.controller.dto.OwnerResponse;
-import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
-import com.aruiz.user.notification.controller.dto.PetResponse;
+import com.aruiz.user.notification.controller.dto.*;
 import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.repository.OwnerRepository;
@@ -75,13 +72,15 @@ public class OwnerServiceImp implements OwnerService {
 
             List<PetEntity> petEntityList = new ArrayList<>();
             petEntity.setOwner(ownerEntity);
+            log.info("Owner to pet entity: {}", petEntity.getOwner());
             petEntityList.add(petEntity);
+
             ownerEntity.setPets(petEntityList);
+            ownerRepository.save(ownerEntity);
 
             PetRequestUpdate petRequestUpdate = modelMapper.map(petEntity, PetRequestUpdate.class);
             petService.updateById(petId, petRequestUpdate);
 
-            ownerRepository.save(ownerEntity);
             log.info("Owner created successfully!!!");
             return modelMapper.map(ownerEntity, OwnerResponse.class);
             //return ownerConverter.toOwnerResponse(ownerEntity);
