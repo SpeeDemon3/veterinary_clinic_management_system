@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.EOFException;
@@ -162,55 +163,63 @@ public class PetServiceImpl implements PetService {
     @Override
     public PetResponse updateById(Long id, PetRequestUpdate petRequestUpdate) throws Exception {
 
-        Optional<PetEntity> optionalPetEntity = petRepository.findById(id);
+        try {
 
-        if (optionalPetEntity.isPresent()) {
+            Optional<PetEntity> optionalPetEntity = petRepository.findById(id);
 
-            if (petRequestUpdate.getVeterinarian() == null) {
-                petRequestUpdate.setVeterinarian(optionalPetEntity.get().getVeterinarian());
+            if (optionalPetEntity.isPresent()) {
+
+                if (petRequestUpdate.getVeterinarian() == null) {
+                    petRequestUpdate.setVeterinarian(optionalPetEntity.get().getVeterinarian());
+                }
+
+                if (petRequestUpdate.getIdentificationCode() == null) {
+                    petRequestUpdate.setIdentificationCode(optionalPetEntity.get().getIdentificationCode());
+                }
+
+                if (petRequestUpdate.getName() == null) {
+                    petRequestUpdate.setName(optionalPetEntity.get().getName());
+                }
+
+                if (petRequestUpdate.getDescription() == null) {
+                    petRequestUpdate.setDescription(optionalPetEntity.get().getDescription());
+                }
+
+                if (petRequestUpdate.getVaccinationData() == null) {
+                    petRequestUpdate.setVaccinationData(optionalPetEntity.get().getVaccinationData());
+                }
+
+                if (petRequestUpdate.getImg() == null) {
+                    petRequestUpdate.setImg(optionalPetEntity.get().getImg());
+                }
+
+                if (petRequestUpdate.getBirthdate() == null) {
+                    petRequestUpdate.setBirthdate(petRequestUpdate.getBirthdate());
+                }
+
+                if (petRequestUpdate.getMedication() == null) {
+                    petRequestUpdate.setMedication(petRequestUpdate.getMedication());
+                }
+
+                PetEntity petEntitySave = modelMapper.map(petRequestUpdate, PetEntity.class);
+
+                petEntitySave.setId(id);
+
+                petRepository.save(petEntitySave);
+
+                log.info("Pet successfully updated!!!");
+
+                return modelMapper.map(petEntitySave, PetResponse.class);
             }
 
-            if (petRequestUpdate.getIdentificationCode() == null) {
-                petRequestUpdate.setIdentificationCode(optionalPetEntity.get().getIdentificationCode());
-            }
-
-            if (petRequestUpdate.getName() == null) {
-                petRequestUpdate.setName(optionalPetEntity.get().getName());
-            }
-
-            if (petRequestUpdate.getDescription() == null) {
-                petRequestUpdate.setDescription(optionalPetEntity.get().getDescription());
-            }
-
-            if (petRequestUpdate.getVaccinationData() == null) {
-                petRequestUpdate.setVaccinationData(optionalPetEntity.get().getVaccinationData());
-            }
-
-            if (petRequestUpdate.getImg() == null) {
-                petRequestUpdate.setImg(optionalPetEntity.get().getImg());
-            }
-
-            if (petRequestUpdate.getBirthdate() == null) {
-                petRequestUpdate.setBirthdate(petRequestUpdate.getBirthdate());
-            }
-
-            if (petRequestUpdate.getMedication() == null) {
-                petRequestUpdate.setMedication(petRequestUpdate.getMedication());
-            }
-
-            PetEntity petEntitySave = modelMapper.map(petRequestUpdate, PetEntity.class);
-
-            petEntitySave.setId(id);
-
-            petRepository.save(petEntitySave);
-
-            log.info("Pet successfully updated!!!");
-
-            return modelMapper.map(petEntitySave, PetResponse.class);
+            log.error("Pet with ID {} is not present!!!", id);
+            throw new Exception();
+        } catch (Exception e) {
+            log.error("Error updating pet: {}", e.getMessage(), e);
+            // Aquí es donde podrías lanzar una excepción personalizada si lo prefieres
+            throw new Exception("Error updating pet: " + e.getMessage(), e);
         }
 
-        log.error("Pet with ID {} is not present!!!", id);
-        throw new Exception();
     }
 
     /**

@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,34 +58,41 @@ public class OwnerServiceImp implements OwnerService {
      */
     @Override
     public OwnerResponse save(Long petId, OwnerRequest ownerRequest) throws Exception {
+        try {
 
         Optional<PetResponse> optionalPet = Optional.ofNullable(petService.findById(petId));
 
         if (ownerRequest != null && optionalPet.isPresent()) {
 
-            List<PetEntity> petEntityList = new ArrayList<>();
+            log.info("Owner Request: {}", ownerRequest);
+
             PetEntity petEntity = modelMapper.map(optionalPet.get(), PetEntity.class);
             log.info("Pet entity name: {}", petEntity.getName());
-            petEntityList.add(petEntity);
 
-            log.info("Owner Request: {}", ownerRequest);
-            //OwnerEntity ownerEntity = modelMapper.map(ownerRequest, OwnerEntity.class);
-            OwnerEntity ownerEntity = ownerConverter.toOwnerEntity(ownerRequest);
+            OwnerEntity ownerEntity = modelMapper.map(ownerRequest, OwnerEntity.class);
+            //OwnerEntity ownerEntity = ownerConverter.toOwnerEntity(ownerRequest);
+            log.info("Owner Entity values: {}", ownerEntity);
 
-            ownerEntity.setPets(petEntityList);
+            List<PetEntity> petEntityList = new ArrayList<>();
             petEntity.setOwner(ownerEntity);
+            petEntityList.add(petEntity);
+            ownerEntity.setPets(petEntityList);
 
-            petService.updateById(petId, modelMapper.map(petEntity, PetRequestUpdate.class));
+            PetRequestUpdate petRequestUpdate = modelMapper.map(petEntity, PetRequestUpdate.class);
+            petService.updateById(petId, petRequestUpdate);
 
-            System.out.println("I'm HERE!!!!!");
             ownerRepository.save(ownerEntity);
             log.info("Owner created successfully!!!");
+            return modelMapper.map(ownerEntity, OwnerResponse.class);
+            //return ownerConverter.toOwnerResponse(ownerEntity);
+        }
+            throw new Exception("Pet with ID " + petId + " not found or owner request is null");
 
-            //return modelMapper.map(ownerEntity, OwnerResponse.class);
-            return ownerConverter.toOwnerResponse(ownerEntity);
+        } catch (Exception e) {
+                log.error("Error saving owner: {}", e.getMessage(), e);
+                throw new Exception("Error saving owner: " + e.getMessage(), e);
         }
 
-        throw new Exception("Something went wrong!!!!");
     }
 
     /**

@@ -20,6 +20,6 @@ public class OwnerResponse {
     private String email;
     private String dni;
     private String phoneNumber;
-    private List<PetEntity> pets;
+    private List<PetResponse> pets;
     private List<Invoice> invoices;
 }

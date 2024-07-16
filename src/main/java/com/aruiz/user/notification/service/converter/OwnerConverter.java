@@ -3,6 +3,7 @@ package com.aruiz.user.notification.service.converter;
 import com.aruiz.user.notification.controller.dto.InvoiceResponse;
 import com.aruiz.user.notification.controller.dto.OwnerRequest;
 import com.aruiz.user.notification.controller.dto.OwnerResponse;
+import com.aruiz.user.notification.controller.dto.PetResponse;
 import com.aruiz.user.notification.domain.Invoice;
 import com.aruiz.user.notification.entity.InvoiceEntity;
 import com.aruiz.user.notification.entity.OwnerEntity;
@@ -54,7 +55,7 @@ public class OwnerConverter {
         List<Invoice> invoiceEntityList = modelMapper.map(ownerEntity.getInvoices(), new TypeToken<List<Invoice>>() {}.getType());
         ownerResponse.setInvoices(invoiceEntityList);
 
-        List<PetEntity> petEntityList = modelMapper.map(ownerEntity.getPets(), new TypeToken<List<PetEntity>>() {}.getType());
+        List<PetResponse> petEntityList = modelMapper.map(ownerEntity.getPets(), new TypeToken<List<PetResponse>>() {}.getType());
         ownerResponse.setPets(petEntityList);
 
         log.info("Conversion carried out successfully!!!");
