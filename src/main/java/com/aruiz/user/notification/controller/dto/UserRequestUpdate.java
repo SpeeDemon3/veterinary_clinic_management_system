@@ -17,6 +17,6 @@ public class UserRequestUpdate {
     private String phoneNumber;
     private String img;
     private String birthdate;
-    private Long role;
+    //private Long role;
 
 }

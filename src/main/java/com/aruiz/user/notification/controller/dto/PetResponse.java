@@ -1,5 +1,6 @@
 package com.aruiz.user.notification.controller.dto;
 
+import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class PetResponse {
     private Long id;
     private UserEntity veterinarian;
+    private OwnerEntity owner;
     private String identificationCode;
     private String name;
     private String description;
