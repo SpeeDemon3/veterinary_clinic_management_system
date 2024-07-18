@@ -126,12 +126,31 @@ public class RoleServicesImpl implements RoleService {
      */
     @Override
     public RoleResponse updateById(Long id, RoleRequest roleRequest) throws Exception {
+        log.info("role request values: {}", roleRequest);
+
         Optional<RoleEntity> optionalRoleEntity = roleRepository.findById(id);
+        log.info("Found Optional values: {}", optionalRoleEntity.get().toString());
 
         if (optionalRoleEntity.isPresent()) {
             log.info("Updating role...");
             RoleEntity roleEntity = optionalRoleEntity.get();
+
+            if (roleRequest.getName() == null) {
+                roleEntity.setName(optionalRoleEntity.get().getName());
+            } else {
+                roleEntity.setName(roleRequest.getName());
+            }
+
+            if (roleRequest.getDescription() == null) {
+                roleEntity.setDescription(optionalRoleEntity.get().getDescription());
+            } else {
+                roleEntity.setDescription(roleRequest.getDescription());
+            }
+
             roleEntity.setId(id);
+
+            log.info("Values entity update: {}", roleEntity);
+            roleRepository.save(roleEntity);
             return modelMapper.map(roleEntity, RoleResponse.class);
         } else {
             log.error("Role id does not exist: {}", id);

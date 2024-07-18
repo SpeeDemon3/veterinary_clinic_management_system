@@ -109,6 +109,7 @@ public class RoleController {
             return ResponseEntity.ok(roleServices.updateById(id, roleRequest));
         } catch (Exception e) {
             // Handle exceptions and return appropriate error response
+            log.error("Error -> " + e.getCause());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role with ID " + id + "  not found!!!");
         }
     }
