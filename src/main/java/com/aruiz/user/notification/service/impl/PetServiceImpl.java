@@ -169,9 +169,13 @@ public class PetServiceImpl implements PetService {
     @Override
     public PetResponse updateById(Long id, PetRequestUpdate petRequestUpdate) throws Exception {
 
+        log.info("Pet request: {}", petRequestUpdate);
+
         try {
 
             Optional<PetEntity> optionalPetEntity = petRepository.findById(id);
+
+            log.info("Opcional pet: {}", optionalPetEntity.get());
 
             if (optionalPetEntity.isPresent()) {
 
@@ -204,11 +208,11 @@ public class PetServiceImpl implements PetService {
                 }
 
                 if (petRequestUpdate.getBirthdate() == null) {
-                    petRequestUpdate.setBirthdate(petRequestUpdate.getBirthdate());
+                    petRequestUpdate.setBirthdate(optionalPetEntity.get().getBirthdate());
                 }
 
                 if (petRequestUpdate.getMedication() == null) {
-                    petRequestUpdate.setMedication(petRequestUpdate.getMedication());
+                    petRequestUpdate.setMedication(optionalPetEntity.get().getMedication());
                 }
 
                 PetEntity petEntitySave = modelMapper.map(petRequestUpdate, PetEntity.class);
