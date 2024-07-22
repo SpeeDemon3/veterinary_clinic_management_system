@@ -133,10 +133,13 @@ public class InvoiceController {
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> updateById (@PathVariable Long id, @RequestBody InvoiceRequest invoiceRequest) {
         try {
+            log.info("Invoice request: {}", invoiceRequest);
             return ResponseEntity.ok(invoiceService.updateById(id, invoiceRequest));
         } catch (BadRequestException e) {
+            log.error("Cause error:", e.getCause());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
+            log.error("Cause error:", e.getCause());
             return ResponseEntity.internalServerError().build();
         }
 

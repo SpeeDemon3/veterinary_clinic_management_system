@@ -285,7 +285,9 @@ public class AppointmentServiceImp implements AppointmentService {
             if (appointmentRequestUpdate.getAppointmentTime() == null) {
                 appointmentEntitysave.setAppointmentTime(appointmentEntityFound.getAppointmentTime());
             } else {
+                log.info("Value timne: {}", appointmentRequestUpdate.getAppointmentTime());
                 appointmentEntitysave.setAppointmentTime(appointmentRequestUpdate.getAppointmentTime());
+                log.info("Value time entity found: {}", appointmentEntitysave.getAppointmentTime());
             }
 
             if (appointmentRequestUpdate.getDescription() == null) {

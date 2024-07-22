@@ -183,7 +183,7 @@ public class AppointmentController {
      * @param requestUpdate the details to update the appointment with.
      * @return ResponseEntity containing the updated appointment information if successful, or an appropriate error response.
      */
-    @PutMapping("/updateById/{id}")
+        @PutMapping("/updateById/{id}")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<?> updateById (@PathVariable Long id, @RequestBody AppointmentRequestUpdate requestUpdate) {
         try {
@@ -193,6 +193,7 @@ public class AppointmentController {
         } catch (EntityNotFoundException ntf) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

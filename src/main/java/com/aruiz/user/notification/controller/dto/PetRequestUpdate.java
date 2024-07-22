@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PetRequestUpdate {
+    //private Long veterinarian;
     private UserEntity veterinarian;
     private OwnerEntity owner;
     private String identificationCode;

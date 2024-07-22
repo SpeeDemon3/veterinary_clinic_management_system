@@ -45,6 +45,7 @@ public class AppointmentConverter {
 
         appointmentResponse.setId(appointmentEntity.getId());
         appointmentResponse.setDateOfAppointment(appointmentEntity.getDateOfAppointment());
+        appointmentResponse.setAppointmentTime(appointmentEntity.getAppointmentTime());
         appointmentResponse.setDescription(appointmentEntity.getDescription());
         appointmentResponse.setVeterinarian(modelMapper.map(userResponse, User.class));
         appointmentResponse.setPet(modelMapper.map(petResponse, Pet.class));
