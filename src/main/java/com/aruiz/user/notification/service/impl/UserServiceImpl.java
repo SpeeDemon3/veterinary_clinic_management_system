@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
     private ObjectMapper objectMapper;
 
 
-    private final String[] HEADERS = {"ID", "Birthdate", "DNI", "EMAIL", "Name", "Phone Number"};
+    private final String[] HEADERS = {"ID", "BIRTHDATE", "DNI", "EMAIL", "NAME", "PHONE NUMBER"};
 
     /**
      * Saves a new user based on the provided SignUpRequest.

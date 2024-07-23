@@ -136,6 +136,7 @@ public class OwnerController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

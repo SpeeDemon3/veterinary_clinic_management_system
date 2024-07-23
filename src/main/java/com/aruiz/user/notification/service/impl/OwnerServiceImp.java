@@ -110,7 +110,9 @@ public class OwnerServiceImp implements OwnerService {
             List<OwnerResponse> ownerResponseList = new ArrayList<>();
 
             for (OwnerEntity owner : ownerEntityList) {
-                ownerResponseList.add(modelMapper.map(owner, OwnerResponse.class));
+                log.info("Owner value: {}", owner);
+                // ownerResponseList.add(modelMapper.map(owner, OwnerResponse.class));
+                ownerResponseList.add(ownerConverter.toOwnerResponse(owner));
             }
 
             return ownerResponseList;
