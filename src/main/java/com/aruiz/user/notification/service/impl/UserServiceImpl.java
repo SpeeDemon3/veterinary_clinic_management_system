@@ -461,7 +461,7 @@ public class UserServiceImpl implements UserService {
      * @return A message indicating the success of the role update operation.
      * @throws Exception If the user or role is not found, or if an unexpected error occurs.
      */
-    public String updateRoleByDni (String dni, Long idRole) throws Exception {
+    public UserResponse updateRoleByDni (String dni, Long idRole) throws Exception {
         Optional<UserEntity> optionalUserEntity = userRepository.findByDni(dni);
 
         Optional<RoleEntity> optionalRoleEntity = roleRepository.findById(idRole);
@@ -478,6 +478,7 @@ public class UserServiceImpl implements UserService {
             log.info("Role update user with DNI -> {}", dni);
             log.info("Role updated successfully!!!");
 
+            return modelMapper.map(userEntity, UserResponse.class);
 
         }
 

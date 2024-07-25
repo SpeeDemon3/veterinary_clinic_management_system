@@ -276,6 +276,7 @@ public class UserController {
                     .headers(headers)
                     .body(userService.usersInfoDownloadJson());
         } catch (Exception e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error downloading pets JSON!!!!");
         }
 
