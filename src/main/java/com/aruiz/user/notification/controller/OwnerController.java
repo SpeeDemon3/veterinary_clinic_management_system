@@ -92,6 +92,7 @@ public class OwnerController {
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

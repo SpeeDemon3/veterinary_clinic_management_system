@@ -319,10 +319,12 @@ public class OwnerServiceImp implements OwnerService {
     @Override
     public OwnerResponse findByDni(String dni) throws Exception {
 
+        log.info("DNI value: {}", dni);
         Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findByDni(dni);
 
         if (optionalOwnerEntity.isPresent()) {
-            OwnerResponse ownerResponse = modelMapper.map(optionalOwnerEntity.get(), OwnerResponse.class);
+            // OwnerResponse ownerResponse = modelMapper.map(optionalOwnerEntity.get(), OwnerResponse.class);
+            OwnerResponse ownerResponse = ownerConverter.toOwnerResponse(optionalOwnerEntity.get());
             log.info("Owner found with DNI -> {}", dni);
             return ownerResponse;
         }
