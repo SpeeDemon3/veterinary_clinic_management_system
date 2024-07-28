@@ -94,12 +94,24 @@ public class AppointmentServiceImp implements AppointmentService {
      * @throws Exception If no appointments are found in the database.
      */
     @Override
-    public List<AppointmentEntity> findAll() throws Exception {
+    public List<AppointmentResponse> findAll() throws Exception {
 
         List<AppointmentEntity> appointmentEntityList = appointmentRepository.findAll();
 
         if (!appointmentEntityList.isEmpty()) {
-            return appointmentEntityList;
+
+            List<AppointmentResponse> appointmentResponseList = new ArrayList<>();
+
+            int count = 0;
+
+            for (AppointmentEntity entity: appointmentEntityList) {
+                appointmentResponseList.add(appointmentConverter.toAppointmentResponse(entity));
+                count++;
+            }
+
+            log.info("Count value: {}", count);
+
+            return appointmentResponseList;
         }
 
         throw new Exception();

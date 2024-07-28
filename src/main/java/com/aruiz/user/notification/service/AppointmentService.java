@@ -18,7 +18,7 @@ public interface AppointmentService {
 
     AppointmentResponse save (Long idVeterinarian, Long idPet, AppointmentRequest appointmentRequest) throws Exception;
 
-    List<AppointmentEntity> findAll () throws Exception;
+    List<AppointmentResponse> findAll () throws Exception;
 
     AppointmentResponse findById (Long id) throws Exception;
 
