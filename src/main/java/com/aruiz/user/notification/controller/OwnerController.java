@@ -117,6 +117,7 @@ public class OwnerController {
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -179,10 +180,13 @@ public class OwnerController {
         try {
             return ResponseEntity.ok(ownerServiceImp.updateById(id, ownerRequest));
         } catch (EntityNotFoundException e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.notFound().build();
         } catch (BadRequestException e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

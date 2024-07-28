@@ -135,7 +135,7 @@ public class OwnerServiceImp implements OwnerService {
         Optional<OwnerEntity> optionalOwnerEntity = ownerRepository.findById(id);
 
         if (optionalOwnerEntity.isPresent()) {
-            return modelMapper.map(optionalOwnerEntity.get(), OwnerResponse.class);
+            return ownerConverter.toOwnerResponse(optionalOwnerEntity.get());
         }
 
         throw new Exception();
