@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.SignUpRequest;
+import com.aruiz.user.notification.controller.dto.UserRequestUpdate;
 import com.aruiz.user.notification.controller.dto.UserResponse;
 import com.aruiz.user.notification.entity.UserEntity;
 import com.aruiz.user.notification.repository.RoleRepository;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -153,18 +154,42 @@ class UserServiceImplTest {
         // Given
         Long userId = 3L;
         UserEntity userEntity = new UserEntity();
+        userEntity.setId(userId);
 
         // Mocking behavior
-        when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
+        when(userRepository.existsById(userId)).thenReturn(true);
+        doNothing().when(userRepository).deleteById(userId);
 
         // When
         boolean resutl = userService.deleteById(userId);
 
+        // Then
         assertEquals(true, resutl);
+        verify(userRepository, times(1)).deleteById(userId);
 
     }
 
     @Test
-    void updateById() {
+    void updateById() throws Exception {
+        // Given
+        Long idUser = 1L;
+        UserRequestUpdate userRequestUpdate = new UserRequestUpdate();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(idUser);
+        UserResponse userResponse = new UserResponse();
+
+        // Mocking behavior
+        when(userRepository.findById(idUser)).thenReturn(Optional.of(userEntity));
+        when(modelMapper.map(userRequestUpdate, UserEntity.class)).thenReturn(userEntity);
+        when(userRepository.save(userEntity)).thenReturn(userEntity);
+        when(modelMapper.map(userEntity, UserResponse.class)).thenReturn(userResponse);
+
+        // When
+        UserResponse userResponseUpdate = userService.updateById(idUser, userRequestUpdate);
+
+        // Then
+        assertEquals(userResponse, userResponseUpdate);
+
+
     }
 }
