@@ -61,9 +61,9 @@ public class PetServiceImpl implements PetService {
      * @throws Exception if the owner with the specified ID is not found or there is an error saving the pet.
      */
     @Override
-    public PetResponse save(Long ownerId, PetRequest petRequest) throws Exception {
+    public PetResponse save(Long veterinarianId, PetRequest petRequest) throws Exception {
 
-        Optional<UserEntity> optionalUserEntity = userRepository.findById(ownerId);
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(veterinarianId);
 
         if (optionalUserEntity.isPresent()) {
 
@@ -78,7 +78,7 @@ public class PetServiceImpl implements PetService {
             return modelMapper.map(petEntity, PetResponse.class);
 
         } else {
-            log.error("User with id {} not found!!!!", ownerId);
+            log.error("Veterinarian with id {} not found!!!!", veterinarianId);
         }
 
         log.error("There was an error saving the pet!!!!");

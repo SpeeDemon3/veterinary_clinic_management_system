@@ -52,10 +52,10 @@ class UserServiceImplTest {
         when(modelMapper.map(userEntity, UserResponse.class)).thenReturn(userResponse);
 
         // When
-        UserResponse entitySave = userService.save(signUpRequest);
+        UserResponse responseSave = userService.save(signUpRequest);
 
         // Then
-        assertEquals(userResponse, entitySave);
+        assertEquals(userResponse, responseSave);
 
     }
 
