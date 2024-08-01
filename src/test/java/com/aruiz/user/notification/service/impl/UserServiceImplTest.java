@@ -161,10 +161,10 @@ class UserServiceImplTest {
         doNothing().when(userRepository).deleteById(userId);
 
         // When
-        boolean resutl = userService.deleteById(userId);
+        boolean result = userService.deleteById(userId);
 
         // Then
-        assertEquals(true, resutl);
+        assertEquals(true, result);
         verify(userRepository, times(1)).deleteById(userId);
 
     }

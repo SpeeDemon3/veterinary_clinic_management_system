@@ -1,6 +1,7 @@
 package com.aruiz.user.notification.service.impl;
 
 import com.aruiz.user.notification.controller.dto.PetRequest;
+import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
 import com.aruiz.user.notification.controller.dto.PetResponse;
 import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.entity.PetEntity;
@@ -24,8 +25,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PetServiceImplTest {
@@ -92,18 +94,97 @@ class PetServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws Exception {
+        // Given
+        Long petId = 2L;
+        PetEntity petEntity = new PetEntity();
+        petEntity.setId(petId);
+
+        PetResponse petResponse = new PetResponse();
+        petResponse.setId(petId);
+
+        // Mocking behavior
+        when(petRepository.findById(petId)).thenReturn(Optional.of(petEntity));
+        when(modelMapper.map(petEntity, PetResponse.class)).thenReturn(petResponse);
+
+        // When
+        PetResponse response = petService.findById(petId);
+
+        // Then
+        assertEquals(response, petResponse);
+        verify(petRepository, times(1)).findById(petId);
+
     }
 
     @Test
-    void deleteById() {
+    void deleteById() throws Exception {
+        // Given
+        Long petId = 1L;
+        PetEntity petEntity = new PetEntity();
+        petEntity.setId(petId);
+
+        // Mocking behavior
+        when(petRepository.findById(petId)).thenReturn(Optional.of(petEntity));
+        doNothing().when(petRepository).deleteById(petId);
+
+        // When
+        Boolean result = petService.deleteById(petId);
+
+        // Then
+        assertEquals(true, result);
+        verify(petRepository, times(1)).deleteById(petId);
+
     }
 
     @Test
-    void updateById() {
+    void updateById() throws Exception {
+        // Given
+        Long petId = 5L;
+        PetRequestUpdate petRequestUpdate = new PetRequestUpdate();
+        PetEntity petEntity = new PetEntity();
+        petEntity.setId(petId);
+        PetResponse petResponse = new PetResponse();
+
+        // Mocking behavior
+        when(petRepository.findById(petId)).thenReturn(Optional.of(petEntity));
+        when(modelMapper.map(petRequestUpdate, PetEntity.class)).thenReturn(petEntity);
+        when(petRepository.save(petEntity)).thenReturn(petEntity);
+        when(modelMapper.map(petEntity, PetResponse.class)).thenReturn(petResponse);
+
+        // When
+        PetResponse response = petService.updateById(petId, petRequestUpdate);
+
+        // Then
+        assertEquals(petResponse, response);
+        assertEquals(petResponse.getId(), response.getId());
+
+        verify(petRepository, times(1)).save(petEntity);
+
     }
 
     @Test
-    void findByIdentificationCode() {
+    void findByIdentificationCode() throws Exception {
+        // Give
+        String code = "Test3";
+        PetEntity petEntity = new PetEntity();
+        petEntity.setIdentificationCode(code);
+
+        PetResponse petResponseMock = new PetResponse();
+        petResponseMock.setIdentificationCode(code);
+
+        // Mocking behavior
+        when(petRepository.findByIdentificationCode(code)).thenReturn(Optional.of(petEntity));
+        when(modelMapper.map(petEntity, PetResponse.class)).thenReturn(petResponseMock);
+
+        // When
+        PetResponse response = petService.findByIdentificationCode(code);
+
+        // Then
+        assertEquals(petResponseMock, response);
+        assertEquals(petResponseMock.getIdentificationCode(), response.getIdentificationCode());
+
+        verify(petRepository, times(1)).findByIdentificationCode(code);
+
     }
+    
 }
