@@ -129,7 +129,7 @@ public class RoleServicesImpl implements RoleService {
         log.info("role request values: {}", roleRequest);
 
         Optional<RoleEntity> optionalRoleEntity = roleRepository.findById(id);
-        log.info("Found Optional values: {}", optionalRoleEntity.get().toString());
+        log.info("Found Optional values: {}", optionalRoleEntity.get());
 
         if (optionalRoleEntity.isPresent()) {
             log.info("Updating role...");
