@@ -202,5 +202,7 @@ class RoleServicesImplTest {
         // Then
         assertEquals(roleMock.getName(), response.getName());
 
+        verify(roleRepository, times(1)).findByName(name);
+
     }
 }

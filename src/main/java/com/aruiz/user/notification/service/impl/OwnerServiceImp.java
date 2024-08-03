@@ -89,7 +89,7 @@ public class OwnerServiceImp implements OwnerService {
 
         } catch (Exception e) {
                 log.error("Error saving owner: {}", e.getMessage(), e);
-                throw new Exception("Error saving owner: " + e.getMessage(), e);
+                throw new Exception("Error saving owner: " + e.getMessage());
         }
 
     }

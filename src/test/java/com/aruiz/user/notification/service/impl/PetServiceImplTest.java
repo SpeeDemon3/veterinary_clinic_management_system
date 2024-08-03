@@ -3,14 +3,10 @@ package com.aruiz.user.notification.service.impl;
 import com.aruiz.user.notification.controller.dto.PetRequest;
 import com.aruiz.user.notification.controller.dto.PetRequestUpdate;
 import com.aruiz.user.notification.controller.dto.PetResponse;
-import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.entity.PetEntity;
 import com.aruiz.user.notification.entity.UserEntity;
-import com.aruiz.user.notification.repository.OwnerRepository;
 import com.aruiz.user.notification.repository.PetRepository;
 import com.aruiz.user.notification.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,15 +14,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import org.mockito.BDDMockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.BDDMockito.given;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
