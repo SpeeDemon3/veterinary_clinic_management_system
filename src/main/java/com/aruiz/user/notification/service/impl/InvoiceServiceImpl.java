@@ -93,7 +93,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         Optional<InvoiceEntity> optionalInvoiceEntity = invoiceRepository.findById(id);
 
         if (optionalInvoiceEntity.isPresent()) {
-            return modelMapper.map(optionalInvoiceEntity, InvoiceResponse.class);
+            //return modelMapper.map(optionalInvoiceEntity, InvoiceResponse.class);
+            return invoiceConverter.toInvoiceResponse(optionalInvoiceEntity.get());
         }
 
         throw new Exception("Invoice not found!!!");
