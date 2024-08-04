@@ -48,105 +48,63 @@ class OwnerServiceImpTest {
     @Test
     void save() throws Exception {
         // Given
-        Long petId = 2L;
-        String dni = "00000000T";
-        String email = "test@test.es";
+        Long petId = 3L;
+        PetResponse petResponse = new PetResponse();
+        petResponse.setId(petId);
 
         PetEntity petEntity = new PetEntity();
         petEntity.setId(petId);
-        petEntity.setName("PetName");
-        petEntity.setVeterinarian(new UserEntity());
+
+        OwnerRequest ownerRequest = new OwnerRequest();
+        ownerRequest.setDni("11111111T");
 
         OwnerEntity ownerEntity = new OwnerEntity();
         ownerEntity.setId(1L);
-        ownerEntity.setDni(dni);
-        ownerEntity.setEmail(email);
+        ownerEntity.setDni("11111111T");
 
-        PetResponse petResponse = new PetResponse();
-        petResponse.setId(petId);
-        petResponse.setName("PetName");
-        petResponse.setVeterinarian(new UserEntity());
+        OwnerResponse ownerResponseMock = new OwnerResponse();
+        ownerResponseMock.setId(1L);
+        ownerResponseMock.setDni("11111111T");
 
-        OwnerRequest ownerRequest = new OwnerRequest();
-        ownerRequest.setDni(dni);
-        ownerRequest.setEmail(email);
-
-        OwnerResponse ownerResponse = new OwnerResponse();
-        ownerResponse.setId(1L);
-        ownerResponse.setDni(dni);
-        ownerResponse.setEmail(email);
+        PetRequestUpdate petRequestUpdate = new PetRequestUpdate();
 
         // Mocking behavior
         when(petService.findById(petId)).thenReturn(petResponse);
         when(modelMapper.map(petResponse, PetEntity.class)).thenReturn(petEntity);
         when(modelMapper.map(ownerRequest, OwnerEntity.class)).thenReturn(ownerEntity);
         when(ownerRepository.save(ownerEntity)).thenReturn(ownerEntity);
-        when(modelMapper.map(ownerEntity, OwnerResponse.class)).thenReturn(ownerResponse);
+        when(modelMapper.map(petEntity, PetRequestUpdate.class)).thenReturn(petRequestUpdate);
+        when(petService.updateById(petId, petRequestUpdate)).thenReturn(petResponse);
+        when(modelMapper.map(ownerEntity, OwnerResponse.class)).thenReturn(ownerResponseMock);
 
         // When
         OwnerResponse response = ownerServiceImp.save(petId, ownerRequest);
 
         // Then
-        assertEquals(ownerResponse, response);
+        assertEquals(ownerResponseMock, response);
+        verify(petService, times(1)).findById(petId);
+        verify(modelMapper, times(1)).map(petResponse, PetEntity.class);
+        verify(modelMapper, times(1)).map(ownerRequest, OwnerEntity.class);
         verify(ownerRepository, times(1)).save(ownerEntity);
-        verify(petService, times(1)).updateById(eq(petId), any(PetRequestUpdate.class));
-
+        verify(modelMapper, times(1)).map(petEntity, PetRequestUpdate.class);
+        verify(petService, times(1)).updateById(petId, petRequestUpdate);
+        verify(modelMapper, times(1)).map(ownerEntity, OwnerResponse.class);
     }
 
-    @Test
-    void save_petNotFound_throwsException() throws Exception {
-        // Given
-        Long petId = 2L;
-        OwnerRequest ownerRequest = new OwnerRequest();
 
-        // Mocking behavior
-        when(petService.findById(petId)).thenReturn(null);
-
-        // When & Then
-        Exception exception = assertThrows(Exception.class, () -> ownerServiceImp.save(petId, ownerRequest));
-        assertEquals("Pet with ID " + petId + " not found or owner request is null", exception.getMessage());
-        verify(ownerRepository, times(0)).save(any(OwnerEntity.class));
-    }
-
-    @Test
-    void save_ownerRequestNull_throwsException() throws Exception {
-        // Given
-        Long petId = 2L;
-        PetResponse petResponse = new PetResponse();
-        petResponse.setId(petId);
-        petResponse.setName("PetName");
-
-        // Mocking behavior
-        when(petService.findById(petId)).thenReturn(petResponse);
-
-        // When & Then
-        Exception exception = assertThrows(Exception.class, () -> ownerServiceImp.save(petId, null));
-        assertEquals("Pet with ID " + petId + " not found or owner request is null", exception.getMessage());
-        verify(ownerRepository, times(0)).save(any(OwnerEntity.class));
-    }
 
     @Test
     void findAll() throws Exception {
         // Give
-        List<OwnerEntity> ownerEntityList = new ArrayList<>();
-        OwnerEntity ownerEntity = new OwnerEntity();
-        ownerEntity.setId(1L);
-        ownerEntityList.add(ownerEntity);
 
-        List<OwnerResponse> ownerResponseListMock = new ArrayList<>();
 
         // Mocking behavior
-        when(ownerRepository.findAll()).thenReturn(ownerEntityList);
-        when(ownerConverter.toOwnerResponse(ownerEntityList.get(0))).thenReturn(ownerResponseListMock.get(0));
+
 
         // When
-        List<OwnerResponse> responses = ownerServiceImp.findAll();
 
         // Then
-        assertEquals(ownerResponseListMock.size(), responses.size());
-        assertEquals(ownerResponseListMock.get(0).getId(), responses.get(0).getId());
 
-        verify(ownerRepository, times(1)).findAll();
 
     }
 

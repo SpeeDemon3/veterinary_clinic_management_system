@@ -312,5 +312,5 @@ class AppointmentServiceImpTest {
         verify(appointmentRepository, times(1)).save(appointmentEntity);
 
     }
-    
+
 }
