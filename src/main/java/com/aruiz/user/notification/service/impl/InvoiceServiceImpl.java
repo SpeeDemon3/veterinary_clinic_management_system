@@ -9,6 +9,7 @@ import com.aruiz.user.notification.repository.InvoiceRepository;
 import com.aruiz.user.notification.service.InvoiceService;
 import com.aruiz.user.notification.service.OwnerService;
 import com.aruiz.user.notification.service.converter.InvoiceConverter;
+import com.aruiz.user.notification.service.converter.OwnerConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -75,6 +76,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceRepository.save(invoiceEntitySave);
 
             return modelMapper.map(invoiceEntitySave, InvoiceResponse.class);
+            //return invoiceConverter.toInvoiceResponse(invoiceEntitySave);
         }
 
         throw new Exception("INTERNAL SERVER ERROR!!!!");

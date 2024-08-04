@@ -1,12 +1,16 @@
 package com.aruiz.user.notification.service.impl;
 
+import com.aruiz.user.notification.controller.dto.InvoiceRequest;
 import com.aruiz.user.notification.controller.dto.InvoiceResponse;
 import com.aruiz.user.notification.controller.dto.OwnerResponse;
+import com.aruiz.user.notification.domain.Owner;
 import com.aruiz.user.notification.entity.InvoiceEntity;
 import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.repository.InvoiceRepository;
 import com.aruiz.user.notification.service.converter.AppointmentConverter;
 import com.aruiz.user.notification.service.converter.InvoiceConverter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +44,13 @@ class InvoiceServiceImplTest {
     private ModelMapper modelMapper;
 
     @Mock
+    private ObjectMapper objectMapper;
+
+    @Mock
     private InvoiceConverter invoiceConverter;
+
+    private final String[] HEADERS = {"ID", "DATE OF ISSUE", "INVOICE NUMBER", "STATE", "TOTAL PRICE", "CLIENT ID"};
+
 
     // Give
     // Mocking behavior
@@ -47,11 +58,38 @@ class InvoiceServiceImplTest {
     // Then
 
     @Test
-    void save() {
+    void save() throws Exception {
         // Give
+        String clientDni = "22222222F";
+        OwnerResponse ownerResponse = new OwnerResponse();
+        ownerResponse.setDni(clientDni);
+
+        OwnerEntity ownerEntity = new OwnerEntity();
+        ownerEntity.setDni(clientDni);
+
+        Owner owner = new Owner();
+        owner.setDni(clientDni);
+
+        InvoiceRequest invoiceRequest = new InvoiceRequest();
+        InvoiceEntity invoiceEntity = new InvoiceEntity();
+        invoiceEntity.setClient(ownerEntity);
+
+        InvoiceResponse invoiceResponseMock = new InvoiceResponse();
+        invoiceResponseMock.setClient(owner);
+
         // Mocking behavior
+        when(ownerServiceImp.findByDni(clientDni)).thenReturn(ownerResponse);
+        when(modelMapper.map(invoiceRequest, InvoiceEntity.class)).thenReturn(invoiceEntity);
+        when(modelMapper.map(ownerResponse, OwnerEntity.class)).thenReturn(new OwnerEntity());
+        when(invoiceRepository.save(invoiceEntity)).thenReturn(invoiceEntity);
+        when(modelMapper.map(invoiceEntity, InvoiceResponse.class)).thenReturn(invoiceResponseMock);
+
         // When
+        InvoiceResponse invoiceResponse = invoiceService.save(clientDni, invoiceRequest);
+
         // Then
+        assertEquals(invoiceResponseMock.getClient(), invoiceResponse.getClient());
+
     }
 
     @Test
@@ -177,11 +215,32 @@ class InvoiceServiceImplTest {
     }
 
     @Test
-    void updateById() {
+    void updateById() throws Exception {
         // Give
+        Long invoiceId = 3L;
+
+        InvoiceEntity invoiceEntity = new InvoiceEntity();
+        invoiceEntity.setId(invoiceId);
+
+        InvoiceRequest invoiceRequest = new InvoiceRequest();
+
+        InvoiceResponse invoiceResponseMock = new InvoiceResponse();
+
         // Mocking behavior
+        when(invoiceRepository.findById(invoiceId)).thenReturn(Optional.of(invoiceEntity));
+        when(invoiceRepository.save(invoiceEntity)).thenReturn(invoiceEntity);
+        when(modelMapper.map(invoiceEntity, InvoiceResponse.class)).thenReturn(invoiceResponseMock);
+
         // When
+        InvoiceResponse response = invoiceService.updateById(invoiceId, invoiceRequest);
+
         // Then
+        assertEquals(invoiceResponseMock, response);
+        assertEquals(invoiceResponseMock.getId(), response.getId());
+
+        verify(invoiceRepository, times(1)).findById(invoiceId);
+        verify(invoiceRepository, times(1)).save(invoiceEntity);
+
     }
 
     @Test
@@ -208,10 +267,71 @@ class InvoiceServiceImplTest {
     }
 
     @Test
-    void invoicesInfoDownloadCsv() {
+    void invoicesInfoDownloadCsv() throws Exception {
+        // Give
+        OwnerEntity owner = new OwnerEntity();
+
+        InvoiceEntity invoiceEntity = new InvoiceEntity();
+        invoiceEntity.setId(1L);
+        invoiceEntity.setInvoiceNumber("INV001");
+        invoiceEntity.setTotalPrice(100.0);
+        invoiceEntity.setClient(owner);
+        invoiceEntity.setDateOfIssue(LocalDate.now());
+        invoiceEntity.setState("paid");
+
+        List<InvoiceEntity> invoiceEntityList = new ArrayList<>();
+        invoiceEntityList.add(invoiceEntity);
+
+        // Given
+        when(invoiceRepository.findAll()).thenReturn(invoiceEntityList);
+
+        // When
+        String csvContent = invoiceService.invoicesInfoDownloadCsv();
+
+        // Then
+        StringBuilder expectedCsvContent = new StringBuilder();
+        int count = 1;
+        for (String header : HEADERS) {
+            expectedCsvContent.append(header).append(",");
+            if (count == HEADERS.length) {
+                expectedCsvContent.append(header).append("\n");
+            }
+            count++;
+        }
+        expectedCsvContent
+                .append(invoiceEntity.getId()).append(",")
+                .append(invoiceEntity.getInvoiceNumber()).append(",")
+                .append(invoiceEntity.getTotalPrice()).append(",")
+                .append(invoiceEntity.getClient()).append(",")
+                .append(invoiceEntity.getDateOfIssue()).append(",")
+                .append(invoiceEntity.getState()).append("\n");
+
+        assertEquals(expectedCsvContent.length(), csvContent.length());
+        verify(invoiceRepository, times(1)).findAll();
+
+
     }
 
     @Test
-    void invoicesInfoDownloadJson() {
+    void invoicesInfoDownloadJson() throws JsonProcessingException {
+        // Give
+        InvoiceEntity invoiceEntity = new InvoiceEntity();
+        invoiceEntity.setId(1L);
+        invoiceEntity.setState("paid");
+
+        List<InvoiceEntity> invoiceEntityList = new ArrayList<>();
+        invoiceEntityList.add(invoiceEntity);
+
+        String invoicesJson = "[{\"id\":1,\"state\":\"paid\"}]";
+
+        // Mocking behavior
+        when(objectMapper.writeValueAsString(invoiceEntityList)).thenReturn(invoicesJson);
+
+        // When
+        String respone = objectMapper.writeValueAsString(invoiceEntityList);
+
+        // Then
+        assertEquals(invoicesJson, respone);
     }
+
 }
