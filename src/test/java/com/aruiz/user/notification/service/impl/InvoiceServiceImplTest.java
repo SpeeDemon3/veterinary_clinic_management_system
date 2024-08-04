@@ -7,7 +7,6 @@ import com.aruiz.user.notification.domain.Owner;
 import com.aruiz.user.notification.entity.InvoiceEntity;
 import com.aruiz.user.notification.entity.OwnerEntity;
 import com.aruiz.user.notification.repository.InvoiceRepository;
-import com.aruiz.user.notification.service.converter.AppointmentConverter;
 import com.aruiz.user.notification.service.converter.InvoiceConverter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.*;
 
 
@@ -51,11 +49,6 @@ class InvoiceServiceImplTest {
 
     private final String[] HEADERS = {"ID", "DATE OF ISSUE", "INVOICE NUMBER", "STATE", "TOTAL PRICE", "CLIENT ID"};
 
-
-    // Give
-    // Mocking behavior
-    // When
-    // Then
 
     @Test
     void save() throws Exception {

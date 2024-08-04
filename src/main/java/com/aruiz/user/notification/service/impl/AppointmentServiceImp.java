@@ -63,7 +63,9 @@ public class AppointmentServiceImp implements AppointmentService {
     @Override
     public AppointmentResponse save(Long idVeterinarian, Long idPet, AppointmentRequest appointmentRequest) throws Exception {
 
+
         Optional<PetEntity> optionalPetEntity = petRepository.findById(idPet);
+        log.info("Pet entity value: {}", optionalPetEntity.get());
         Optional<UserEntity> optionalUserEntity = userRepository.findById(idVeterinarian);
 
         if (optionalPetEntity.isPresent() && optionalUserEntity.isPresent() && appointmentRequest != null) {
@@ -208,10 +210,10 @@ public class AppointmentServiceImp implements AppointmentService {
 
             }
 
-            log.error("Appointments not found for veterinarian ID -> {}", idVeterinarian);
             return appointmentResponsesList;
 
         }
+        log.error("Appointments not found for veterinarian ID -> {}", idVeterinarian);
 
         throw new Exception();
     }
@@ -284,7 +286,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
             AppointmentEntity appointmentEntityFound = optionalAppointmentEntity.get();
 
-            log.info("AppointmentEntityFound -> {}", appointmentEntityFound.toString());
+            log.info("AppointmentEntityFound -> {}", appointmentEntityFound);
 
             AppointmentEntity appointmentEntitysave = new AppointmentEntity();
 

@@ -48,9 +48,10 @@ public class AppointmentController {
         try {
             return ResponseEntity.ok(appointmentService.save(idVeterinarian, idPet, appointmentRequest));
         } catch (BadRequestException e) {
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
-            log.error(e.toString());
+            log.error("Error cause: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
