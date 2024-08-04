@@ -96,15 +96,31 @@ class OwnerServiceImpTest {
     @Test
     void findAll() throws Exception {
         // Give
+        OwnerEntity ownerEntity = new OwnerEntity();
+        ownerEntity.setId(1L);
+        OwnerEntity ownerEntity2 = new OwnerEntity();
+        ownerEntity2.setId(2L);
 
+        List<OwnerEntity> ownerEntityList = new ArrayList<>();
+        ownerEntityList.add(ownerEntity);
+        ownerEntityList.add(ownerEntity2);
+
+        List<OwnerResponse> ownerResponseListMock = new ArrayList<>();
+        OwnerResponse ownerResponse = new OwnerResponse();
+        ownerResponse.setId(1L);
+        OwnerResponse ownerResponse1 = new OwnerResponse();
+        ownerResponseListMock.add(ownerResponse);
+        ownerResponseListMock.add(ownerResponse1);
 
         // Mocking behavior
-
+        when(ownerRepository.findAll()).thenReturn(ownerEntityList);
+        when(ownerConverter.toOwnerResponse(ownerEntityList.get(0))).thenReturn(ownerResponseListMock.get(0));
 
         // When
+        List<OwnerResponse> responses = ownerServiceImp.findAll();
 
         // Then
-
+        assertEquals(ownerResponseListMock.size(), responses.size());
 
     }
 
