@@ -267,7 +267,7 @@ public class UserController {
      */
     @GetMapping("/downloadFileJsonUsers")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> downloadFileJsonPets() {
+    public ResponseEntity<?> downloadFileJsonUsers() {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
