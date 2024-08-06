@@ -19,12 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -134,11 +132,26 @@ class UserControllerTest {
     }
 
     @Test
-    void findByDni() {
+    void findByDni() throws Exception {
         // Give
+        String dni = "66666666T";
+        UserResponse userResponseMock = new UserResponse();
+        userResponseMock.setDni(dni);
+        userResponseMock.setName("Test");
+
         // Mocking behavior
+        when(userService.findByDni(dni)).thenReturn(userResponseMock);
+
         // When
+        ResultActions resultActions = mockMvc.perform(get("/api/user/findByDni/{dni}", dni)
+                .accept(MediaType.APPLICATION_JSON)
+        );
+
         // Then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.dni").value(dni))
+                .andExpect(jsonPath("$.name").value("Test"));
     }
 
     @Test
@@ -154,6 +167,7 @@ class UserControllerTest {
 
         List<UserResponse> userList = Arrays.asList(userResponse1, userResponse2);
 
+        // Mocking behavior
         when(userService.findAll()).thenReturn(userList);
 
         // When
