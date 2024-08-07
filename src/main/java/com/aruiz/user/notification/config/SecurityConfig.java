@@ -82,7 +82,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
-                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200"));
+                    corsConfiguration.setAllowedOrigins(List.of("http://localhost:8070", "http://localhost:4200"));
                     corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                     corsConfiguration.setAllowedHeaders(List.of("*"));
                     corsConfiguration.setAllowCredentials(true);
@@ -109,6 +109,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/**").permitAll()
                         // Requires authentication for any other request
                         // Requiere autenticación para cualquier otra solicitud
+                        // Test
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()
+                        // End Test
                         .anyRequest().authenticated()
                 )
                 // Configures authentication provider and adds JWT authentication filter before UsernamePasswordAuthenticationFilter
